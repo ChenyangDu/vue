@@ -1,14 +1,19 @@
-import Vue from 'vue'
-import './plugins/axios'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import './plugins/element.js'
+// main.js
+import Vue from "vue";
+import md5 from "js-md5";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import { Button, Form, Field, Toast } from "vant";
+import "lib-flexible/flexible";
 
-Vue.config.productionTip = false
+Vue.use(Form).use(Field).use(Toast).use(Button);
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");
+
+Vue.prototype.$md5 = md5;
