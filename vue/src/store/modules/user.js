@@ -1,7 +1,6 @@
 export default {
   state: {
-    // username: sessionStorage.getItem('username') == null ? '' : JSON.parse(sessionStorage.getItem('username' || '[]'))
-    username: ''
+    username: sessionStorage.getItem('username') == null ? '' : JSON.parse(sessionStorage.getItem('username' || '[]'))
   },
   getters: {},
   mutations: {

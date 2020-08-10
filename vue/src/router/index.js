@@ -51,10 +51,10 @@ const router = new VueRouter({
 })
 
 // router.beforeEach((to, from, next) => {
-//   let user = sessionStorage.getItem('user')
+//   let username = sessionStorage.getItem('username')
 //   if (to.path === '/login') {
 //     // 访问登录界面
-//     if(user) {
+//     if(username) {
 //       // 已登录
 //       next({ path: '/'})
 //     } else {
@@ -62,7 +62,7 @@ const router = new VueRouter({
 //     }
 //   } else {
 //     // 访问非登陆界面
-//     if (!user) {
+//     if (!username) {
 //       next({ path: '/login'})
 //     } else {
 //       next()

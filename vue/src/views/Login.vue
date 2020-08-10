@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import user from "@/store/modules/user";
+// import user from "@/store/modules/user";
 
 export default {
   name: "Login",
@@ -51,19 +51,19 @@ export default {
       }
       var _this = this
       this.$api.login.login(userInfo).then(res => {
-        if (res.msg != null) {
+        if (res.data === "error") {
           _this.$message({
-            message: res.msg,
+            message: res.data,
             type: 'error'
           })
         } else {
-          sessionStorage.setItem('user', userInfo.phone)
-          _this.$store.commit('login',userInfo.phone)
+          sessionStorage.setItem('username', res.data.phone)
+          _this.$store.commit('login',res.data.phone)
           _this.$router.push('/')
         }
       }).catch(res => {
         _this.$message({
-          message: res.message,
+          message: res.data,
           type: 'error'
         })
       })

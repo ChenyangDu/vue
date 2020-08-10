@@ -71,9 +71,9 @@ export default {
       }
       var _this = this
       this.$api.login.register(userInfo).then(res => {
-        if (res.msg != null) {
+        if (res.data !== "ok") {
           _this.$message({
-            message: res.msg,
+            message: res.data,
             type: 'error'
           })
         } else {
@@ -81,7 +81,7 @@ export default {
         }
       }).catch(res => {
         _this.$message({
-          message: res.message,
+          message: res.data,
           type: 'error'
         })
       })
