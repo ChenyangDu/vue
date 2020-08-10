@@ -61,10 +61,30 @@ export default {
   },
   methods: {
     register() {
-      // let userInfo = {
-      //
-      // }
-      //
+      let userInfo = {
+        name: this.registerForm.name,
+        password: this.registerForm.password,
+        phone: this.registerForm.phone,
+        email: this.registerForm.email,
+        wechat: this.registerForm.wechat,
+        qq: this.registerForm.qq
+      }
+      var _this = this
+      this.$api.login.register(userInfo).then(res => {
+        if (res.msg != null) {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        } else {
+          _this.$router.push('/login')
+        }
+      }).catch(res => {
+        _this.$message({
+          message: res.message,
+          type: 'error'
+        })
+      })
     },
     reset() {
       this.$refs.registerForm.resetFields()

@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import user from "@/store/modules/user";
+
 export default {
   name: "Login",
   data() {
@@ -43,11 +45,28 @@ export default {
   },
   methods: {
     login() {
-      // let userInfo = {
-      //   phone: this.loginForm.phone,
-      //   password: this.loginForm.password
-      // }
-      // todo api接口封装
+      let userInfo = {
+        phone: this.loginForm.phone,
+        password: this.loginForm.password
+      }
+      var _this = this
+      this.$api.login.login(userInfo).then(res => {
+        if (res.msg != null) {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        } else {
+          sessionStorage.setItem('user', userInfo.phone)
+          _this.$store.commit('login',userInfo.phone)
+          _this.$router.push('/')
+        }
+      }).catch(res => {
+        _this.$message({
+          message: res.message,
+          type: 'error'
+        })
+      })
     },
     reset() {
       this.$refs.loginForm.resetFields()
