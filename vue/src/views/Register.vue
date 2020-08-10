@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="register-page">
     <el-form class="register-container" :model="registerForm" :rules="fieldRules" ref="registerForm">
       <h2 class="title">用户注册</h2>
       <el-form-item prop="name">
@@ -20,9 +20,9 @@
       <el-form-item prop="qq">
         <el-input type="text" v-model="registerForm.qq"  auto-complete="off" placeholder="QQ号"></el-input>
       </el-form-item>
-      <el-form-item class="button-item">
-        <el-button type="primary" style="width:36%;" @click="reset" round>重 置</el-button>
-        <el-button type="primary" style="width:36%;" @click="register('registerForm')" round>注 册</el-button>
+      <el-form-item class="button-item" style="margin-bottom: 10px">
+        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="reset" round>重 置</el-button>
+        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="register('registerForm')" round>注 册</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -104,6 +104,15 @@ export default {
 </script>
 
 <style scoped>
+.register-page {
+  background: url("../assets/img/bg/bg_1_underattack.png") no-repeat center;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  position: fixed;
+}
 .register-container {
   -webkit-border-radius: 5px;
   border-radius: 5px;
@@ -127,7 +136,13 @@ export default {
 .el-form-item {
   margin-bottom: 30px;
 }
-.button-item {
-  margin-bottom: 10px;
-}
+/*.el-button{*/
+/*  margin-left: 47px;*/
+/*}*/
+/*.el-button+.el-button{*/
+/*  margin-left: 47px;*/
+/*}*/
+/*.button-item {*/
+/*  margin-bottom: 10px;*/
+/*}*/
 </style>
