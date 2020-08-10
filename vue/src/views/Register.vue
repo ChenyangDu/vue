@@ -42,6 +42,13 @@ export default {
         qq: ''
       },
       fieldRules: {
+        name: [
+          {
+            required: true,
+            message: '请输入用户名',
+            trigger: 'blur'
+          }
+        ],
         password: [
           {
             required: true,
@@ -64,14 +71,7 @@ export default {
       var _this = this
       this.$refs[formName].validate(valid => {
         if (valid) {
-          let userInfo = {
-            name: this.registerForm.name,
-            password: this.registerForm.password,
-            phone: this.registerForm.phone,
-            email: this.registerForm.email,
-            wechat: this.registerForm.wechat,
-            qq: this.registerForm.qq
-          }
+          let userInfo = this.registerForm
           this.$api.login.register(userInfo).then(res => {
             if (res !== "ok") {
               _this.$message({
