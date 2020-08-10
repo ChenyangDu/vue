@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item class="button-item">
         <el-button type="primary" style="width:36%;" @click.native.prevent="reset" round>重 置</el-button>
-        <el-button type="primary" style="width:36%;" @click.native.prevent="login" :loading="loading" round>登 录</el-button>
+        <el-button type="primary" style="width:36%;" @click.native.prevent="login('loginForm')" :loading="loading" round>登 录</el-button>
       </el-form-item>
       <el-form-item class="register-item">
           <router-link to="/register">
@@ -44,28 +44,37 @@ export default {
     }
   },
   methods: {
-    login() {
-      let userInfo = {
-        phone: this.loginForm.phone,
-        password: this.loginForm.password
-      }
+    login(formName) {
       var _this = this
-      this.$api.login.login(userInfo).then(res => {
-        if (res.data === "error") {
-          _this.$message({
-            message: res.data,
-            type: 'error'
+      this.$refs[formName].validate(valid => {
+        if (valid){
+          let userInfo = {
+            phone: this.loginForm.phone,
+            password: this.loginForm.password
+          }
+          this.$api.login.login(userInfo).then(res => {
+            if (res === "error") {
+              _this.$message({
+                message: res,
+                type: 'error'
+              })
+            } else {
+              sessionStorage.setItem('username', res.phone)
+              _this.$store.commit('login',res.phone)
+              _this.$router.push('/')
+            }
+          }).catch(res => {
+            _this.$message({
+              message: res,
+              type: 'error'
+            })
           })
         } else {
-          sessionStorage.setItem('username', res.data.phone)
-          _this.$store.commit('login',res.data.phone)
-          _this.$router.push('/')
+          _this.$message({
+            message: '请填写完整登录信息！',
+            type: 'error'
+          })
         }
-      }).catch(res => {
-        _this.$message({
-          message: res.data,
-          type: 'error'
-        })
       })
     },
     reset() {

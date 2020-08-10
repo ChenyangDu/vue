@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item class="button-item">
         <el-button type="primary" style="width:36%;" @click="reset" round>重 置</el-button>
-        <el-button type="primary" style="width:36%;" @click="register" round>注 册</el-button>
+        <el-button type="primary" style="width:36%;" @click="register('registerForm')" round>注 册</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -60,31 +60,41 @@ export default {
     }
   },
   methods: {
-    register() {
-      let userInfo = {
-        name: this.registerForm.name,
-        password: this.registerForm.password,
-        phone: this.registerForm.phone,
-        email: this.registerForm.email,
-        wechat: this.registerForm.wechat,
-        qq: this.registerForm.qq
-      }
+    register(formName) {
       var _this = this
-      this.$api.login.register(userInfo).then(res => {
-        if (res.data !== "ok") {
-          _this.$message({
-            message: res.data,
-            type: 'error'
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let userInfo = {
+            name: this.registerForm.name,
+            password: this.registerForm.password,
+            phone: this.registerForm.phone,
+            email: this.registerForm.email,
+            wechat: this.registerForm.wechat,
+            qq: this.registerForm.qq
+          }
+          this.$api.login.register(userInfo).then(res => {
+            if (res !== "ok") {
+              _this.$message({
+                message: res,
+                type: 'error'
+              })
+            } else {
+              _this.$router.push('/login')
+            }
+          }).catch(res => {
+            _this.$message({
+              message: res,
+              type: 'error'
+            })
           })
         } else {
-          _this.$router.push('/login')
+          _this.$message({
+            message: '请正确填写注册信息！',
+            type: 'error'
+          })
         }
-      }).catch(res => {
-        _this.$message({
-          message: res.data,
-          type: 'error'
-        })
       })
+
     },
     reset() {
       this.$refs.registerForm.resetFields()
