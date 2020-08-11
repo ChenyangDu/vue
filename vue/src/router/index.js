@@ -9,8 +9,10 @@ import Register from '../views/Register'
 // test用
 import PersonalInformation from "../views/PersonalInformation"
 import Revising from "../views/Revising"
+
 import DocEditor from "@/views/DocEditor";
 import GetDocTest from "@/views/GetDocTest";
+import NoticePanelTest from "@/views/NoticePanelTest";
 
 import api from '@/http/api'
 import store from '../store'
@@ -53,6 +55,7 @@ const router = new VueRouter({
         requireAuth: false
       }
     },
+    // 以下为测试用 暂且写在这里
     {
       path: '/personalInformation',
       name: 'PersonalInformation',
@@ -78,6 +81,11 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: GetDocTest
+    },
+    {
+      path: '/noticepaneltest',
+      name: 'NoticePanelTest',
+      component: NoticePanelTest
     }
   ]
 })

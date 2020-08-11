@@ -12,11 +12,11 @@ export default {
       var _this = this
       this.$api.document.info(
           {
-            id: 1
+            doc_id: 1
           }
       ).then(res => {
         if(res.code === 200) {
-          _this.$route.push({
+          _this.$router.push({
             name: '/doceditor',
             params: {
               doc_id: res.data.id

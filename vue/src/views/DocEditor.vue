@@ -51,11 +51,11 @@ export default {
   },
   mounted() {
     // todo 权限请求判断
-    this.doc_id = this.$route.params.id
+    this.doc_id = this.$route.params.doc_id
     console.log(this.doc_id)
     var _this = this
     this.$api.document.view({
-      id: _this.doc_id // 通过doc的id请求文档内容
+      doc_id: _this.doc_id // 通过doc的id请求文档内容
     }).then(res => {
       if (res.code === 200 ){
         _this.msg = res.data
