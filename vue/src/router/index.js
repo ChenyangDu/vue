@@ -55,7 +55,7 @@ const router = new VueRouter({
     name: 'PersonalInformation',
     component: PersonalInformation,
     meta: {
-      isLogin: true
+      requireAuth: true
     }
   },
   {
@@ -63,7 +63,7 @@ const router = new VueRouter({
     name: 'Revising',
     component: Revising,
     meta: {
-      isLogin: true
+      requireAuth: true
     }
   }
     
