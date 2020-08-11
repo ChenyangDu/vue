@@ -6,8 +6,11 @@ import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
 
+// test用
 import PersonalInformation from "../views/PersonalInformation"
 import Revising from "../views/Revising"
+import DocEditor from "@/views/DocEditor";
+import GetDocTest from "@/views/GetDocTest";
 
 import api from '@/http/api'
 import store from '../store'
@@ -47,26 +50,35 @@ const router = new VueRouter({
       name: 'NotFound',
       component: NotFound,
       meta: {
-        isLogin: false
+        requireAuth: false
       }
     },
-  {
-    path: '/PersonalInformation',
-    name: 'PersonalInformation',
-    component: PersonalInformation,
-    meta: {
-      requireAuth: true
+    {
+      path: '/personalInformation',
+      name: 'PersonalInformation',
+      component: PersonalInformation,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/revising',
+      name: 'Revising',
+      component: Revising,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/doceditor',
+      name: 'DocEditor',
+      component: DocEditor,
+    },
+    {
+      path: '/getdoctest',
+      name: 'GetDocTest',
+      component: GetDocTest
     }
-  },
-  {
-    path: '/Revising',
-    name: 'Revising',
-    component: Revising,
-    meta: {
-      requireAuth: true
-    }
-  }
-    
   ]
 })
 

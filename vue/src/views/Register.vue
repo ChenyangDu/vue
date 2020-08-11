@@ -73,9 +73,9 @@ export default {
         if (valid) {
           let userInfo = this.registerForm
           this.$api.login.register(userInfo).then(res => {
-            if (res !== "ok") {
+            if (res.code !== 200) {
               _this.$message({
-                message: res,
+                message: res.msg,
                 type: 'error'
               })
             } else {
@@ -83,7 +83,7 @@ export default {
             }
           }).catch(res => {
             _this.$message({
-              message: res,
+              message: res.msg,
               type: 'error'
             })
           })
