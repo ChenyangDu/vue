@@ -1,16 +1,16 @@
 export default {
   state: {
-    username: sessionStorage.getItem('username') == null ? '' : JSON.parse(sessionStorage.getItem('username' || '[]'))
+    username: localStorage.getItem('username') == null ? '' : JSON.parse(localStorage.getItem('username' || '[]'))
   },
   getters: {},
   mutations: {
     login(state, data) {
       state.username = data
-      window.sessionStorage.setItem('username', JSON.stringify(data))
+      window.localStorage.setItem('username', JSON.stringify(data))
     },
     logout(state) {
       state.username = ''
-      window.sessionStorage.removeItem('username')
+      window.localStorage.removeItem('username')
     }
   },
   action: {}

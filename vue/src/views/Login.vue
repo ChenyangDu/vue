@@ -12,9 +12,13 @@
         <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click.native.prevent="reset" round>重 置</el-button>
         <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click.native.prevent="login('loginForm')" :loading="loading" round>登 录</el-button>
       </el-form-item>
-      <el-form-item class="register-item" style="margin: 0 0 0 149px;">
+      <el-form-item class="register-item" style="margin: 0 0 0 2px;">
+        <el-checkbox class="login_remember" v-model="checked"
+                     label-position="left"><span style="color: #505458">记住密码</span>
+        </el-checkbox>
+        <span style="color: #505458;margin-left: 130px">还没有账号?</span>
           <router-link to="/register">
-            <el-button type="text">去 注 册</el-button>
+            <el-button type="text">立即注册</el-button>
           </router-link>
       </el-form-item>
     </el-form>
@@ -59,8 +63,7 @@ export default {
                 type: 'error'
               })
             } else {
-              sessionStorage.setItem('username', res.phone)
-              _this.$store.commit('login',res.phone)
+              _this.$store.commit('login',res)
               _this.$router.push('/')
             }
           }).catch(res => {
@@ -117,6 +120,10 @@ export default {
 }
 .el-form-item {
   margin-bottom: 30px;
+}
+.login_remember {
+  margin: 0 0 0 0;
+  text-align: left;
 }
 /*.el-button{*/
 /*  margin-left: 47px;*/

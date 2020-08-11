@@ -39,13 +39,13 @@ export default function $axios(options){
       response => {
         return response.data
       },
-      err => {
+      error => {
         // console.error(err)
-        if (err) {
+        if (error) {
           store.commit('logout')
           // router.replace('/login')
         }
-        return Promise.reject(err)
+        return Promise.reject(error)
       }
     )
     //请求处理
