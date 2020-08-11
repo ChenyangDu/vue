@@ -1,8 +1,9 @@
 <template>
 
   <div >
-  <div style="margin: 20px;"></div>
-  <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+    <center>
+  <div style="margin: 50px;"></div>
+  <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" style="width:40%;text-align:center" >
   <el-form-item label="昵称">
     <el-input v-model="formLabelAlign.name"></el-input>
   </el-form-item>
@@ -26,6 +27,7 @@
       <el-button type="primary" style="width:36%;" @click="rep" round>保 存</el-button>
     </el-form-item >
   </el-form>
+  </center>
   </div>
 
 </template>
@@ -41,7 +43,7 @@ export default {
     data() {
       
       return {
-        labelPosition: 'top',
+        labelPosition: 'right',
         
         formLabelAlign: {
           name: '',
