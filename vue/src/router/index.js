@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
+import DocumentList from '../views/DocumentList'
 
 import api from '@/http/api'
 import store from '../store'
@@ -45,6 +46,14 @@ const router = new VueRouter({
       component: NotFound,
       meta: {
         isLogin: false
+      }
+    },
+    {
+      path : '/DocumentList',
+      name: 'DocumentList',
+      component: DocumentList,
+      meta:{
+        isLogin:false
       }
     }
   ]
