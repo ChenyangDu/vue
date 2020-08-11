@@ -4,6 +4,9 @@
 ```
 npm install
 ```
+### npm install @tinymce/tinymce-vue -S
+### npm install tinymce -S
+
 
 ### Compiles and hot-reloads for development
 ```

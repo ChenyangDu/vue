@@ -26,8 +26,6 @@
 </template>
 
 <script>
-// import user from "@/store/modules/user";
-
 export default {
   name: "Login",
   data() {
