@@ -1,5 +1,7 @@
 <template>
   <div class="doc-editor-page">
+    <el-page-header @back="goBack" content="编辑页面" class="header"></el-page-header>
+
     <el-form class="edit-container">
       <el-form-item>
         <tinymce-editor v-model="msg"
@@ -9,8 +11,8 @@
         </tinymce-editor>
       </el-form-item>
       <el-form-item class="button-item">
-        <el-button type="primary" @click="handleSubmit">提交</el-button>
-        <el-button type="primary" @click="disabled = true">禁用</el-button>
+        <el-button type="primary" @click="handleSubmit" style="float: right">提交</el-button>
+<!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
       </el-form-item>
     </el-form>
     {{ msg }}
@@ -33,6 +35,9 @@ export default {
     }
   },
   methods: {
+    goBack() {
+      this.$router.back()
+    },
     //鼠标单击的事件
     onClick(e, editor) {
       console.log('Element clicked')
@@ -45,11 +50,12 @@ export default {
     }
   },
   mounted() {
+    // todo 权限请求判断
     this.doc_id = this.$route.params.id
-    alert(this.doc_id + 'jkadshlfajhse')
+    console.log(this.doc_id)
     var _this = this
     this.$api.document.view({
-      id: _this.doc_id
+      id: _this.doc_id // 通过doc的id请求文档内容
     }).then(res => {
       if (res.code === 200 ){
         _this.msg = res.data
@@ -64,8 +70,21 @@ export default {
   }
 }
 </script>
-<style>
-.doc-editor-page{
-  margin: 100px 150px 0 150px;
+
+<style scoped>
+.header{
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+}
+.edit-container{
+  margin: 60px 80px 0 80px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  padding: 40px;
+  border-radius: 15px;
 }
 </style>
