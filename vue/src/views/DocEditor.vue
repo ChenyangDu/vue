@@ -61,10 +61,9 @@ export default {
         _this.msg = res.data
       } else {
         _this.$message({
-          message: '错误',
+          message: res.msg, // 文章不存在
           type: 'error'
         })
-        _this.$router.push('/')
       }
     })
   }
