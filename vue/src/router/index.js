@@ -6,6 +6,9 @@ import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
 
+import PersonalInformation from "../views/PersonalInformation"
+import Revising from "../views/Revising"
+
 import api from '@/http/api'
 import store from '../store'
 
@@ -46,7 +49,24 @@ const router = new VueRouter({
       meta: {
         isLogin: false
       }
+    },
+  {
+    path: '/PersonalInformation',
+    name: 'PersonalInformation',
+    component: PersonalInformation,
+    meta: {
+      isLogin: true
     }
+  },
+  {
+    path: '/Revising',
+    name: 'Revising',
+    component: Revising,
+    meta: {
+      isLogin: true
+    }
+  }
+    
   ]
 })
 
