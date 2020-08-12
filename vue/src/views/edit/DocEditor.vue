@@ -2,6 +2,7 @@
   <div class="doc-editor-page">
     <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>
     <div class="content-container">
+      <!-- 编辑区 -->
       <el-form class="edit-container" >
         <el-form-item>
           <tinymce-editor v-model="msg"
@@ -15,7 +16,7 @@
           <!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
         </el-form-item>
       </el-form>
-      <!--    {{ msg }}-->
+      <!-- 评论区 -->
       <div class="comment-container">
         <comment-panel></comment-panel>
       </div>
