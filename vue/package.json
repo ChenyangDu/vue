@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.2.2",
+    "ant-design-vue": "^1.6.4",
     "core-js": "^3.6.5",
     "element-ui": "^2.4.5",
     "tinymce": "^5.4.1",

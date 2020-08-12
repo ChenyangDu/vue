@@ -68,6 +68,7 @@ export default {
   },
   methods: {
     register(formName) {
+      alert(this.registerForm.wechat === '')
       var _this = this
       this.$refs[formName].validate(valid => {
         if (valid) {

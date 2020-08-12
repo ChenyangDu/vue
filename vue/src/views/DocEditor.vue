@@ -1,30 +1,37 @@
 <template>
   <div class="doc-editor-page">
-    <el-page-header @back="goBack" content="编辑页面" class="header"></el-page-header>
+    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>
+    <div class="content-container">
+      <el-form class="edit-container" >
+        <el-form-item>
+          <tinymce-editor v-model="msg"
+                          :disabled="disabled"
+                          @onClick="onClick"
+                          ref="editor">
+          </tinymce-editor>
+        </el-form-item>
+        <el-form-item class="button-item">
+          <el-button type="primary" @click="handleSubmit" style="float: right">提交</el-button>
+          <!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
+        </el-form-item>
+      </el-form>
+      <!--    {{ msg }}-->
+      <div class="comment-container">
+        <comment-panel></comment-panel>
+      </div>
+    </div>
 
-    <el-form class="edit-container">
-      <el-form-item>
-        <tinymce-editor v-model="msg"
-                        :disabled="disabled"
-                        @onClick="onClick"
-                        ref="editor">
-        </tinymce-editor>
-      </el-form-item>
-      <el-form-item class="button-item">
-        <el-button type="primary" @click="handleSubmit" style="float: right">提交</el-button>
-<!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
-      </el-form-item>
-    </el-form>
-    {{ msg }}
   </div>
 
 </template>
 
 <script>
 import TinymceEditor from "@/component/TinymceEditor";
+import CommentPanel from "@/component/CommentPanel";
 export default {
   name: 'Home',
   components: {
+    CommentPanel,
     TinymceEditor
   },
   data() {
@@ -79,11 +86,25 @@ export default {
   padding: 20px 20px 20px 20px;
 }
 .edit-container{
-  margin: 60px 80px 0 80px;
+  display: inline;
+  float: left;
+  width: 67%;
+  margin: 60px 15px 0 30px;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
   padding: 40px;
+  border-radius: 15px;
+}
+.comment-container{
+  display: inline;
+  float: right;
+  width: 25%;
+  margin: 60px 30px 0 15px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  padding: 20px 20px 20px 20px;
   border-radius: 15px;
 }
 </style>
