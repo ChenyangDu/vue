@@ -1,19 +1,9 @@
 <template>
 
 <div>
-  <!-- <el-row>
-    <el-row :span="12">
-      <div class="demo-basic--circle">
-        <div class="block">
-          <el-avatar :size="50" :src="circleUrl"></el-avatar></div>
-      </div>
-    </el-row>  
-    <el-row>
-      <h2>蔡徐坤</h2>
-    </el-row>
-  </el-row> -->
+
 <el-card>
-    <div>
+    <!-- <div>
         <el-row>
           <el-col :span="200">
           <el-button type="primary" round>新建</el-button>
@@ -29,7 +19,26 @@
           </el-select>
           </el-col>
         </el-row>
-    </div>
+    </div> -->
+<el-row :gutter="20">
+  <el-col :span="6">
+    <el-select  v-model="value" placeholder="请选择" @change="selectChange">
+            <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+            </el-option>
+          </el-select>
+  </el-col>
+  <el-col :span="6">
+    <el-input placeholder="请输入搜索内容" v-model="input3" class="input-with-select">
+    <el-button slot="append" icon="el-icon-search"></el-button>
+  </el-input>
+  </el-col>
+  <el-col :span="6"><el-button type="primary" round>新建</el-button></el-col>
+</el-row>
+
   <el-table
     :data="tableData"
     stripe
@@ -86,10 +95,8 @@ export default {
     data:function() {
       return {
         count:10,
-        value:"",
-        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
-        squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
-        sizeList: ["large", "medium", "small"],
+        value:"选项1",
+
         options: [{
           value: '选项1',
           label: '全部'
@@ -131,51 +138,17 @@ export default {
           authortname:'蔡徐坤',
           modifydate: '2020-8-11'
         },
-        {
-          id:4,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        },
-        {
-          id:5,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        },
-        {
-          id:6,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        },
-        {
-          id:7,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        },
-        {
-          id:8,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        },
-        {
-          id:9,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
-        }
 
-        ]
+
+        ],
+        //用于测试的用户id
+        userid:0
       }
+    },
+    created:function(){
+        const {data:res} = this.$http.get('user/own',{params:this.userid});
+        console.log(res);
+        this.tableData = res;
     },
     methods: {
       detail:function(id) {
@@ -193,13 +166,64 @@ export default {
       },
       selectChange:function(val){
           this.value = val;
-          console.log(this.count);
-
+          if(this.value == '选项1')
+          {
+              const {data:res} = this.$http.get('user/own',{params:this.userid});
+              console.log(res);
+              this.tableData = res;
+          }
+          else if(this.value == '选项2')
+          {
+              const {data:res} = this.$http.get('user/favorite',{params:this.userid});
+              console.log(res);
+              this.tableData = res;
+          }
+          else if(this.value == '选项3')
+          {
+              const {data:res} = this.$http.get('user/own',{params:this.userid});
+              console.log(res);
+              this.tableData = res;
+          }
+          else if(this.value == '选项4')
+          {
+              const {data:res} = this.$http.get('user/recent',{params:this.userid});
+              console.log(res);
+              this.tableData = res;
+          }
       }
     },
 }
 </script>
 
 <style scoped>
+ .el-row {
+    margin-bottom: 20px;
 
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+   .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+   .el-select .el-input {
+    width: 130px;
+  }
 </style>
