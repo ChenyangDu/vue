@@ -82,12 +82,7 @@ export default {
             } else {
               _this.$router.push('/login')
             }
-          }).catch(res => {
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          })
+          }).catch(failResponse => {})
         } else {
           _this.$message({
             message: '请正确填写注册信息！',

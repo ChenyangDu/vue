@@ -33,12 +33,13 @@
     </a-comment>
   </div>
 </template>
+
 <script>
 // import moment from 'moment';
 export default {
   name: 'CommentPanel',
   props: {
-
+    doc_id: ''
   },
   data() {
     return {
@@ -49,24 +50,57 @@ export default {
     };
   },
   methods: {
+    // 请求评论列表
+    loadComments() {
+      alert(this.doc_id)
+      var _this = this
+      this.$api.comment.list({
+        doc_id: this.doc_id
+      }).then(res => {
+        if(res.code === 200) {
+          this.comments = res.data
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
+    // 提交
     handleSubmit() {
       if (!this.value) {
         return;
       }
       this.submitting = true;
-      this.submitting = false;
-      this.comments.unshift({ // 添加在数组头部
-        author: 'Han Solo',
+      var _this = this
+      let newComment = {
+        // user_id: this.$store.state.user.username.id
+        user_id: 1,
+        doc_id: this.doc_id,
         content: this.value,
         datetime: this.getNowFormatDate()
-      })
+      }
+      this.$api.comment.create(newComment).then(res => {
+        if (res.code === 200 ){
+          _this.comments.unshift(res.data)
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+      this.submitting = false;
       this.value = '';
-      // 发送数据到后端
     },
     handleChange(e) {
       this.value = e.target.value;
     },
   },
+  created() {
+    this.loadComments()
+  }
 };
 </script>
 

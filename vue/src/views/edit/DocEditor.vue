@@ -18,7 +18,7 @@
       </el-form>
       <!-- 评论区 -->
       <div class="comment-container">
-        <comment-panel></comment-panel>
+        <comment-panel :doc_id="this.doc_id"></comment-panel>
       </div>
     </div>
 
@@ -39,7 +39,7 @@ export default {
     return {
       msg: 'Welcome to Use Tinymce Editor',
       disabled: false,
-      doc_id: ''
+      doc_id: 1
     }
   },
   methods: {
@@ -87,10 +87,10 @@ export default {
   padding: 20px 20px 20px 20px;
 }
 .edit-container{
-  display: inline;
-  float: left;
-  width: 67%;
-  margin: 60px 15px 0 30px;
+  /*display: inline;*/
+  /*float: left;*/
+  /*width: 67%;*/
+  margin: 60px 60px 30px 60px;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
@@ -98,10 +98,10 @@ export default {
   border-radius: 15px;
 }
 .comment-container{
-  display: inline;
-  float: right;
-  width: 25%;
-  margin: 60px 30px 0 15px;
+  /*display: inline;*/
+  /*float: right;*/
+  /*width: 25%;*/
+  margin: 30px 60px 0 60px;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;

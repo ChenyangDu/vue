@@ -62,12 +62,7 @@ export default {
           type: 'error'
         })
       }
-    }).catch(res=>{
-      _this.$message({
-        message: res.msg,
-        type: 'error'
-      })
-    })
+    }).catch(failResponse => {})
   }
 }
 </script>

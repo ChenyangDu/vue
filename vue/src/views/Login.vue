@@ -64,12 +64,7 @@ export default {
               _this.$store.commit('login',res.data)
               _this.$router.push('/')
             }
-          }).catch(res => {
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          })
+          }).catch(failResponse => {})
         } else {
           _this.$message({
             message: '请填写完整登录信息！',
