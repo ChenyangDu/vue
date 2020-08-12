@@ -3,23 +3,7 @@
 <div>
 
 <el-card>
-    <!-- <div>
-        <el-row>
-          <el-col :span="200">
-          <el-button type="primary" round>新建</el-button>
-          <el-button icon="el-icon-search" circle></el-button>
-          <span></span>
-          <el-select  v-model="value" placeholder="请选择" @change="selectChange">
-            <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            </el-option>
-          </el-select>
-          </el-col>
-        </el-row>
-    </div> -->
+
 <el-row :gutter="20">
   <el-col :span="6">
     <el-select  v-model="value" placeholder="请选择" @change="selectChange">
@@ -40,29 +24,25 @@
 </el-row>
 
   <el-table
-    :data="tableData"
+    :data="documents"
     stripe
     style="width: 100%" >
 
     <el-table-column type="index" >
     </el-table-column>
     <el-table-column 
-      prop="createdate"
+      prop="createtime"
       label="创建日期"
       width="150" >
     </el-table-column>
     <el-table-column
-      prop="documentname"
+      prop="name"
       label="文档标题"
       width="300">
     </el-table-column>
+
     <el-table-column
-      prop="authortname"
-      label="作者"
-      width="100">
-    </el-table-column>
-    <el-table-column
-      prop="modifydate"
+      prop="last_edit_time"
       label="修改日期"
       width="150">
     </el-table-column>
@@ -97,58 +77,67 @@ export default {
         count:10,
         value:"选项1",
 
-        options: [{
+        options: [ {
           value: '选项1',
-          label: '全部'
+          label: '我创建的'
         }, {
           value: '选项2',
           label: '我收藏的'
         }, {
           value: '选项3',
-          label: '我创建的'
-        }, {
-          value: '选项4',
           label: '最近浏览'
         }],
-        tableData: [{
+        documents: [{
           id:0,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
+          name:"鸡你太美",
+          creator_id:0,
+          group_id:0,
+          createtime: '2016-05-02',
+          last_edit_time:'20208-11',
+          is_deleted:false,
+          is_editing:false
         }, 
         {
           id:1,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
+          name:"鸡你太美",
+          creator_id:0,
+          group_id:0,
+          createtime: '2016-05-02',
+          last_edit_time:'20208-11',
+          is_deleted:false,
+          is_editing:false
         },
         {
           id:2,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
+          name:"鸡你太美",
+          creator_id:0,
+          group_id:0,
+          createtime: '2016-05-02',
+          last_edit_time:'20208-11',
+          is_deleted:false,
+          is_editing:false
         },
         {
           id:3,
-          createdate: '2016-05-02',
-          documentname: '鸡你太美',
-          authortname:'蔡徐坤',
-          modifydate: '2020-8-11'
+          name:"鸡你太美",
+          creator_id:0,
+          group_id:0,
+          createtime: '2016-05-02',
+          last_edit_time:'20208-11',
+          is_deleted:false,
+          is_editing:false
         },
 
 
         ],
         //用于测试的用户id
-        userid:0
+        id:1
       }
     },
     created:function(){
-        const {data:res} = this.$http.get('user/own',{params:this.userid});
+        const {data:res} = this.$http.get('user/own',{params:this.id});
         console.log(res);
-        this.tableData = res;
+        this.documents = res;
     },
     methods: {
       detail:function(id) {
@@ -168,27 +157,21 @@ export default {
           this.value = val;
           if(this.value == '选项1')
           {
-              const {data:res} = this.$http.get('user/own',{params:this.userid});
+              const {data:res} = this.$http.get('user/own',{params:this.id});
               console.log(res);
-              this.tableData = res;
+              this.documents = res;
           }
           else if(this.value == '选项2')
           {
-              const {data:res} = this.$http.get('user/favorite',{params:this.userid});
+              const {data:res} = this.$http.get('user/favorite',{params:this.id});
               console.log(res);
-              this.tableData = res;
+              this.documents = res;
           }
           else if(this.value == '选项3')
           {
-              const {data:res} = this.$http.get('user/own',{params:this.userid});
+              const {data:res} = this.$http.get('user/recent',{params:this.id});
               console.log(res);
-              this.tableData = res;
-          }
-          else if(this.value == '选项4')
-          {
-              const {data:res} = this.$http.get('user/recent',{params:this.userid});
-              console.log(res);
-              this.tableData = res;
+              this.documents = res;
           }
       }
     },
