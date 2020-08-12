@@ -17,13 +17,18 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: Home,
-      meta: {
-        requireAuth: true
-      }
+      path: "/",
+      name: "Home",
+      redirect: "home",
     },
+	{
+	  path: "/home",
+	  name: "Home",
+	  component: Home,
+	  meta: {
+	    requireAuth: false
+	  },
+	},
     {
       path: '/login',
       name: 'Login',
