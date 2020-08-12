@@ -8,11 +8,11 @@ import Register from '../views/Register'
 import DocumentList from '../views/DocumentList'
 
 // test用
-import PersonalInformation from "../views/PersonalInformation"
-import Revising from "../views/Revising"
+import PersonalInformation from "../views/userInfo/PersonalInformation"
+import Revising from "../views/userInfo/Revising"
 
-import DocEditor from "@/views/DocEditor";
-import GetDocTest from "@/views/GetDocTest";
+import DocEditor from "@/views/edit/DocEditor";
+import GetDocTest from "@/views/edit/GetDocTest";
 import NoticePanelTest from "@/views/NoticePanelTest";
 
 import api from '@/http/api'
