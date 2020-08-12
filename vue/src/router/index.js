@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
+import DocumentList from '../views/DocumentList'
 
 // test用
 import PersonalInformation from "../views/userInfo/PersonalInformation"
@@ -86,6 +87,11 @@ const router = new VueRouter({
       path: '/noticepaneltest',
       name: 'NoticePanelTest',
       component: NoticePanelTest
+    },
+    {
+      path: '/documentlist',
+      name: 'DocumentList',
+      component: DocumentList
     }
   ]
 })
