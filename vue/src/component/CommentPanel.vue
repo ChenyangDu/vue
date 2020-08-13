@@ -8,9 +8,9 @@
 <!--      ${comments.length > 1 ? 'replies' : 'reply'}-->
       <a-list-item slot="renderItem" slot-scope="item, index">
         <a-comment
-          :author="item.author"
+          :author="item.user_id"
           :content="item.content"
-          :datetime="item.datetime"/>
+          :datetime="item.time"/>
 <!--        :avatar="item.avatar"-->
       </a-list-item>
     </a-list>
@@ -74,7 +74,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    // 提交
+    // 提交评论
     handleSubmit() {
       if (!this.value) {
         return;
@@ -84,9 +84,10 @@ export default {
       let newComment = {
         // user_id: this.$store.state.user.username.id
         user_id: 1,
-        doc_id: this.doc_id,
+        document_id: this.doc_id,
         content: this.value,
-        datetime: this.getNowFormatDate()
+        // time: this.getNowFormatDate()
+        time: ''
       }
       this.$api.comment.create(newComment).then(res => {
         if (res.code === 200 ){

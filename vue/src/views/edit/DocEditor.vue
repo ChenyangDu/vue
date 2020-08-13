@@ -42,11 +42,26 @@ export default {
       msg: 'Welcome to Use Tinymce Editor',
       disabled: false,
       authority: {
-        doc_id: 1,
-        can_read: true,
-        can_comment: true,
-        can_edit: true,
-        can_delete: true
+        doc_id: {
+          type: Number,
+          default: 1
+        },
+        can_read: {
+          type: Boolean,
+          default: true
+        },
+        can_comment: {
+          type: Boolean,
+          default: true
+        },
+        can_edit: {
+          type: Boolean,
+          default: true
+        },
+        can_delete: {
+          type: Boolean,
+          default: true
+        }
       },
       doc: {
         id: 1,
@@ -108,7 +123,21 @@ export default {
     },
     //提交
     handleSubmit() {
-      this.$refs.editor.handleSubmit()
+      // this.$refs.editor.handleSubmit()
+      var _this = this
+      console.log(this.msg)
+      this.$api.document.end({
+        doc_id: this.doc.id
+      }, this.msg).then(res => {
+        if (res.code === 200 ){
+          alert("成功!")
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
     },
     //删除
     handleDelete() {

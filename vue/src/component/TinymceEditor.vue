@@ -98,22 +98,22 @@ export default {
       this.$emit('onClick', e, tinymce)
     },
     //可以添加一些自己的自定义事件
-    handleSubmit() {
-      var _this = this
-      console.log(this.myValue)
-      this.$api.document.end({
-        doc_id: this.doc_id
-      }, this.myValue).then(res => {
-        if (res.code === 200 ){
-          alert("成功!")
-        } else {
-          _this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
-    }
+    // handleSubmit() {
+    //   var _this = this
+    //   console.log(this.myValue)
+    //   this.$api.document.end({
+    //     doc_id: this.doc_id
+    //   }, this.myValue).then(res => {
+    //     if (res.code === 200 ){
+    //       alert("成功!")
+    //     } else {
+    //       _this.$message({
+    //         message: res.msg,
+    //         type: 'error'
+    //       })
+    //     }
+    //   })
+    // }
     // to_data() {
     //   console.log(this.tinymceHtml)
     //   let Base64 = {

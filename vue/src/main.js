@@ -3,16 +3,16 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import global from '@/utils/global'
-import './plugins/element.js'
 import api from './http'
-// import tinymce from 'tinymce/tinymce'
-// import 'tinymce/themes/silver/theme'
-// import Editor from '@tinymce/tinymce-vue'
+
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
 Vue.config.productionTip = false
 Vue.use(api)
+Vue.use(Element)
 Vue.use(Antd)
 
 Vue.prototype.global = global
