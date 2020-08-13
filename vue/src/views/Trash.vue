@@ -169,7 +169,7 @@ export default {
           is_editing: false,
         },
       ],
-      id:1
+      id:this.$store.state.user.username.id
     };
   },
   methods: {

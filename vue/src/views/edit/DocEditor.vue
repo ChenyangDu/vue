@@ -1,6 +1,6 @@
 <template>
   <div class="doc-editor-page">
-    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>
+<!--    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>-->
     <div class="content-container">
       <!-- 编辑区 -->
       <el-form class="edit-container" >
@@ -233,7 +233,7 @@ export default {
   /*display: inline;*/
   /*float: left;*/
   /*width: 67%;*/
-  margin: 60px 60px 30px 60px;
+  margin: 30px 60px 30px 60px;
   background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
