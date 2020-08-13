@@ -13,7 +13,6 @@ import Revising from "../views/userInfo/Revising"
 
 import DocEditor from "@/views/edit/DocEditor";
 import GetDocTest from "@/views/edit/GetDocTest";
-import NoticePanelTest from "@/views/NoticePanelTest";
 
 import api from '@/http/api'
 import store from '../store'
@@ -82,11 +81,6 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: GetDocTest
-    },
-    {
-      path: '/noticepaneltest',
-      name: 'NoticePanelTest',
-      component: NoticePanelTest
     },
     {
       path: '/documentlist',
