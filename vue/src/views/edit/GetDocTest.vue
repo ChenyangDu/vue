@@ -108,7 +108,7 @@ export default {
     handleRecover() {
       var _this = this
       this.$api.document.recover({
-        doc_id: 1290398265
+        doc_id: 1294250488
       }).then(res => {
         if (res.code === 200) {
           _this.message({

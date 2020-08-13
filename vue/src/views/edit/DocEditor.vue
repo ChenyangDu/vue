@@ -42,31 +42,17 @@ export default {
       msg: 'Welcome to Use Tinymce Editor',
       disabled: false,
       authority: {
-        doc_id: {
-          type: Number,
-          default: 1
-        },
-        can_read: {
-          type: Boolean,
-          default: true
-        },
-        can_comment: {
-          type: Boolean,
-          default: true
-        },
-        can_edit: {
-          type: Boolean,
-          default: true
-        },
-        can_delete: {
-          type: Boolean,
-          default: true
-        }
+        document_id: 1,
+        user_id: 1,
+        can_read: false,
+        can_comment: false,
+        can_edit: false,
+        can_delete: false
       },
       doc: {
         id: 1,
         name: '',
-        creator_id: -1,
+        creator_id: 1,
         group_id: -1,
         create_time: '',
         last_time: '',
@@ -121,7 +107,21 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //提交
+    // 开始编辑（需要权限）
+    editStart() {
+      var _this = this
+      this.$api.document.start({
+        doc_id: 1,
+      }).then(res => {
+        if (res.code !== 200) {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
+    // 提交
     handleSubmit() {
       // this.$refs.editor.handleSubmit()
       var _this = this
@@ -162,19 +162,6 @@ export default {
         }
       }).catch(failResponse => {})
     }
-  },
-  editStart() {
-    var _this = this
-    this.$api.document.start({
-      doc_id: 1,
-    }).then(res => {
-      if (res.code !== 200) {
-        _this.$message({
-          message: res.msg,
-          type: 'error'
-        })
-      }
-    }).catch(failResponse => {})
   },
   created() {
     this.doc = this.$route.params.doc
