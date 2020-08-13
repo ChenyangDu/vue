@@ -100,7 +100,7 @@ const router = new VueRouter({
       path: '/personalinformation',
       name: 'PersonalInformation',
       component: PersonalInformation
-    }
+    },
   ]
 })
 
