@@ -5,26 +5,21 @@ import Home from '../views/Home.vue'
 import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
-import DocumentList from '../views/DocumentList'
-import GroupDocumentList from '../views/GroupDocumentList'
+
 import GetDocTest from "@/views/edit/GetDocTest";
-import DocEditor from "@/views/edit/DocEditor";
-import PersonalInformation from "@/views/userInfo/PersonalInformation";
-import Revising from "@/views/userInfo/Revising";
+
 
 import api from '@/http/api'
 import store from '../store'
 
 Vue.use(VueRouter)
 
-
-
 const router = new VueRouter({
   routes: [
     {
       path: "/",
       name: "Index",
-      redirect: "/login",
+      redirect: "/home",
     },
     {
       path: "/home",
@@ -33,21 +28,53 @@ const router = new VueRouter({
       meta: {
         requireAuth: false
       },
-      children:[{
-        path: '/DocumentList',
-        name: 'DocumentList',
-        component: DocumentList,
-        meta: {
-          isLogin: false
+      children: [
+        {
+          path: '/personalinformation',
+          name: 'PersonalInformation',
+          component: () => import('../views/userInfo/PersonalInformation'),
+          meta: {
+            isLogin: false
+          }
+        },
+        {
+          path: '/revising',
+          name: 'Revising',
+          component: () => import('../views/userInfo/Revising'),
+          meta: {
+            isLogin: false
+          }
+        },
+        {
+          path: '/documentList',
+          name: 'DocumentList',
+          component: () => import('../views/DocumentList'),
+          meta: {
+            isLogin: false
+          }
+        },
+        {
+          path:'/groupdocumentlist',
+          name:'GroupDocumentList',
+          component: () => import('../views/GroupDocumentList'),
+          meta:{
+            isLogin:false
+          }
+        },
+        {
+          path:'/groupmember',
+          name:'GroupMember',
+          component: ()=>import('../views/GroupMember'),
+          meta:{
+            isLogin:false
+          }
         }
-      },{
-        path:'/groupdocumentlist',
-        name:'GroupDocumentList',
-        component: GroupDocumentList,
-        meta:{
-          isLogin:false
-        }
-      }]
+        ,
+        {
+          path: '/doceditor',
+          name: 'DocEditor',
+          component: () => import('../views/edit/DocEditor')
+        }]
     },
     {
       path: '/login',
@@ -73,33 +100,10 @@ const router = new VueRouter({
         requireAuth: false
       }
     },
-    // {
-    //   path: '/DocumentList',
-    //   name: 'DocumentList',
-    //   component: DocumentList,
-    //   meta: {
-    //     isLogin: false
-    //   }
-    // }
     {
       path: '/getdoctest',
       name: 'GetDocTest',
-      component: GetDocTest
-    },
-    {
-      path: '/doceditor',
-      name: 'DocEditor',
-      component: DocEditor
-    },
-    {
-      path:'/groupmember',
-      name:'GroupMember',
-      component: ()=>import('../views/GroupMember')
-    },
-    {
-      path: '/personalinformation',
-      name: 'PersonalInformation',
-      component: PersonalInformation
+      component: () => import('../views/edit/GetDocTest')
     }
   ]
 })
