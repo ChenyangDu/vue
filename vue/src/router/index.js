@@ -6,6 +6,7 @@ import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import DocumentList from '../views/DocumentList'
+import GroupDocumentList from '../views/GroupDocumentList'
 
 import api from '@/http/api'
 import store from '../store'
@@ -21,14 +22,29 @@ const router = new VueRouter({
       name: "Home",
       redirect: "home",
     },
-	{
-	  path: "/home",
-	  name: "Home",
-	  component: Home,
-	  meta: {
-	    requireAuth: false
-	  },
-	},
+    {
+      path: "/home",
+      name: "Home",
+      component: Home,
+      meta: {
+        requireAuth: false
+      },
+      children:[{
+        path: '/DocumentList',
+        name: 'DocumentList',
+        component: DocumentList,
+        meta: {
+          isLogin: false
+        }
+      },{
+        path:'/groupdocumentlist',
+        name:'GroupDocumentList',
+        component: GroupDocumentList,
+        meta:{
+          isLogin:false
+        }
+      }]
+    },
     {
       path: '/login',
       name: 'Login',
@@ -53,14 +69,14 @@ const router = new VueRouter({
         isLogin: false
       }
     },
-    {
-      path : '/DocumentList',
-      name: 'DocumentList',
-      component: DocumentList,
-      meta:{
-        isLogin:false
-      }
-    }
+    // {
+    //   path: '/DocumentList',
+    //   name: 'DocumentList',
+    //   component: DocumentList,
+    //   meta: {
+    //     isLogin: false
+    //   }
+    // }
   ]
 })
 

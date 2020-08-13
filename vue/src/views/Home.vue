@@ -16,6 +16,7 @@
           <keep-alive :include="tagsList">
             <!-- 次级出口，用以引入次级组件。例如下一个实验中的首页组件 -->
             <router-view></router-view>
+            
           </keep-alive>
         </transition>
         <el-backtop target=".content"></el-backtop>
@@ -30,6 +31,7 @@
   import vTags from "../components/common/Tags.vue";
   import bus from "../utils/bus.js";
   export default {
+    name:"guider",
     data() {
       return {
         tagsList: [],
