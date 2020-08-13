@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import global from '@/utils/global'
-import './plugins/element.js'
 import api from './http'
 import axios from 'axios'
 
