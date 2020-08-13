@@ -91,7 +91,7 @@ export default {
           })
           _this.$router.back()
         } else if (res.code === 200) {
-          console.log('authority code = 400')
+          console.log('authority code = 200')
           _this.authority = res.data
           console.log('authority')
           console.log(_this.authority)
@@ -119,22 +119,28 @@ export default {
     // 显示文章
     viewDoc() {
       console.log("获取文章内容")
+      var _this = this
       this.$api.document.view({
         doc_id: _this.doc.id, // 通过doc的id请求文档内容
-        user_id: _this.$store.state.user.username.id
+        // user_id: _this.$store.state.user.username.id
       }).then(res => {
         if (res.code === 200 ){
           _this.msg = res.data
           console.log('获取文章内容 code = 200')
-          console.log(_this.msg)
+          console.log('here' + _this.msg)
         } else {
-          console.log('获取文章内容 code = 200')
+          console.log('获取文章内容 code = 400')
           _this.$message({
             message: res.msg, // 文章不存在
             type: 'error'
           })
         }
       }).catch(failResponse => {})
+      // this.axios.get('http://39.101.200.9:8081/document/view?doc_id='+this.doc.id)
+      // .then(res => {
+      //
+      // })
+      console.log("获取文章内容-完成")
     },
     // 开始编辑（需要权限）
     editStart() {
@@ -204,7 +210,8 @@ export default {
       }).catch(failResponse => {})
     }
   },
-  created() {
+  mounted() {
+    console.log('编辑页')
     this.doc = this.$route.params.doc // info
     console.log(this.doc)
     var _this = this
