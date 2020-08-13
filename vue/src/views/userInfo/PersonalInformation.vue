@@ -1,6 +1,6 @@
 <template>
   <div class='user_info_page'>
-    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" style="width:40%;text-align:center" >
+    <el-form class="person">
       <h2 class="title">个人信息</h2>
       
       <div class="image">
@@ -87,5 +87,47 @@ export default {
 }
 </script>
 
+<style scoped>
+  .title {
 
+  margin: 0 auto 30px auto;
+
+  text-align: center;
+
+  color: #505458;
+
+}
+.el-form-item {
+
+  margin-bottom: 30px;
+
+}
+.person {
+  -webkit-border-radius: 5px;
+
+  border-radius: 5px;
+
+  -moz-border-radius: 5px;
+
+  background-clip: padding-box;
+
+  margin: 100px auto;
+
+  width: 350px;
+
+  padding: 35px 35px 15px 35px;
+
+  background: #fff;
+
+  border: 1px solid #eaeaea;
+
+  box-shadow: 0 0 25px #cac6c6;
+}
+.button-item {
+    margin: 0 auto 30px auto;
+
+    text-align: center;
+  }
+
+</style>
 
