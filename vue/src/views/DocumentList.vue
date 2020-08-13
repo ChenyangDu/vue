@@ -71,7 +71,7 @@ export default {
         },
       ],
       documents: [],
-      id: this.$store.state.user.username.id,
+      id:1,
       keyword: "",
     };
   },

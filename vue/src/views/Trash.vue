@@ -27,7 +27,6 @@ export default {
   name: "Trash",
   data: function () {
     return {
-      id: 1,
       documents: [
         {
           id: 0,
@@ -170,6 +169,7 @@ export default {
           is_editing: false,
         },
       ],
+      id:1
     };
   },
   methods: {
@@ -184,6 +184,7 @@ export default {
     let inf = { id: this.id }; // 用户id
     var that = this;
     console.log("created");
+    console.log(this.id);
     console.log(inf);
     this.$api.document
       .recycle(inf)
