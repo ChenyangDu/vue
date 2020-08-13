@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "trash",
+  name: "Trash",
   data: function () {
     return {
       documents: [

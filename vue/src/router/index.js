@@ -79,7 +79,7 @@ const router = new VueRouter({
         },
         {
           path: '/trash',
-          name: Trash,
+          name: 'Trash',
           component: () => import('../views/Trash'),
           meta:{
             isLogin:false
