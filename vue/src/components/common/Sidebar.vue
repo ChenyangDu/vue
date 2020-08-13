@@ -86,7 +86,7 @@
           },
           {
             icon: "el-icon-s-custom",
-            index: "groupmember",
+            index: "grouplist",
             title: "我的团队",
           },
           {
