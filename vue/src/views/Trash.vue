@@ -1,50 +1,33 @@
 <template>
   <div>
-    <el-container>
-      <el-main>
-        <el-row>
-          <el-card>
-            <el-row>
-              <h1>蔡徐坤粉丝一群</h1>
-              <p>创建者:蔡徐坤 2020-8-13</p>
-            </el-row>
-            <el-table :data="groupdocuments" stripe style="width: 100%">
-              <el-table-column type="index"></el-table-column>
-              <el-table-column prop="create_time" label="创建日期" width="150"></el-table-column>
-              <el-table-column prop="name" label="文档标题" width="300"></el-table-column>
+    <el-table :data="documents" stripe style="width: 100%">
+      <el-table-column type="index"></el-table-column>
+      <el-table-column prop="create_time" label="创建日期" width="150"></el-table-column>
+      <el-table-column prop="name" label="文档标题" width="300"></el-table-column>
 
-              <el-table-column prop="last_edit_time" label="修改日期" width="150"></el-table-column>
-              <el-table-column fixed="right" label>
-                <template slot-scope="scope">
-                  <el-button @click="detail(scope.row.id)" type="primary" round size="small">查看</el-button>
-                  <el-button @click="edit(scope.row.id)" type="primary" round size="small">编辑</el-button>
-                  <el-button @click="del(scope.row.id)" type="danger" round size="small">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </el-row>
-      </el-main>
-      <el-footer>
-        <el-pagination
-          @current-change="currentChange"
-          :page-size="10"
-          layout="prev, pager, next"
-          :total="60"
-        ></el-pagination>
-      </el-footer>
-    </el-container>
+      <el-table-column prop="last_edit_time" label="修改日期" width="150"></el-table-column>
+      <el-table-column fixed="right" label>
+        <template slot-scope="scope">
+          <el-button @click="resave(scope.row.id)" type="primary" round size="small">还原</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-pagination
+      @current-change="currentChange"
+      :page-size="10"
+      layout="prev, pager, next"
+      :total="60"
+    ></el-pagination>
   </div>
 </template>
 
-
 <script>
 export default {
-  name: "GroupDocumentList",
+  name: "trash",
   data: function () {
     return {
-
-      groupdocuments: [
+      documents: [
         {
           id: 0,
           name: "鸡你太美",
@@ -188,82 +171,16 @@ export default {
       ],
     };
   },
-
-  created: function () {
-    console.log("created!");
-  },
   methods: {
-    handleNodeClick(data) {
-      console.log(data);
+    resave: function (id) {
+      console.log(id);
+    },
+    currentChange: function (newPage) {
+      console.log(newPage);
     },
   },
 };
 </script>
 
-
 <style scoped>
-.el-header,
-.el-footer {
-  /* background-color: #b3c0d1;
-  color: #333; */
-  text-align: center;
-  line-height: 20px;
-}
-
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: left;
-  line-height: 20px;
-}
-
-/* .el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-} */
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
-}
-
-.time {
-  font-size: 13px;
-  color: #999;
-}
-
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-
-.button {
-  padding: 0;
-  float: right;
-}
-
-.image {
-  width: 100%;
-  display: block;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both;
-}
 </style>

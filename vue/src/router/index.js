@@ -7,6 +7,9 @@ import Login from '../views/Login'
 import Register from '../views/Register'
 import DocumentList from '../views/DocumentList'
 import GroupDocumentList from '../views/GroupDocumentList'
+import Trash from '../views/Trash'
+import GroupList from '../views/GroupList'
+
 import GetDocTest from "@/views/edit/GetDocTest";
 import DocEditor from "@/views/edit/DocEditor";
 import PersonalInformation from "@/views/userInfo/PersonalInformation";
@@ -24,7 +27,7 @@ const router = new VueRouter({
     {
       path: "/",
       name: "Index",
-      redirect: "/login",
+      redirect: "/home",
     },
     {
       path: "/home",
@@ -47,7 +50,22 @@ const router = new VueRouter({
         meta:{
           isLogin:false
         }
-      }]
+      },{
+        path: '/trash',
+        name:'Trash',
+        component: Trash,
+        meta:{
+          isLogin:false
+        }
+      },{
+        path: '/grouplist',
+        name: 'GroupList',
+        component: GroupList,
+        meta:{
+          isLogin:false
+        }
+      }
+    ]
     },
     {
       path: '/login',
@@ -73,14 +91,6 @@ const router = new VueRouter({
         requireAuth: false
       }
     },
-    // {
-    //   path: '/DocumentList',
-    //   name: 'DocumentList',
-    //   component: DocumentList,
-    //   meta: {
-    //     isLogin: false
-    //   }
-    // }
     {
       path: '/getdoctest',
       name: 'GetDocTest',
