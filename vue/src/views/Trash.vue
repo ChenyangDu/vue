@@ -181,7 +181,7 @@ export default {
     },
   },
   created: function () {
-    let inf = { id: this.id }; // 用户id
+    let inf = { user_id: this.id }; // 用户id
     var that = this;
     console.log("created");
     console.log(this.id);
