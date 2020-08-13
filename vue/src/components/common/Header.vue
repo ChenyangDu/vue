@@ -97,7 +97,8 @@
         //退出登录事件
         if (command == "loginout") {
           // 从本地存储中删除用户名
-          localStorage.removeItem("ms_username");
+          // localStorage.removeItem("username");
+          this.$store.commit('logout')
           // 跳转到登录页面
           this.$router.push("/login");
         }
@@ -146,7 +147,7 @@
           }
         }
         this.fullscreen = !this.fullscreen;
-      },
+      }
     },
 
     // 初始化页面完成后，对页面可见区域宽度进行判定，如果页面宽度小于1500，则触发 collapseChage 方法。

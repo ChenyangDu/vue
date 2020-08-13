@@ -87,70 +87,29 @@ export default {
           value: '选项3',
           label: '最近浏览'
         }],
-        documents: [{
-          id:0,
-          name:"鸡你太美",
-          creator_id:0,
-          group_id:0,
-          createtime: '2016-05-02',
-          last_edit_time:'20208-11',
-          is_deleted:false,
-          is_editing:false
-        },
-        {
-          id:1,
-          name:"鸡你太美",
-          creator_id:0,
-          group_id:0,
-          createtime: '2016-05-02',
-          last_edit_time:'20208-11',
-          is_deleted:false,
-          is_editing:false
-        },
-        {
-          id:2,
-          name:"鸡你太美",
-          creator_id:0,
-          group_id:0,
-          createtime: '2016-05-02',
-          last_edit_time:'20208-11',
-          is_deleted:false,
-          is_editing:false
-        },
-        {
-          id:3,
-          name:"鸡你太美",
-          creator_id:0,
-          group_id:0,
-          createtime: '2016-05-02',
-          last_edit_time:'20208-11',
-          is_deleted:false,
-          is_editing:false
-        },
-
-
-        ],
-        //用于测试的用户id
+        documents: [],
         id:this.$store.state.user.username.id,
         keyword:""
       }
     },
     created:function(){
-        let inf = { id:this.id }
+        let inf = { id:this.id } // 用户id
         var that = this;
         console.log("created");
+        console.log(inf)
         this.$api.user.own(inf).
         then(response => {
             if(response.code === 400)
             {
                 that.$message({
-                    message: res.msg,
+                    // message: response.msg,
+                  message: '列表为空',
                     type: 'error'
                 })
                 console.log("返回了400");
             }
             else {
-                that.documents = response.data;
+                that.documents = response.data; // 文档列表
                 console.log("获取数据成功");
             }
         }).catch(err => {
@@ -175,7 +134,7 @@ export default {
             _this.$router.push({
               name: 'DocEditor',
               params: {
-                doc: res.data // 返回一个新的文档document
+                doc: res.data // 返回一个新的文档信息document
               }
             })
           } else {
@@ -247,6 +206,7 @@ export default {
               message: '文章已被成功删除',
               type: 'success'
             })
+            _this.selectChange(_this.value)
           } else {
             _this.$message({
               message: res.msg,
@@ -269,7 +229,7 @@ export default {
                 if(response.code === 400)
                 {
                     that.$message({
-                        message: res.msg,
+                        message: response.msg,
                         type: 'error'
                     })
                     console.log("返回了400");
@@ -294,7 +254,7 @@ export default {
                 if(response.code === 400)
                 {
                     that.$message({
-                        message: res.msg,
+                        message: response.msg,
                         type: 'error'
                     })
                     console.log("返回了400");
@@ -319,10 +279,12 @@ export default {
                 if(response.code === 400)
                 {
                     that.$message({
-                        message: res.msg,
+                        message: response.msg,
                         type: 'error'
                     })
                     console.log("返回了400");
+                    that.value = '选项1'
+                    that.selectChange(that.value)
                 }
                 else {
                     that.documents = response.data;

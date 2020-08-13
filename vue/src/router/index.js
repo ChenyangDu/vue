@@ -85,9 +85,14 @@ const router = new VueRouter({
       component: GetDocTest
     },
     {
-      path: 'doceditor',
+      path: '/doceditor',
       name: 'DocEditor',
       component: DocEditor
+    },
+    {
+      path:'/groupmember',
+      name:'GroupMember',
+      component: ()=>import('../views/GroupMember')
     }
   ]
 })
