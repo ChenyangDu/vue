@@ -81,18 +81,18 @@
           },
           {
             icon: "el-icon-s-cooperation",
-            index: "mydoc",
+            index: "documentlist",
             title: "我的文档",
           },
           {
             icon: "el-icon-s-custom",
-            index: "group",
+            index: "groupmember",
             title: "我的团队",
           },
           {
             icon: "el-icon-pie-chart",
-            index: "desktop",
-            title: "我的桌面",
+            index: "groupdocumentlist",
+            title: "团队文档",
           },
           {
             icon: "el-icon-rank",
@@ -100,7 +100,7 @@
             title: "工作台",
             subs: [
               {
-                index: "last",
+                index: "getdoctest",
                 title: "最近使用",
               },
               {
@@ -108,35 +108,15 @@
                 title: "我的收藏",
               },
 			  {
-			    index: "workhome",
+			    index: "groupmember",
 			    title: "我的团队",
 			  },
             ],
           },
           {
             icon: "el-icon-folder",
-            index: "2",
+            index: "doceditor",
             title: "文档编辑",
-            subs: [
-              {
-                index: "upload",
-                title: "文件上传",
-              },
-              {
-                index: "2-2",
-                title: "文本编辑器",
-                subs: [
-                  {
-                    index: "editor",
-                    title: "富文本编辑器",
-                  },
-                  {
-                    index: "markdown",
-                    title: "markdown编辑器",
-                  },
-                ],
-              },
-            ],
           },
           {
             icon: "el-icon-delete",
