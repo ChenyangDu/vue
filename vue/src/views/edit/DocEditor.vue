@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import TinymceEditor from "@/component/TinymceEditor";
-import CommentPanel from "@/component/CommentPanel";
+import TinymceEditor from "@/components/document/TinymceEditor";
+import CommentPanel from "@/components/document/CommentPanel";
 export default {
   name: 'Home',
   components: {

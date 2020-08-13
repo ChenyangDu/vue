@@ -16,13 +16,9 @@
           </el-select>
   </el-col>
   <el-col :span="6">
-
-    <el-input placeholder="请输入搜索内容" v-model="input3" class="input-with-select"></el-input>
-
-    <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select"></el-input>
-
+    <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select">
     <el-button slot="append" icon="el-icon-search"></el-button>
-<!--  </el-input>-->
+  </el-input>
   </el-col>
   <el-col :span="6"><el-button type="primary" round>新建</el-button></el-col>
 </el-row>
@@ -135,13 +131,6 @@ export default {
 
         ],
         //用于测试的用户id
-        id:1
-      }
-    },
-    created:function(){
-        const {data:res} = this.$http.get('user/own',{params:this.id});
-        console.log(res);
-        this.documents = res;
         id:1,
         keyword:""
       }
@@ -189,26 +178,9 @@ export default {
       },
       selectChange:function(val){
           this.value = val;
-          if(this.value == '选项1')
-          {
-              const {data:res} = this.$http.get('user/own',{params:this.id});
-              console.log(res);
-              this.documents = res;
-          }
-          else if(this.value == '选项2')
-          {
-              const {data:res} = this.$http.get('user/favorite',{params:this.id});
-              console.log(res);
-              this.documents = res;
-          }
-          else if(this.value == '选项3')
-          {
-              const {data:res} = this.$http.get('user/recent',{params:this.id});
-              console.log(res);
-              this.documents = res;
           let inf = { id:this.id }
           var that = this;
-          if(this.value == '选项1')
+          if(this.value === '选项1')
           {
               console.log("点击了选项1");
               this.$api.user.own(inf).then(response => {
@@ -233,7 +205,7 @@ export default {
             //console.log("获取数据失败");
             })
           }
-          else if(this.value == '选项2')
+          else if(this.value === '选项2')
           {
               console.log("点击了选项2");
               this.$api.user.favorite(inf).then(response => {
@@ -258,7 +230,7 @@ export default {
             //console.log("获取数据失败");
             })
           }
-          else if(this.value == '选项3')
+          else if(this.value === '选项3')
           {
               console.log("点击了选项3");
               this.$api.user.recent(inf).then(response => {
