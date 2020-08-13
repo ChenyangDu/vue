@@ -18,9 +18,9 @@
           <!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
         </el-form-item>
       </el-form>
-      <!-- 评论区 -->
-      <div class="comment-container">
-        <comment-panel :doc_id="this.doc.id" :can_comment="this.authority.can_comment"></comment-panel>
+      <!-- 评论区   :can_comment="this.authority.can_comment"-->
+      <div class="comment-container" :doc_id="this.doc.id">
+        <comment-panel></comment-panel>
       </div>
     </div>
 
@@ -42,12 +42,14 @@ export default {
       msg: 'Welcome to Use Tinymce Editor',
       disabled: false,
       authority: {
-        document_id: 1,
-        user_id: 1,
-        can_read: false,
-        can_comment: false,
-        can_edit: false,
-        can_delete: false
+        authority_userKey: {
+          document_id: 1,
+          user_id: 1
+        },
+        can_comment: true,
+        can_delete: false,
+        can_edit: true,
+        can_read: false
       },
       doc: {
         id: 1,
@@ -184,7 +186,7 @@ export default {
         this.editStart()
       }
     }
-
+    // this.editStart()
   }
 }
 </script>
