@@ -4,7 +4,6 @@
     <el-button>个人-根据模板新建文档测试（未写）</el-button>
     <el-button @click="handleViewDoc">个人-编辑文档测试(user_id=1 doc_id=1)</el-button>
     <el-button @click="handleDelete">个人-文档删除测试(user_id=1 doc_id=2)</el-button>
-    <el-button @click="handleRecover">个人-文档恢复测试(user_id=1 doc_id=2)</el-button>
   </div>
 </template>
 
@@ -73,24 +72,6 @@ export default {
           })
         } else {
           _this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      }).catch(failResponse => {})
-    },
-    handleRecover() {
-      var _this = this
-      this.$api.document.recover({
-        doc_id: 2
-      }).then(res => {
-        if (res.code === 200) {
-          _this.message({
-            message: '该文档恢复成功',
-            type: 'success'
-          })
-        } else {
-          _this.message({
             message: res.msg,
             type: 'error'
           })
