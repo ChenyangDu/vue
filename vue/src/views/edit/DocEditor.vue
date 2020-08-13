@@ -83,7 +83,7 @@ export default {
         // user_id: 1,
         doc_id: _this.doc.id
       }).then(res => {
-        if (res.code === 400 ){
+        if (res.code === 400 ){ // 非权限问题
           _this.$message({
             message: res.msg,
             type: 'error'
@@ -93,11 +93,12 @@ export default {
           _this.authority = res.data
           console.log('authority')
           console.log(_this.authority)
-          if ( _this.authority.can_read === true) {
-            if ( _this.authority.can_edit === true){
+          if ( _this.authority.can_read === true) { //可查看
+            if ( _this.authority.can_edit === true && !_this.doc.is_editing){ //可编辑 且 文章没有正在被编辑
               _this.editStart()
-            } else {
-              _this.disabled = true
+            } else { //无编辑权力 或 文章正在被编辑
+              _this.disabled = true // 只可查看
+              _this.viewDoc()
             }
           } else {
             _this.$message({
@@ -113,6 +114,7 @@ export default {
     },
     // 显示文章
     viewDoc() {
+      console.log("获取文章内容")
       this.$api.document.view({
         doc_id: _this.doc.id // 通过doc的id请求文档内容
       }).then(res => {
@@ -132,14 +134,22 @@ export default {
     editStart() {
       var _this = this
       this.$api.document.start({
-        doc_id: _this.doc.id,
+        doc_id: _this.doc.id, //封锁文章
       }).then(res => {
-        if (res.code !== 200) {
+        if (res.code === 200) { //无人在编辑
+          _this.viewDoc()
+        } else if (res.code === 401) {
+          // _this.$message({
+          //   message: res.msg,
+          //   type: 'error'
+          // })
+          console.log(res.code)
+          _this.viewDoc()
+        } else {
           _this.$message({
             message: res.msg,
             type: 'error'
           })
-          this.viewDoc()
         }
       }).catch(failResponse => {})
     },
@@ -152,7 +162,7 @@ export default {
         doc_id: this.doc.id
       }, this.msg).then(res => {
         if (res.code === 200 ){
-          _this.message({
+          _this.$message({
             message: '文章上传成功！',
             type: 'success'
           })
@@ -190,26 +200,10 @@ export default {
   },
   created() {
     this.doc = this.$route.params.doc // info
-    console.log(this.doc.id)
+    console.log(this.doc)
     var _this = this
     // 请求文档权限信息
     _this.getAuthority()
-    // // this.editStart()
-    // console.log('created')
-    // console.log(_this.authority)
-    // if ( this.authority.can_read === true) {
-    //   if ( this.authority.can_edit === true){
-    //     _this.editStart()
-    //   } else {
-    //     this.disabled = true
-    //   }
-    // } else {
-    //   _this.$message({
-    //     message: '您没有权限查看此文档',
-    //     type: 'error'
-    //   })
-    //   this.$router.back()
-    // }
   }
 }
 </script>

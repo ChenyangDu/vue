@@ -15,7 +15,8 @@ import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false;
 
 Vue.use(Antd);
-Vue.use(ElementUI, { size: "small", zIndex: 3000 });
+Vue.use(ElementUI);
+// , { size: "small", zIndex: 3000 }
 Vue.use(api)
 
 Vue.config.productionTip = false

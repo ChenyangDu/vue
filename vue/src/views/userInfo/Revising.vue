@@ -77,8 +77,8 @@ export default {
   created() {
     var _this = this
     this.$api.user.info({
-      id: 1
-      // id: _this.$store.state.user.username.id
+      // id: 1
+      id: _this.$store.state.user.username.id
     }).then(res=>{
           if (res.code === 200) {
             this.formLabelAlign=res.data
