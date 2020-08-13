@@ -8,9 +8,9 @@
 <!--      ${comments.length > 1 ? 'replies' : 'reply'}-->
       <a-list-item slot="renderItem" slot-scope="item, index">
         <a-comment
-          :author="item.author"
+          :author="item.user_id"
           :content="item.content"
-          :datetime="item.datetime"/>
+          :datetime="item.time"/>
 <!--        :avatar="item.avatar"-->
       </a-list-item>
     </a-list>
@@ -24,7 +24,7 @@
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
         </a-form-item>
-        <a-form-item>
+        <a-form-item v-if="this.can_comment">
           <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
             添加评论
           </a-button>
@@ -39,14 +39,21 @@
 export default {
   name: 'CommentPanel',
   props: {
-    doc_id: ''
+    doc_id: {
+      type: Number,
+      default: 1
+    },
+    can_comment: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       comments: [],//通过接口获得comments列表
       submitting: false,
       value: '',
-      // moment,
+      // can_comment: -1
     };
   },
   methods: {
@@ -67,7 +74,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    // 提交
+    // 提交评论
     handleSubmit() {
       if (!this.value) {
         return;
@@ -77,9 +84,10 @@ export default {
       let newComment = {
         // user_id: this.$store.state.user.username.id
         user_id: 1,
-        doc_id: this.doc_id,
+        document_id: this.doc_id,
         content: this.value,
-        datetime: this.getNowFormatDate()
+        // time: this.getNowFormatDate()
+        time: ''
       }
       this.$api.comment.create(newComment).then(res => {
         if (res.code === 200 ){
