@@ -132,6 +132,7 @@ export default {
         .catch((failResponse) => {});
     },
     detail: function (id) {
+      console.log('点击detail')
       console.log(id);
       console.log(typeof this.count);
       var _this = this;
@@ -143,6 +144,7 @@ export default {
         .then((res) => {
           if (res.code === 200) {
             // 跳转编辑页
+            console.log('跳转编辑页')
             _this.$router.push({
               name: "DocEditor",
               params: {
