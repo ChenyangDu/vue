@@ -2,6 +2,12 @@
   <div class='user_info_page'>
     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" style="width:40%;text-align:center" >
       <h2 class="title">个人信息</h2>
+      
+      <div class="image">
+        <span class="demonstration">头像</span>
+        <el-image :src="src"></el-image>
+      </div>
+      
       <el-form-item label="昵称" prop="name" class="descClass">
         <el-input type="text" v-model="formLabelAlign.name" readonly="readonly"></el-input>
       </el-form-item>
@@ -56,6 +62,20 @@ export default {
     }).then(res=>{
       if (res.code === 200) {
         this.formLabelAlign=res.data
+      } else {
+        _this.$message({
+          message: res.msg,
+          type: 'error'
+        })
+      }
+    }).catch(failResponse => {})
+    
+    this.$api.image.avatar.show({
+      id: 1
+      // id: _this.$store.state.user.username.id
+    }).then(res=>{
+      if (res.code === 200) {
+        this.src=res.data
       } else {
         _this.$message({
           message: res.msg,
