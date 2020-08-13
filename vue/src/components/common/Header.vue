@@ -57,12 +57,7 @@
           </span>
           <!-- slot设置下拉列表 -->
           <el-dropdown-menu slot="dropdown">
-            <a
-              href="https://github.com/lin-xin/vue-manage-system"
-              target="_blank"
-            >
-              <el-dropdown-item>我的文档</el-dropdown-item>
-            </a>
+            <el-dropdown-item divided command="myinfo">我的信息</el-dropdown-item>
             <el-dropdown-item divided command="loginout"
               >退出登录</el-dropdown-item
             >
@@ -106,6 +101,9 @@
           // 跳转到登录页面
           this.$router.push("/login");
         }
+		else if(command == "myinfo"){
+			this.$router.push("/personalinformation");
+		}
       },
 
       // 侧边栏折叠
