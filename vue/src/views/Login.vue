@@ -42,7 +42,8 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
-      }
+      },
+      checked: false
     }
   },
   methods: {
@@ -62,7 +63,7 @@ export default {
               })
             } else {
               _this.$store.commit('login',res.data)
-              _this.$router.push('/')
+              _this.$router.push('/home')
             }
           }).catch(failResponse => {})
         } else {

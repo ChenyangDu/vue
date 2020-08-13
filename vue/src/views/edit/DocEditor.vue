@@ -77,8 +77,8 @@ export default {
     getAuthority() {
       var _this = this
       this.$api.authority.authority({
-        // user_id: _this.$store.state.user.username.id,
-        user_id: 1,
+        user_id: _this.$store.state.user.username.id,
+        // user_id: 1,
         doc_id: _this.doc.id
       }).then(res => {
         if (res.code === 400 ){

@@ -1,7 +1,7 @@
 export default {
   state: {
-    // username: localStorage.getItem('username') == null ? '' : JSON.parse(localStorage.getItem('username' || '[]'))
-    username: 12
+    username: localStorage.getItem('username') == null ? '' : JSON.parse(localStorage.getItem('username' || '[]'))
+    // username: 12
   },
   getters: {},
   mutations: {

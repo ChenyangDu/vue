@@ -20,7 +20,7 @@
     <el-button slot="append" icon="el-icon-search"></el-button>
   </el-input>
   </el-col>
-  <el-col :span="6"><el-button type="primary" round>新建</el-button></el-col>
+  <el-col :span="6"><el-button type="primary" round @click="handleNewDoc">新建</el-button></el-col>
 </el-row>
 
   <el-table
@@ -131,7 +131,7 @@ export default {
 
         ],
         //用于测试的用户id
-        id:1,
+        id:this.$store.state.user.username.id,
         keyword:""
       }
     },
@@ -163,15 +163,97 @@ export default {
         })
     },
     methods: {
+      handleNewDoc() {
+        var _this = this
+        this.$api.document.create({
+          user_id: this.id,
+          group_id: -1,
+          type:-1
+          // type: 1
+        }).then(res => {
+          if (res.code === 200 ){
+            _this.$router.push({
+              name: 'DocEditor',
+              params: {
+                doc: res.data // 返回一个新的文档document
+              }
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
+      },
       detail:function(id) {
         console.log(id);
         console.log(typeof this.count);
+        var _this = this
+        // 获取doc_id文章的信息info
+        this.$api.document.info(
+            {
+              doc_id: id
+            }
+        ).then(res => {
+          if(res.code === 200) {
+            // 跳转编辑页
+            _this.$router.push({
+              name: 'DocEditor',
+              params: {
+                doc: res.data // 返回document信息
+              }
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       },
       edit:function(id){
           console.log(id);
+        this.$api.document.info(
+            {
+              doc_id: id
+            }
+        ).then(res => {
+          if(res.code === 200) {
+            // 跳转编辑页
+            _this.$router.push({
+              name: 'DocEditor',
+              params: {
+                doc: res.data // 返回document信息
+              }
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       },
       del:function(id){
-          console.log(id);
+        console.log(id);
+        var _this = this
+        this.$api.document.deleteDoc({
+          doc_id: id,
+          user_id: _this.$store.state.user.username.id,
+        }).then(res => {
+          if (res.code === 200){
+            _this.$message({
+              message: '文章已被成功删除',
+              type: 'success'
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       },
       currentChange:function(newPage){
           console.log("change"+newPage);

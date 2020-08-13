@@ -7,6 +7,8 @@ import Login from '../views/Login'
 import Register from '../views/Register'
 import DocumentList from '../views/DocumentList'
 import GroupDocumentList from '../views/GroupDocumentList'
+import GetDocTest from "@/views/edit/GetDocTest";
+import DocEditor from "@/views/edit/DocEditor";
 
 import api from '@/http/api'
 import store from '../store'
@@ -19,8 +21,8 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      name: "Home",
-      redirect: "home",
+      name: "Index",
+      redirect: "/login",
     },
     {
       path: "/home",
@@ -66,7 +68,7 @@ const router = new VueRouter({
       name: 'NotFound',
       component: NotFound,
       meta: {
-        isLogin: false
+        requireAuth: false
       }
     },
     // {
@@ -77,6 +79,16 @@ const router = new VueRouter({
     //     isLogin: false
     //   }
     // }
+    {
+      path: '/getdoctest',
+      name: 'GetDocTest',
+      component: GetDocTest
+    },
+    {
+      path: 'doceditor',
+      name: 'DocEditor',
+      component: DocEditor
+    }
   ]
 })
 
