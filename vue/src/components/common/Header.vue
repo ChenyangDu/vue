@@ -10,7 +10,7 @@
 
     <!-- 系统logo -->
     <div class="logo">金刚石文档</div>
-
+	
     <!-- 头部组件右边功能区 -->
     <div class="header-right">
       <div class="header-user-con">
@@ -19,11 +19,11 @@
           <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
           <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
           <el-tooltip
-            effect="dark"
+            effect="light"
             :content="fullscreen?`取消全屏`:`全屏`"
             placement="bottom"
           >
-            <i class="el-icon-rank"></i>
+            <i class="el-icon-sort"></i>
           </el-tooltip>
         </div>
 
@@ -31,12 +31,12 @@
         <div class="btn-bell">
           <!--  -->
           <el-tooltip
-            effect="dark"
+            effect="light"
             :content="message?`有${message}条未读消息`:`消息中心`"
             placement="bottom"
           >
             <router-link to="/tabs">
-              <i class="el-icon-bell"></i>
+              <i class="el-icon-message-solid"></i>
             </router-link>
           </el-tooltip>
           <!-- 通过对message的判定，来决定是否显示小红点 -->
@@ -170,7 +170,8 @@
     width: 100%;
     height: 70px;
     font-size: 22px;
-    color: #fff;
+    color: #000000;
+	background-color: #ffffff;
   }
   .collapse-btn {
     float: left;
@@ -221,6 +222,7 @@
   }
   .user-name {
     margin-left: 10px;
+	color: #000000;
   }
   .user-avator {
     margin-left: 20px;
@@ -232,7 +234,7 @@
     border-radius: 50%;
   }
   .el-dropdown-link {
-    color: #fff;
+    color: #000000;
     cursor: pointer;
   }
   .el-dropdown-menu__item {

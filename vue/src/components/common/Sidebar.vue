@@ -9,8 +9,8 @@
       class="sidebar-el-menu"
       :default-active="onRoutes"
       :collapse="collapse"
-      background-color="#324157"
-      text-color="#bfcbd9"
+      background-color="#fffdfb"
+      text-color="#000000"
       active-text-color="#20a0ff"
       unique-opened
       router
@@ -75,19 +75,19 @@
         items: [
           // 这些便是菜单的数据，目前并没有实现对应的功能，为了展示侧边栏的样式，提前模拟在这里。
           {
-            icon: "el-icon-lx-home",
+            icon: "el-icon-s-home",
             index: "home",
             title: "首页",
           },
           {
-            icon: "el-icon-lx-cascades",
-            index: "grouphome",
-            title: "我的团队",
+            icon: "el-icon-s-cooperation",
+            index: "mydoc",
+            title: "我的文档",
           },
           {
-            icon: "el-icon-lx-copy",
-            index: "trash",
-            title: "回收站",
+            icon: "el-icon-s-custom",
+            index: "group",
+            title: "我的团队",
           },
           {
             icon: "el-icon-pie-chart",
@@ -107,6 +107,10 @@
                 index: "mylove",
                 title: "我的收藏",
               },
+			  {
+			    index: "workhome",
+			    title: "我的团队",
+			  },
             ],
           },
           {
@@ -135,24 +139,9 @@
             ],
           },
           {
-            icon: "el-icon-lx-global",
-            index: "documentlist",
-            title: "个人信息",
-          },
-          {
-            icon: "el-icon-lx-warn",
-            index: "7",
-            title: "错误处理",
-            subs: [
-              {
-                index: "permission",
-                title: "权限测试",
-              },
-              {
-                index: "404",
-                title: "404页面",
-              },
-            ],
+            icon: "el-icon-delete",
+            index: "trash",
+            title: "回收站",
           },
         ],
       };
@@ -181,6 +170,7 @@
     top: 70px;
     bottom: 0;
     overflow-y: scroll;
+	background-color: #000000;
   }
   .sidebar::-webkit-scrollbar {
     width: 0;
