@@ -2,11 +2,13 @@
   <div class='user_info_page'>
     <el-form class="person">
       <h2 class="title">个人信息</h2>
-      
-      <div class="image">
-        <span class="demonstration">头像</span>
-        <el-image :src="src"></el-image>
+
+      <div style="width:100%;text-align:center">
+        <el-form-item>
+          <div class="block"><el-avatar shape="square" :size="100" :src="src"></el-avatar></div>
+        </el-form-item>
       </div>
+
       
       <el-form-item label="昵称" prop="name" class="descClass">
         <el-input type="text" v-model="formLabelAlign.name" readonly="readonly"></el-input>
@@ -50,15 +52,16 @@ export default {
         wechat: '',
         qq: '',
         email: '',
-      }
+      },
+      src:this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id
     };
   },
   methods : {},
   created() {
     var _this = this
     this.$api.user.info({
-      id: 1
-      // id: _this.$store.state.user.username.id
+      //id: 1
+      id: _this.$store.state.user.username.id
     }).then(res=>{
       if (res.code === 200) {
         this.formLabelAlign=res.data
@@ -69,20 +72,8 @@ export default {
         })
       }
     }).catch(failResponse => {})
-    
-    this.$api.image.avatar.show({
-      id: 1
-      // id: _this.$store.state.user.username.id
-    }).then(res=>{
-      if (res.code === 200) {
-        this.src=res.data
-      } else {
-        _this.$message({
-          message: res.msg,
-          type: 'error'
-        })
-      }
-    }).catch(failResponse => {})
+    console.log(this.src)
+
   }
 }
 </script>
