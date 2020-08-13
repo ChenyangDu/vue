@@ -6,6 +6,7 @@ import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import DocumentList from '../views/DocumentList'
+import GroupDocumentList from '../views/GroupDocumentList'
 
 // test用
 import PersonalInformation from "../views/userInfo/PersonalInformation"
@@ -92,6 +93,11 @@ const router = new VueRouter({
       path: '/documentlist',
       name: 'DocumentList',
       component: DocumentList
+    },
+    {
+      path: '/groupdocumentlist',
+      name: 'GroupDocumentList',
+      component: GroupDocumentList
     }
   ]
 })

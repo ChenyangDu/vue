@@ -1,8 +1,8 @@
 <template>
 
-<div>
+<div > 
 
-<el-card>
+<el-card >
 
 <el-row :gutter="20">
   <el-col :span="6">
@@ -290,5 +290,14 @@ export default {
   }
    .el-select .el-input {
     width: 130px;
+  }
+  .background {
+    background: url("../assets/img/bg/bg_1_underattack.png") no-repeat center;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  position: fixed;
   }
 </style>
