@@ -19,12 +19,12 @@
 <!--          slot="avatar"-->
 <!--          src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"-->
 <!--          alt="Han Solo"-->
-<!--      />-->
+<!--      /> v-if="this.can_comment"-->
       <div slot="content">
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
         </a-form-item>
-        <a-form-item v-if="this.can_comment">
+        <a-form-item>
           <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
             添加评论
           </a-button>
@@ -41,12 +41,11 @@ export default {
   props: {
     doc_id: {
       type: Number,
-      default: 1
     },
-    can_comment: {
-      type: Boolean,
-      default: false
-    }
+    // can_comment: {
+    //   type: Boolean,
+    //   default: true
+    // }
   },
   data() {
     return {
