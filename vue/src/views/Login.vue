@@ -26,8 +26,6 @@
 </template>
 
 <script>
-// import user from "@/store/modules/user";
-
 export default {
   name: "Login",
   data() {
@@ -57,21 +55,16 @@ export default {
             password: this.loginForm.password
           }
           this.$api.login.login(userInfo).then(res => {
-            if (res === "error") {
+            if (res.code === 400) {
               _this.$message({
-                message: res,
+                message: res.msg,
                 type: 'error'
               })
             } else {
-              _this.$store.commit('login',res)
+              _this.$store.commit('login',res.data)
               _this.$router.push('/')
             }
-          }).catch(res => {
-            _this.$message({
-              message: res,
-              type: 'error'
-            })
-          })
+          }).catch(failResponse => {})
         } else {
           _this.$message({
             message: '请填写完整登录信息！',

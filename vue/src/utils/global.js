@@ -5,8 +5,8 @@
  */
 
   // 后台管理系统服务器地址
-// export const baseUrl = 'http://xxxxxxxx:8081'
-export const baseUrl = 'http://localhost:8081'
+  export const baseUrl = 'http://39.101.200.9:8081'
+// export const baseUrl = 'http://localhost:8081'
 
 export default {
   baseUrl

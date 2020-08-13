@@ -1,0 +1,75 @@
+import axios from "../axios";
+
+//创建文档
+export const create = params => {
+  return axios({
+    url: '/document/create',
+    method: 'get',
+    params
+  })
+}
+// 保存文档
+// export const save = data => {
+//   return axios({
+//     url: '/document/save',
+//     method: 'post',
+//     data
+//   })
+// }
+// 请求文档信息
+export const info = params => {
+  return axios({
+    url: '/document/info',
+    method: 'get',
+    params
+  })
+}
+// 请求文档具体内容
+export const view = params => {
+  return axios({
+    url: '/document/view',
+    method: 'get',
+    params
+  })
+}
+//文档开始被编辑
+export const start = params => {
+  return axios({
+    url: '/document/edit/start',
+    method: 'get',
+    params
+  });
+}
+// 文章结束被编辑
+export const end = (params, data) => {
+  return axios({
+    url: '/document/edit/end',
+    method: 'post',
+    params,
+    data
+  });
+}
+//删除文档
+export const deleteDoc = params => {
+  return axios({
+    url: '/document/delete',
+    method: 'get',
+    params
+  })
+}
+//回收站列表
+export const recycle = params => {
+  return axios({
+    url: '/document/recycle',
+    method: 'get',
+    params
+  })
+}
+//恢复回收站里的文档
+export const recover =  params => {
+  return axios({
+    url: '/document/recover',
+    method: 'get',
+    params
+  })
+}

@@ -68,25 +68,21 @@ export default {
   },
   methods: {
     register(formName) {
+      alert(this.registerForm.wechat === '')
       var _this = this
       this.$refs[formName].validate(valid => {
         if (valid) {
           let userInfo = this.registerForm
           this.$api.login.register(userInfo).then(res => {
-            if (res !== "ok") {
+            if (res.code !== 200) {
               _this.$message({
-                message: res,
+                message: res.msg,
                 type: 'error'
               })
             } else {
               _this.$router.push('/login')
             }
-          }).catch(res => {
-            _this.$message({
-              message: res,
-              type: 'error'
-            })
-          })
+          }).catch(failResponse => {})
         } else {
           _this.$message({
             message: '请正确填写注册信息！',

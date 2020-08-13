@@ -16,7 +16,11 @@
           </el-select>
   </el-col>
   <el-col :span="6">
+<<<<<<< HEAD
     <el-input placeholder="请输入搜索内容" v-model="input3" class="input-with-select">
+=======
+    <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select">
+>>>>>>> drh
     <el-button slot="append" icon="el-icon-search"></el-button>
   </el-input>
   </el-col>
@@ -131,6 +135,7 @@ export default {
 
         ],
         //用于测试的用户id
+<<<<<<< HEAD
         id:1
       }
     },
@@ -138,6 +143,38 @@ export default {
         const {data:res} = this.$http.get('user/own',{params:this.id});
         console.log(res);
         this.documents = res;
+=======
+        id:1,
+        keyword:""
+      }
+    },
+    created:function(){
+        let inf = { id:this.id }
+        var that = this;
+        console.log("created");
+        this.$api.user.own(inf).
+        then(response => {
+            if(response.code === 400)
+            {
+                that.$message({
+                    message: res.msg,
+                    type: 'error'
+                })
+                console.log("返回了400");
+            }
+            else {
+                that.documents = response.data;
+                console.log("获取数据成功");
+            }
+        }).catch(err => {
+            console.log("捕获到了异常");
+            that.$message({
+                message: err.msg,
+                type: 'error'
+            })
+            //console.log("获取数据失败");
+        })
+>>>>>>> drh
     },
     methods: {
       detail:function(id) {
@@ -155,6 +192,7 @@ export default {
       },
       selectChange:function(val){
           this.value = val;
+<<<<<<< HEAD
           if(this.value == '选项1')
           {
               const {data:res} = this.$http.get('user/own',{params:this.id});
@@ -172,6 +210,84 @@ export default {
               const {data:res} = this.$http.get('user/recent',{params:this.id});
               console.log(res);
               this.documents = res;
+=======
+          let inf = { id:this.id }
+          var that = this;
+          if(this.value == '选项1')
+          {
+              console.log("点击了选项1");
+              this.$api.user.own(inf).then(response => {
+                if(response.code === 400)
+                {
+                    that.$message({
+                        message: res.msg,
+                        type: 'error'
+                    })
+                    console.log("返回了400");
+                }
+                else {
+                    that.documents = response.data;
+                    console.log("获取数据成功");
+                }
+              }).catch(err => {
+                console.log("捕获到了异常");
+                that.$message({
+                    message: err.msg,
+                    type: 'error'
+              })
+            //console.log("获取数据失败");
+            })
+          }
+          else if(this.value == '选项2')
+          {
+              console.log("点击了选项2");
+              this.$api.user.favorite(inf).then(response => {
+                if(response.code === 400)
+                {
+                    that.$message({
+                        message: res.msg,
+                        type: 'error'
+                    })
+                    console.log("返回了400");
+                }
+                else {
+                    that.documents = response.data;
+                    console.log("获取数据成功");
+                }
+              }).catch(err => {
+                console.log("捕获到了异常");
+                that.$message({
+                    message: err.msg,
+                    type: 'error'
+              })
+            //console.log("获取数据失败");
+            })
+          }
+          else if(this.value == '选项3')
+          {
+              console.log("点击了选项3");
+              this.$api.user.recent(inf).then(response => {
+                if(response.code === 400)
+                {
+                    that.$message({
+                        message: res.msg,
+                        type: 'error'
+                    })
+                    console.log("返回了400");
+                }
+                else {
+                    that.documents = response.data;
+                    console.log("获取数据成功");
+                }
+              }).catch(err => {
+                console.log("捕获到了异常");
+                that.$message({
+                    message: err.msg,
+                    type: 'error'
+              })
+            //console.log("获取数据失败");
+            })
+>>>>>>> drh
           }
       }
     },
