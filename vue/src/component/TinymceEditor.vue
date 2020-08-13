@@ -35,6 +35,10 @@ export default {
     Editor
   },
   props: {
+    doc_id: {
+      type: Number,
+      default: -1
+    },
     //传入一个value，使组件支持v-model绑定
     value: {
       type: String,
@@ -97,12 +101,14 @@ export default {
     handleSubmit() {
       var _this = this
       console.log(this.myValue)
-      this.$api.document.save(this.myValue).then(res => {
+      this.$api.document.end({
+        doc_id: this.doc_id
+      }, this.myValue).then(res => {
         if (res.code === 200 ){
           alert("成功!")
         } else {
           _this.$message({
-            message: 'error',
+            message: res.msg,
             type: 'error'
           })
         }

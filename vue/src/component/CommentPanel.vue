@@ -24,7 +24,7 @@
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
         </a-form-item>
-        <a-form-item>
+        <a-form-item v-if="this.can_comment">
           <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
             添加评论
           </a-button>
@@ -39,14 +39,21 @@
 export default {
   name: 'CommentPanel',
   props: {
-    doc_id: ''
+    doc_id: {
+      type: Number,
+      default: 1
+    },
+    can_comment: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
       comments: [],//通过接口获得comments列表
       submitting: false,
       value: '',
-      // moment,
+      // can_comment: -1
     };
   },
   methods: {
