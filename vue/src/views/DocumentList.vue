@@ -16,13 +16,13 @@
           </el-select>
   </el-col>
   <el-col :span="6">
-<<<<<<< HEAD
-    <el-input placeholder="请输入搜索内容" v-model="input3" class="input-with-select">
-=======
-    <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select">
->>>>>>> drh
+
+    <el-input placeholder="请输入搜索内容" v-model="input3" class="input-with-select"></el-input>
+
+    <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select"></el-input>
+
     <el-button slot="append" icon="el-icon-search"></el-button>
-  </el-input>
+<!--  </el-input>-->
   </el-col>
   <el-col :span="6"><el-button type="primary" round>新建</el-button></el-col>
 </el-row>
@@ -34,7 +34,7 @@
 
     <el-table-column type="index" >
     </el-table-column>
-    <el-table-column 
+    <el-table-column
       prop="createtime"
       label="创建日期"
       width="150" >
@@ -100,7 +100,7 @@ export default {
           last_edit_time:'20208-11',
           is_deleted:false,
           is_editing:false
-        }, 
+        },
         {
           id:1,
           name:"鸡你太美",
@@ -135,7 +135,6 @@ export default {
 
         ],
         //用于测试的用户id
-<<<<<<< HEAD
         id:1
       }
     },
@@ -143,7 +142,6 @@ export default {
         const {data:res} = this.$http.get('user/own',{params:this.id});
         console.log(res);
         this.documents = res;
-=======
         id:1,
         keyword:""
       }
@@ -174,7 +172,6 @@ export default {
             })
             //console.log("获取数据失败");
         })
->>>>>>> drh
     },
     methods: {
       detail:function(id) {
@@ -192,7 +189,6 @@ export default {
       },
       selectChange:function(val){
           this.value = val;
-<<<<<<< HEAD
           if(this.value == '选项1')
           {
               const {data:res} = this.$http.get('user/own',{params:this.id});
@@ -210,7 +206,6 @@ export default {
               const {data:res} = this.$http.get('user/recent',{params:this.id});
               console.log(res);
               this.documents = res;
-=======
           let inf = { id:this.id }
           var that = this;
           if(this.value == '选项1')
@@ -287,7 +282,6 @@ export default {
               })
             //console.log("获取数据失败");
             })
->>>>>>> drh
           }
       }
     },
