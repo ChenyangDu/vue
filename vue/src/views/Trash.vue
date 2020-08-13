@@ -27,6 +27,7 @@ export default {
   name: "Trash",
   data: function () {
     return {
+      id: 1,
       documents: [
         {
           id: 0,
@@ -178,6 +179,35 @@ export default {
     currentChange: function (newPage) {
       console.log(newPage);
     },
+  },
+  created: function () {
+    let inf = { id: this.id }; // 用户id
+    var that = this;
+    console.log("created");
+    console.log(inf);
+    this.$api.document
+      .recycle(inf)
+      .then((response) => {
+        if (response.code === 400) {
+          that.$message({
+            // message: response.msg,
+            message: "列表为空",
+            type: "error",
+          });
+          console.log("返回了400");
+        } else {
+          that.documents = response.data; // 文档列表
+          console.log("获取数据成功");
+        }
+      })
+      .catch((err) => {
+        console.log("捕获到了异常");
+        that.$message({
+          message: err.msg,
+          type: "error",
+        });
+        //console.log("获取数据失败");
+      });
   },
 };
 </script>
