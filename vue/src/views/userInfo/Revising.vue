@@ -1,6 +1,17 @@
 <template>
-  <div>
-    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" style="width:40%;text-align:center" >
+  <div style="margin: 0 0 35px 0;">
+  <el-form class="revise" >
+    <el-form-item label="头像">
+    <el-upload
+      class="upload-demo"
+      drag
+      action="https://jsonplaceholder.typicode.com/posts/"
+      multiple>
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+    </el-upload>
+  </el-form-item>
     <el-form-item label="昵称">
       <el-input v-model="formLabelAlign.name"></el-input>
     </el-form-item>
@@ -82,3 +93,40 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.el-form-item {
+
+  margin-bottom: 30px;
+
+}
+  .revise {
+    -webkit-border-radius: 5px;
+
+  border-radius: 5px;
+
+  -moz-border-radius: 5px;
+
+  background-clip: padding-box;
+
+  margin: 100px auto;
+
+  width: 350px;
+
+  padding: 35px 35px 15px 35px;
+
+  background: #fff;
+
+  border: 1px solid #eaeaea;
+
+  box-shadow: 0 0 25px #cac6c6;
+
+  }
+  .button-item {
+    margin: 0 auto 30px auto;
+
+    text-align: center;
+  }
+
+</style>
