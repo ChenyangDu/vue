@@ -53,6 +53,8 @@ export default {
       comments: [],//通过接口获得comments列表
       submitting: false,
       value: '',
+      doc_id: '',
+      can_comment: ''
     };
   },
   methods: {
@@ -106,6 +108,8 @@ export default {
     },
   },
   created() {
+    this.doc_id = this.props.doc_id
+    this.can_comment = this.props.can_comment
     this.loadComments()
   }
 };

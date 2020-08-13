@@ -51,7 +51,7 @@
       label="">
       <template slot-scope="scope">
         <el-button @click="detail(scope.row.id)" type="primary" round size="small">查看</el-button>
-        <el-button @click="edit(scope.row.id)" type="primary" round size="small">编辑</el-button>
+        <el-button @click="detail(scope.row.id)" type="primary" round size="small">编辑</el-button>
         <el-button @click="del(scope.row.id)" type="danger" round size="small">删除</el-button>
       </template>
     </el-table-column>
@@ -147,7 +147,7 @@ export default {
       },
       detail:function(id) {
         console.log(id);
-        console.log(typeof this.count);
+        // console.log(typeof this.count);
         var _this = this
         // 获取doc_id文章的信息info
         this.$api.document.info(
@@ -172,7 +172,7 @@ export default {
         }).catch(failResponse => {})
       },
       edit:function(id){
-          console.log(id);
+        console.log(id);
         this.$api.document.info(
             {
               doc_id: id
@@ -180,6 +180,7 @@ export default {
         ).then(res => {
           if(res.code === 200) {
             // 跳转编辑页
+            console.log('跳转编辑页')
             _this.$router.push({
               name: 'DocEditor',
               params: {

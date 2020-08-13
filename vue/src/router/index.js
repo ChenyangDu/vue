@@ -68,12 +68,30 @@ const router = new VueRouter({
           meta:{
             isLogin:false
           }
-        }
-        ,
+        },
+        {
+          path: '/grouplist',
+          name: 'GroupList',
+          component: () => import('../views/GroupList'),
+          meta:{
+            isLogin:false
+          }
+        },
+        {
+          path: '/trash',
+          name: Trash,
+          component: () => import('../views/Trash'),
+          meta:{
+            isLogin:false
+          }
+        },
         {
           path: '/doceditor',
           name: 'DocEditor',
-          component: () => import('../views/edit/DocEditor')
+          component: () => import('../views/edit/DocEditor'),
+          meta:{
+            isLogin:false
+          }
         }]
     },
     {

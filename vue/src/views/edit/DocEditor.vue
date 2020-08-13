@@ -20,7 +20,7 @@
       </el-form>
       <!-- 评论区   -->
       <div class="comment-container">
-        <comment-panel v-bind:doc_id="this.doc.id" v-bind:can_comment="this.authority.can_comment"></comment-panel>
+        <comment-panel :doc_id="this.doc.id" :can_comment="this.authority.can_comment"></comment-panel>
       </div>
     </div>
 
@@ -84,19 +84,23 @@ export default {
         doc_id: _this.doc.id
       }).then(res => {
         if (res.code === 400 ){ // 非权限问题
+          console.log('authority code = 400')
           _this.$message({
             message: res.msg,
             type: 'error'
           })
           _this.$router.back()
         } else if (res.code === 200) {
+          console.log('authority code = 400')
           _this.authority = res.data
           console.log('authority')
           console.log(_this.authority)
           if ( _this.authority.can_read === true) { //可查看
             if ( _this.authority.can_edit === true && !_this.doc.is_editing){ //可编辑 且 文章没有正在被编辑
+              console.log('可编辑 且 文章没有正在被编辑')
               _this.editStart()
             } else { //无编辑权力 或 文章正在被编辑
+              console.log('无编辑权力 或 文章正在被编辑 只可查看')
               _this.disabled = true // 只可查看
               _this.viewDoc()
             }
@@ -116,13 +120,15 @@ export default {
     viewDoc() {
       console.log("获取文章内容")
       this.$api.document.view({
-        doc_id: _this.doc.id // 通过doc的id请求文档内容
+        doc_id: _this.doc.id, // 通过doc的id请求文档内容
+        user_id: _this.$store.state.user.username.id
       }).then(res => {
         if (res.code === 200 ){
           _this.msg = res.data
-          console.log('文章内容')
+          console.log('获取文章内容 code = 200')
           console.log(_this.msg)
         } else {
+          console.log('获取文章内容 code = 200')
           _this.$message({
             message: res.msg, // 文章不存在
             type: 'error'
