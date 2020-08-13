@@ -94,12 +94,9 @@ export default {
           console.log('authority')
           console.log(_this.authority)
           if ( _this.authority.can_read === true) {
-            console.log(1.1)
             if ( _this.authority.can_edit === true){
-              console.log(1.2)
               _this.editStart()
             } else {
-              console.log(2.1)
               _this.disabled = true
             }
           } else {

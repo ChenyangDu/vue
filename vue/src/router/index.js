@@ -9,6 +9,8 @@ import DocumentList from '../views/DocumentList'
 import GroupDocumentList from '../views/GroupDocumentList'
 import GetDocTest from "@/views/edit/GetDocTest";
 import DocEditor from "@/views/edit/DocEditor";
+import PersonalInformation from "@/views/userInfo/PersonalInformation";
+import Revising from "@/views/userInfo/Revising";
 
 import api from '@/http/api'
 import store from '../store'
@@ -93,6 +95,11 @@ const router = new VueRouter({
       path:'/groupmember',
       name:'GroupMember',
       component: ()=>import('../views/GroupMember')
+    },
+    {
+      path: '/personalinformation',
+      name: 'PersonalInformation',
+      component: PersonalInformation
     }
   ]
 })
