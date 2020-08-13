@@ -89,11 +89,11 @@
             index: "grouplist",
             title: "我的团队",
           },
-          {
-            icon: "el-icon-pie-chart",
-            index: "groupdocumentlist",
-            title: "团队文档",
-          },
+          // {
+          //   icon: "el-icon-pie-chart",
+          //   index: "groupdocumentlist",
+          //   title: "团队文档",
+          // },
           {
             icon: "el-icon-rank",
             index: "workhome",
