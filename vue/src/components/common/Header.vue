@@ -58,7 +58,7 @@
           <!-- slot设置下拉列表 -->
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item divided command="myinfo">我的信息</el-dropdown-item>
-            <el-dropdown-item divided command="loginout" @click="logout"
+            <el-dropdown-item divided command="loginout"
               >退出登录</el-dropdown-item
             >
           </el-dropdown-menu>

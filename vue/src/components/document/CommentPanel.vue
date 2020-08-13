@@ -19,12 +19,12 @@
 <!--          slot="avatar"-->
 <!--          src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"-->
 <!--          alt="Han Solo"-->
-<!--      /> v-if="this.can_comment"-->
+<!--      /> -->
       <div slot="content">
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
         </a-form-item>
-        <a-form-item>
+        <a-form-item v-if="this.can_comment">
           <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
             添加评论
           </a-button>
@@ -41,24 +41,24 @@ export default {
   props: {
     doc_id: {
       type: Number,
+      default: 1
     },
-    // can_comment: {
-    //   type: Boolean,
-    //   default: true
-    // }
+    can_comment: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
       comments: [],//通过接口获得comments列表
       submitting: false,
       value: '',
-      // can_comment: -1
     };
   },
   methods: {
     // 请求评论列表
     loadComments() {
-      alert(this.doc_id)
+      // alert(this.doc_id)
       var _this = this
       this.$api.comment.list({
         doc_id: this.doc_id
@@ -81,8 +81,8 @@ export default {
       this.submitting = true;
       var _this = this
       let newComment = {
-        // user_id: this.$store.state.user.username.id
-        user_id: 1,
+        user_id: this.$store.state.user.username.id,
+        // user_id: 1,
         document_id: this.doc_id,
         content: this.value,
         // time: this.getNowFormatDate()

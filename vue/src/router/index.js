@@ -85,7 +85,7 @@ const router = new VueRouter({
       component: GetDocTest
     },
     {
-      path: 'doceditor',
+      path: '/doceditor',
       name: 'DocEditor',
       component: DocEditor
     },

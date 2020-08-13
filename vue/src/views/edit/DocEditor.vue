@@ -13,14 +13,14 @@
           </tinymce-editor>
         </el-form-item>
         <el-form-item class="button-item" v-if="this.authority.can_edit">
-          <el-button type="primary" @click="handleSubmit" style="float: right">提交</el-button>
-          <el-button type="primary" @click="handleDelete" style="float: right">删除</el-button>
+          <el-button type="primary" @click="handleSubmit" style="float: right" >提交</el-button>
+          <el-button type="danger" @click="handleDelete" style="float: left">删除</el-button>
           <!--        <el-button type="primary" @click="disabled = true">禁用</el-button>-->
         </el-form-item>
       </el-form>
-      <!-- 评论区   :can_comment="this.authority.can_comment"-->
-      <div class="comment-container" :doc_id="this.doc.id">
-        <comment-panel></comment-panel>
+      <!-- 评论区   -->
+      <div class="comment-container">
+        <comment-panel v-bind:doc_id="this.doc.id" v-bind:can_comment="this.authority.can_comment"></comment-panel>
       </div>
     </div>
 
@@ -39,17 +39,17 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Use Tinymce Editor',
+      msg: '',
       disabled: false,
       authority: {
         authority_userKey: {
-          document_id: 1,
-          user_id: 1
+          document_id: '',
+          user_id: ''
         },
-        can_comment: true,
-        can_delete: false,
-        can_edit: true,
-        can_read: false
+        can_comment: '',
+        can_delete: '',
+        can_edit: '',
+        can_read: ''
       },
       doc: {
         id: 1,
@@ -91,8 +91,28 @@ export default {
           _this.$router.back()
         } else if (res.code === 200) {
           _this.authority = res.data
+          console.log('authority')
+          console.log(_this.authority)
+          if ( _this.authority.can_read === true) {
+            console.log(1.1)
+            if ( _this.authority.can_edit === true){
+              console.log(1.2)
+              _this.editStart()
+            } else {
+              console.log(2.1)
+              _this.disabled = true
+            }
+          } else {
+            _this.$message({
+              message: '您没有权限查看此文档',
+              type: 'error'
+            })
+            this.$router.back()
+          }
         }
       }).catch(failResponse => {})
+
+
     },
     // 显示文章
     viewDoc() {
@@ -101,6 +121,8 @@ export default {
       }).then(res => {
         if (res.code === 200 ){
           _this.msg = res.data
+          console.log('文章内容')
+          console.log(_this.msg)
         } else {
           _this.$message({
             message: res.msg, // 文章不存在
@@ -113,13 +135,14 @@ export default {
     editStart() {
       var _this = this
       this.$api.document.start({
-        doc_id: 1,
+        doc_id: _this.doc.id,
       }).then(res => {
         if (res.code !== 200) {
           _this.$message({
             message: res.msg,
             type: 'error'
           })
+          this.viewDoc()
         }
       }).catch(failResponse => {})
     },
@@ -132,7 +155,10 @@ export default {
         doc_id: this.doc.id
       }, this.msg).then(res => {
         if (res.code === 200 ){
-          alert("成功!")
+          _this.message({
+            message: '文章上传成功！',
+            type: 'success'
+          })
         } else {
           _this.$message({
             message: res.msg,
@@ -146,8 +172,8 @@ export default {
       var _this = this
       this.$api.document.deleteDoc({
         doc_id: _this.doc.id,
-        // user_id: _this.$store.state.user.username.id
-        user_id: 1
+        user_id: _this.$store.state.user.username.id
+        // user_id: 1
       }).then(res => {
         if (res.code === 200) {
           _this.message({
@@ -166,27 +192,27 @@ export default {
     }
   },
   created() {
-    this.doc = this.$route.params.doc
+    this.doc = this.$route.params.doc // info
     console.log(this.doc.id)
     var _this = this
     // 请求文档权限信息
-    this.getAuthority()
-    if (!this.authority.can_read) { // 不能查看
-      this.$message({
-        message: '您没有权限查看',
-        type: 'error'
-      })
-      this.$router.back() // 退回
-    } else { //能查看
-      // if can_comment 通过comment 是否显示提交按钮实现
-      // if can_edit 通过禁用 和 submit/delete按钮 实现
-      if(!this.authority.can_edit){
-        this.disabled = true
-      } else {
-        this.editStart()
-      }
-    }
-    // this.editStart()
+    _this.getAuthority()
+    // // this.editStart()
+    // console.log('created')
+    // console.log(_this.authority)
+    // if ( this.authority.can_read === true) {
+    //   if ( this.authority.can_edit === true){
+    //     _this.editStart()
+    //   } else {
+    //     this.disabled = true
+    //   }
+    // } else {
+    //   _this.$message({
+    //     message: '您没有权限查看此文档',
+    //     type: 'error'
+    //   })
+    //   this.$router.back()
+    // }
   }
 }
 </script>
