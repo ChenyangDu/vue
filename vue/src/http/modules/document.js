@@ -73,11 +73,11 @@ export const recover =  params => {
     params
   })
 }
-// 分享文章
-// export const sendshare = params => {
-//   return axios({
-//     url: '/document/sendshare',
-//     method: 'get',
-//     params
-//   })
-// }
+
+export const remove = params => {
+  return axios({
+    url: 'document/remove',
+    method: 'get',
+    params
+  })
+}
