@@ -8,7 +8,26 @@
           <el-input class="title-input" type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
 <!--          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>-->
 <!--          <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>-->
-<!--          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>-->
+          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+          <!--分享弹窗-->
+          <el-dialog title="分享" :visible.sync="dialogFormVisible">
+            <el-form :model="shareForm">
+              <el-form-item label="权限给予：" :label-width="formLabelWidth">
+                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
+                  <el-option label="可查看" value="1"></el-option>
+                  <el-option label="可查看与评论" value="2"></el-option>
+                  <el-option label="可查看与评论与编辑" value="3"></el-option>
+                  <el-option label="可查看与评论与编辑与删除" value="4"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleShare">确 定</el-button>
+            </div>
+          </el-dialog>
+
+          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
 <!--          <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>-->
         </el-card>
       </el-col>
@@ -75,7 +94,21 @@ export default {
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
       delete_icon_data: 'el-icon-delete-solid',
-      submit_icon_data: 'el-icon-upload2'
+      submit_icon_data: 'el-icon-upload2',
+      share_icon_data: 'el-icon-s-promotion',
+      dialogFormVisible: false,
+      formLabelWidth:'100px',
+      shareForm: {
+        type: ''
+      },
+      shareAuthority: {
+        document_id: '',
+        user_id: '',
+        can_read: false,
+        can_comment: false,
+        can_edit: false,
+        can_delete: false
+      }
     }
 
   },
@@ -135,6 +168,25 @@ export default {
         })
       }
     },
+    // 分享
+    handleShare() {
+      var _this = this
+      this.dialogFormVisible = false
+      console.log(this.shareForm.type)
+      if (this.shareForm.type === '') {
+        _this.$message({
+          message: '分享失败！',
+          type: 'error'
+        })
+      } else {
+        _this.$message({
+          message: '分享成功！',
+          type: 'success'
+        })
+      }
+
+    },
+    // 收藏
     handleFavo() {
       if (this.favorite_icon_data === 'el-icon-star-on') {
         this.favorite_icon_data = 'el-icon-star-off'
@@ -177,6 +229,13 @@ export default {
   float: right;
   font-size: 24px;
   position: relative;
+  margin-left: 10px;
+}
+.icon-share{
+  float: right;
+  font-size: 24px;
+  position: relative;
+  margin-left: 10px;
 }
 .icon-rename{
   float: right;

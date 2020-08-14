@@ -30,10 +30,6 @@
                               ref="editor">
               </tinymce-editor>
             </el-form-item>
-<!--            <el-form-item class="button-item" >-->
-<!--              <el-button type="primary" @click="handleSubmit" style="float: right" >提交</el-button>-->
-<!--              <el-button type="danger" @click="handleDelete" style="float: left" v-if="authority.can_delete">删除</el-button>-->
-<!--            </el-form-item>-->
           </el-form>
         </el-card>
       </el-col>
@@ -369,21 +365,6 @@ export default {
   float: right;
   font-size: 24px;
   position: relative;
+  border: white;
 }
-/*.edit-container{*/
-/*  margin: 30px 60px 30px 60px;*/
-/*  background: #fff;*/
-/*  border: 1px solid #eaeaea;*/
-/*  box-shadow: 0 0 25px #cac6c6;*/
-/*  padding: 40px;*/
-/*  border-radius: 15px;*/
-/*}*/
-/*.comment-container{*/
-/*  margin: 30px 60px 0 60px;*/
-/*  background: #fff;*/
-/*  border: 1px solid #eaeaea;*/
-/*  box-shadow: 0 0 25px #cac6c6;*/
-/*  padding: 20px 20px 20px 20px;*/
-/*  border-radius: 15px;*/
-/*}*/
 </style>
