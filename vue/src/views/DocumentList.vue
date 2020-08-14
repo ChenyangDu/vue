@@ -2,24 +2,43 @@
   <div>
     <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="我创建的文档" name="first">
-        <h1>我创建的文档</h1>
+        <el-row :gutter="40">
+          <el-col :span="8">
+            <h1>我创建的文档</h1>
+          </el-col>
+          <el-col :span="8">
+            <el-button type="primary" round @click="handleNewDoc">创建新文档</el-button>
+          </el-col>
+        </el-row>
         <el-row :gutter="20">
           <el-col :span="4" v-for="item in documents" :key="item.id">
-            <el-card :body-style="{ padding: '0px' }" shadow="hover">
-              <img
-                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                class="image"
-                @click="detail(item.id)"
-              />
-              <div style="padding: 14px;">
-                <div>{{item.name}}</div>
-                <div>蔡徐坤</div>
-                <div class="bottom clearfix">
-                  <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                  <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+            <div>
+              <br />
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                  class="image"
+                  @click="detail(item.id)"
+                />
+                <div style="padding: 14px;">
+                  <span>{{item.name}}</span>
+                  <span class="right">蔡徐坤</span>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                    <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                      <i class="el-icon-more"></i>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" command="collect">收藏</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
                 </div>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -27,21 +46,33 @@
         <h1>我最近浏览的文档</h1>
         <el-row :gutter="20">
           <el-col :span="4" v-for="item in documents" :key="item.id">
-            <el-card :body-style="{ padding: '0px' }" shadow="hover">
-              <img
-                src='https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
-                class="image"
-                @click="detail(item.id)"
-              />
-              <div style="padding: 14px;">
-                <div>{{item.name}}</div>
-                <div>蔡徐坤</div>
-                <div class="bottom clearfix">
-                  <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                  <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+            <div>
+              <br />
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
+                  class="image"
+                  @click="detail(item.id)"
+                />
+                <div style="padding: 14px;">
+                  <div>{{item.name}}</div>
+                  <div>蔡徐坤</div>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                    <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                      <i class="el-icon-more"></i>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" command="collect">收藏</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
                 </div>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -49,21 +80,34 @@
         <h1>我收藏的文档</h1>
         <el-row :gutter="20">
           <el-col :span="4" v-for="item in documents" :key="item.id">
-            <el-card :body-style="{ padding: '0px' }" shadow="hover">
-              <img
-                src='https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
-                class="image"
-                @click="detail(item.id)"
-              />
-              <div style="padding: 14px;">
-                <div>{{item.name}}</div>
-                <div>蔡徐坤</div>
-                <div class="bottom clearfix">
-                  <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                  <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+            <div>
+              <br />
+              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <img
+                  src="https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg"
+                  class="image"
+                  @click="detail(item.id)"
+                />
+                <div style="padding: 14px;">
+                  <div>{{item.name}}</div>
+                  <div>蔡徐坤</div>
+                  <div class="bottom clearfix">
+                    <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                    <!-- <el-button type="text" class="button">操作按钮</el-button> -->
+                    <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                      <i class="el-icon-more"></i>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-star-on" command="collect">取消收藏</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                  </div>
                 </div>
-              </div>
-            </el-card>
+              </el-card>
+            </div>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -113,6 +157,19 @@ export default {
         })
         .catch((failResponse) => {});
     },
+    handleCommand:function(command,id){
+      //console.log(command,id);
+      if(command === 'view')
+        this.detail(id);
+      else if(command === 'edit')
+        this.edit(id);
+      else if(command === 'del')
+        this.del(id);
+      else if(command === 'share')
+        this.share(id);
+      else if(command === 'collect')
+        this.collect(id);
+    },
     detail: function (id) {
       console.log("点击detail");
       console.log(id);
@@ -142,63 +199,68 @@ export default {
         })
         .catch((failResponse) => {});
     },
-    // edit: function (id) {
-    //   console.log(id);
-    //   this.$api.document
-    //     .info({
-    //       doc_id: id,
-    //     })
-    //     .then((res) => {
-    //       if (res.code === 200) {
-    //         // 跳转编辑页
-    //         _this.$router.push({
-    //           name: "DocEditor",
-    //           params: {
-    //             doc: res.data, // 返回document信息
-    //           },
-    //         });
-    //       } else {
-    //         _this.$message({
-    //           message: res.msg,
-    //           type: "error",
-    //         });
-    //       }
-    //     })
-    //     .catch((failResponse) => {});
-    // },
-    // del: function (id) {
-    //   console.log(id);
-    //   var _this = this;
-    //   this.$api.document
-    //     .deleteDoc({
-    //       doc_id: id,
-    //       user_id: _this.$store.state.user.username.id,
-    //     })
-    //     .then((res) => {
-    //       if (res.code === 200) {
-    //         _this.$message({
-    //           message: "文章已被成功删除",
-    //           type: "success",
-    //         });
-    //         _this.selectChange(_this.value);
-    //       } else {
-    //         _this.$message({
-    //           message: res.msg,
-    //           type: "error",
-    //         });
-    //       }
-    //     })
-    //     .catch((failResponse) => {});
-    // },
+    edit: function (id) {
+      console.log(id);
+      this.$api.document
+        .info({
+          doc_id: id,
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            // 跳转编辑页
+            _this.$router.push({
+              name: "DocEditor",
+              params: {
+                doc: res.data, // 返回document信息
+              },
+            });
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: "error",
+            });
+          }
+        })
+        .catch((failResponse) => {});
+    },
+    del: function (id) {
+      console.log(id);
+      var _this = this;
+      this.$api.document
+        .deleteDoc({
+          doc_id: id,
+          user_id: _this.$store.state.user.username.id,
+        })
+        .then((res) => {
+          if (res.code === 200) {
+            _this.$message({
+              message: "文章已被成功删除",
+              type: "success",
+            });
+            //_this.selectChange(_this.value);
+            _this.handleClick();
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: "error",
+            });
+          }
+        })
+        .catch((failResponse) => {});
+    },
+    share:function(id){
+      console.log('share');
+    },
+    collect:function(id){
+      console.log('collect');
+    },
 
-    handleClick: function (tab, event) {
+    handleClick: function () {
       if (this.activeName === "first") this.getOwnList();
       else if (this.activeName === "second") this.getFavoriteList();
       else if (this.activeName === "third") this.getRecentList();
     },
-    // handleCardClick:function(id){
-    //   console.log('卡片被点击了'+id);
-    // },
+
     getOwnList: function () {
       let inf = { id: this.id }; // 用户id
       var that = this;
@@ -337,5 +399,22 @@ export default {
 
 .clearfix:after {
   clear: both;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.demonstration {
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.right {
+  padding: 0;
+  float: right;
 }
 </style>
