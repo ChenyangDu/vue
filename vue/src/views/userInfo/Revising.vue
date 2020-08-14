@@ -5,7 +5,7 @@
     <el-upload
       class="upload-demo"
       drag
-      action="https://jsonplaceholder.typicode.com/posts/"
+      :action="'http://39.101.200.9:8081//image/avatar/upload?user_id='+this.$store.state.user.username.id"
       multiple>
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
