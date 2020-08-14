@@ -264,8 +264,8 @@ export default {
     getOwnList: function () {
       let inf = { id: this.id }; // 用户id
       var that = this;
-      console.log("created");
-      console.log(inf);
+      // console.log("created");
+      // console.log(inf);
       this.$api.user
         .own(inf)
         .then((response) => {

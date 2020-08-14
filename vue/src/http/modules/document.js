@@ -73,3 +73,11 @@ export const recover =  params => {
     params
   })
 }
+
+export const remove = params => {
+  return axios({
+    url: 'document/remove',
+    method: 'get',
+    params
+  })
+}

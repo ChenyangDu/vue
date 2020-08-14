@@ -2,31 +2,31 @@
   <div>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="6">
-          <el-button type="primary" round @click="handleNewDoc">清空回收站</el-button>
+        <el-button type="primary" round @click="clearTrash">清空回收站</el-button>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="4" v-for="item in documents" :key="item.id">
+          <div>
+            <br />
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <img
+                src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                class="image"
+              />
+              <div style="padding: 14px;">
+                <span>{{item.name}}</span>
+                <span class="right">蔡徐坤</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                </div>
+              </div>
+              <el-button type="primary" class="left" round @click="recover(item.id)">还原</el-button>
+              <el-button type="danger" class="right" round @click="del(item.id)">彻底删除</el-button>
+            </el-card>
+          </div>
         </el-col>
       </el-row>
-      <el-table :data="documents" stripe style="width: 100%">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column prop="create_time" label="创建日期" width="150"></el-table-column>
-        <el-table-column prop="name" label="文档标题" width="300"></el-table-column>
-
-        <el-table-column prop="last_edit_time" label="修改日期" width="150"></el-table-column>
-        <el-table-column fixed="right" label>
-          <template slot-scope="scope">
-            <el-button @click="recover(scope.row.id)" type="primary" round size="small">还原</el-button>
-            <el-button @click="del(scope.row.id)" type="danger" round size="small">彻底删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
     </el-card>
-
-    <el-pagination
-      @current-change="currentChange"
-      :page-size="10"
-      layout="prev, pager, next"
-      :total="60"
-    ></el-pagination>
   </div>
 </template>
 
@@ -97,23 +97,53 @@ export default {
           //console.log("获取数据失败");
         });
     },
-    currentChange: function (newPage) {
-      console.log(newPage);
+    clearTrash: function () {
+      console.log("清空回收站");
+      var that = this;
+      this.documents.forEach(function (value, key, arr) {
+        that.del(value.id);
+      });
+      this.documents = [];
     },
     del: function (id) {
-      console.log(id);
+      //console.log(id);
+      let inf = { doc_id: id, user_id: this.id };
+      var that = this;
+      this.$api.document
+        .remove(inf)
+        .then((response) => {
+          if (response.code === 400) {
+            that.$message({
+              // message: response.msg,
+              message: "列表为空",
+              type: "error",
+            });
+            console.log("返回了400");
+          } else {
+            console.log("彻底删除成功");
+            that.getTrashList();
+          }
+        })
+        .catch((err) => {
+          console.log("捕获到了异常");
+          that.$message({
+            message: err.msg,
+            type: "error",
+          });
+        });
     },
   },
   created: function () {
-    console.log("created");
     this.getTrashList();
   },
 };
 </script>
-
 <style scoped>
 .el-row {
   margin-bottom: 20px;
+  /* &:last-child {
+      margin-bottom: 0;
+    } */
 }
 .el-col {
   border-radius: 4px;
@@ -135,10 +165,42 @@ export default {
   padding: 10px 0;
   background-color: #f9fafc;
 }
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
 }
-.el-select .el-input {
-  width: 130px;
+.image {
+  width: 100%;
+  display: block;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+
+.clearfix:after {
+  clear: both;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.demonstration {
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.right {
+  padding: 5%;
+  float: right;
+}
+.left {
+  padding: 5%;
+  float: left;
 }
 </style>
