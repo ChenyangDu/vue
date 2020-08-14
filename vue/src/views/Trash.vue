@@ -14,7 +14,7 @@
         <el-table-column prop="last_edit_time" label="修改日期" width="150"></el-table-column>
         <el-table-column fixed="right" label>
           <template slot-scope="scope">
-            <el-button @click="resave(scope.row.id)" type="primary" round size="small">还原</el-button>
+            <el-button @click="recover(scope.row.id)" type="primary" round size="small">还原</el-button>
             <el-button @click="del(scope.row.id)" type="danger" round size="small">彻底删除</el-button>
           </template>
         </el-table-column>
@@ -35,154 +35,67 @@ export default {
   name: "Trash",
   data: function () {
     return {
-      documents: [
-        {
-          id: 0,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 1,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 2,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 3,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 4,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 5,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 6,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 7,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 9,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 10,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 11,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 12,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 13,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-        {
-          id: 14,
-          name: "鸡你太美",
-          creator_id: 0,
-          group_id: 0,
-          create_time: "2016-05-02",
-          last_edit_time: "20208-11",
-          is_deleted: false,
-          is_editing: false,
-        },
-      ],
-      id:this.$store.state.user.username.id
+      documents: [],
+      id: this.$store.state.user.username.id,
     };
   },
   methods: {
-    resave: function (id) {
+    getTrashList: function () {
+      let inf = { user_id: this.id }; // 用户id
+      var that = this;
+      //console.log(inf);
+      this.$api.document
+        .recycle(inf)
+        .then((response) => {
+          if (response.code === 400) {
+            that.$message({
+              // message: response.msg,
+              message: "列表为空",
+              type: "error",
+            });
+            console.log("返回了400");
+          } else {
+            that.documents = response.data; // 文档列表
+            console.log("获取数据成功");
+          }
+        })
+        .catch((err) => {
+          console.log("捕获到了异常");
+          that.$message({
+            message: err.msg,
+            type: "error",
+          });
+          //console.log("获取数据失败");
+        });
+    },
+    recover: function (id) {
       console.log(id);
+      let inf = { doc_id: id };
+      var that = this;
+      this.$api.document
+        .recover(inf)
+        .then((response) => {
+          if (response.code === 400) {
+            that.$message({
+              // message: response.msg,
+              message: "列表为空",
+              type: "error",
+            });
+            console.log("返回了400");
+          } else {
+            //that.documents = response.data; // 文档列表
+            this.getTrashList();
+            console.log("获取数据成功");
+          }
+        })
+        .catch((err) => {
+          console.log("捕获到了异常");
+          that.$message({
+            message: err.msg,
+            type: "error",
+          });
+          //console.log("获取数据失败");
+        });
     },
     currentChange: function (newPage) {
       console.log(newPage);
@@ -192,34 +105,8 @@ export default {
     },
   },
   created: function () {
-    let inf = { user_id: this.id }; // 用户id
-    var that = this;
     console.log("created");
-    console.log(this.id);
-    console.log(inf);
-    this.$api.document
-      .recycle(inf)
-      .then((response) => {
-        if (response.code === 400) {
-          that.$message({
-            // message: response.msg,
-            message: "列表为空",
-            type: "error",
-          });
-          console.log("返回了400");
-        } else {
-          that.documents = response.data; // 文档列表
-          console.log("获取数据成功");
-        }
-      })
-      .catch((err) => {
-        console.log("捕获到了异常");
-        that.$message({
-          message: err.msg,
-          type: "error",
-        });
-        //console.log("获取数据失败");
-      });
+    this.getTrashList();
   },
 };
 </script>
