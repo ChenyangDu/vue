@@ -35,10 +35,6 @@ export default {
   name: "Trash",
   data: function () {
     return {
-<<<<<<< HEAD
-      documents: [],
-      id: 1,
-=======
       documents: [
         {
           id: 0,
@@ -182,7 +178,6 @@ export default {
         },
       ],
       id:this.$store.state.user.username.id
->>>>>>> ee4ecf280500f16414edff03c965d738f19a1692
     };
   },
   methods: {
