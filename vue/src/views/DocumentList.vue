@@ -174,53 +174,24 @@ export default {
       console.log(id);
       console.log(typeof this.count);
       var _this = this;
-      // 获取doc_id文章的信息info
-      this.$api.document
-        .info({
-          doc_id: id,
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            // 跳转编辑页
-            console.log("跳转编辑页");
-            _this.$router.push({
-              name: "DocEditor",
-              params: {
-                doc: res.data, // 返回document信息
-              },
-            });
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
+      // 通过user_id直接跳转
+      _this.$router.push({
+        path: '/docediter',
+        query: {
+          doc_id: res.data.id
+        }
+      });
     },
     edit: function (id) {
       console.log(id);
-      this.$api.document
-        .info({
-          doc_id: id,
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            // 跳转编辑页
-            _this.$router.push({
-              name: "DocEditor",
-              params: {
-                doc: res.data, // 返回document信息
-              },
-            });
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
+      var _this = this
+      // 通过user_id直接跳转
+      _this.$router.push({
+        path: '/docediter',
+        query: {
+          doc_id: res.data.id
+        }
+      })
     },
     del: function (id) {
       console.log(id);
