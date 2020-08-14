@@ -34,7 +34,8 @@ const router = new VueRouter({
           name: 'PersonalInformation',
           component: () => import('../views/userInfo/PersonalInformation'),
           meta: {
-            isLogin: false
+            isLogin: false,
+			title: "我的信息"
           }
         },
         {
@@ -42,7 +43,8 @@ const router = new VueRouter({
           name: 'Revising',
           component: () => import('../views/userInfo/Revising'),
           meta: {
-            isLogin: false
+            isLogin: false,
+			title: "修改信息"
           }
         },
         {
@@ -50,7 +52,8 @@ const router = new VueRouter({
           name: 'DocumentList',
           component: () => import('../views/DocumentList'),
           meta: {
-            isLogin: false
+            isLogin: false,
+			title: "工作台"
           }
         },
         {
@@ -58,7 +61,8 @@ const router = new VueRouter({
           name:'GroupDocumentList',
           component: () => import('../views/GroupDocumentList'),
           meta:{
-            isLogin:false
+            isLogin:false,
+			title: "团队文档"
           }
         },
         {
@@ -66,7 +70,8 @@ const router = new VueRouter({
           name:'GroupMember',
           component: ()=>import('../views/GroupMember'),
           meta:{
-            isLogin:false
+            isLogin:false,
+			title: "团队成员"
           }
         },
         {
@@ -74,7 +79,8 @@ const router = new VueRouter({
           name: 'GroupList',
           component: () => import('../views/GroupList'),
           meta:{
-            isLogin:false
+            isLogin:false,
+			title: "我的团队"
           }
         },
         {
@@ -82,7 +88,8 @@ const router = new VueRouter({
           name: 'Trash',
           component: () => import('../views/Trash'),
           meta:{
-            isLogin:false
+            isLogin:false,
+			title: "回收站"
           }
         },
         {
@@ -90,7 +97,8 @@ const router = new VueRouter({
           name: 'DocEditor',
           component: () => import('../views/edit/DocEditor'),
           meta:{
-            isLogin:false
+            isLogin:false,
+			title: "文档编辑"
           }
         }]
     },
