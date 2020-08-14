@@ -18,49 +18,49 @@
       <!-- 对items进行遍历 -->
       <template v-for="item in items">
         <!-- 使用v-if判定是否具有第二级菜单 -->
-        <template v-if="item.subs">
+        <!-- <template v-if="item.subs">
           <el-submenu :index="item.index" :key="item.index">
             <template slot="title">
               <i :class="item.icon"></i>
-              <!-- 如果存在第二级菜单，渲染第一级菜单标题 -->
-              <span slot="title">{{ item.title }}</span>
-            </template>
+               如果存在第二级菜单，渲染第一级菜单标题 -->
+              <!-- <span slot="title">{{ item.title }}</span>
+            </template> -->
 
             <!-- 遍历第二级菜单 -->
-            <template v-for="subItem in item.subs">
+            <!-- <template v-for="subItem in item.subs"> -->
               <!-- 判定是否具有第三级菜单 -->
-              <el-submenu
+              <!-- <el-submenu
                 v-if="subItem.subs"
                 :index="subItem.index"
                 :key="subItem.index"
-              >
+              > -->
                 <!-- 如果存在第三级菜单，渲染第二级菜单标题 -->
-                <template slot="title">{{ subItem.title }}</template>
+                <!-- <template slot="title">{{ subItem.title }}</template> -->
 
                 <!-- 遍历第三级菜单，并渲染第三级菜单标题 -->
-                <el-menu-item
+                <!-- <el-menu-item
                   v-for="(threeItem,i) in subItem.subs"
                   :key="i"
                   :index="threeItem.index"
                   >{{ threeItem.title }}</el-menu-item
                 >
-              </el-submenu>
+              </el-submenu> -->
 
               <!-- 如果不存在第三级菜单，渲染第二级菜单标题 -->
-              <el-menu-item v-else :index="subItem.index" :key="subItem.index"
+              <!-- <el-menu-item v-else :index="subItem.index" :key="subItem.index"
                 >{{ subItem.title }}</el-menu-item
               >
             </template>
           </el-submenu>
-        </template>
+        </template>  -->
 
         <!-- 如果不存在第二级菜单，渲染第一级菜单标题 -->
-        <template v-else>
+        <!-- <template v-else> -->
           <el-menu-item :index="item.index" :key="item.index">
             <i :class="item.icon"></i>
             <span slot="title">{{ item.title }}</span>
           </el-menu-item>
-        </template>
+        <!-- </template> -->
       </template>
     </el-menu>
   </div>
@@ -126,13 +126,13 @@
     top: 70px;
     bottom: 0;
     overflow-y: scroll;
-	background-color: #000000;
+    background-color: #000000;
   }
   .sidebar::-webkit-scrollbar {
     width: 0;
   }
   .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 250px;
+    width: 150px;
   }
   .sidebar > ul {
     height: 100%;
