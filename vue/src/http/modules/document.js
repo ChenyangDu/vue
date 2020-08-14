@@ -89,3 +89,12 @@ export const remove = params => {
     params
   })
 }
+
+// 修改文章标题
+export const rename = params => {
+  return axios({
+    url: 'document/rename',
+    method: 'get',
+    params
+  })
+}

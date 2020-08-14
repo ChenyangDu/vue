@@ -111,12 +111,12 @@ export default {
         doc_id: 1294250488
       }).then(res => {
         if (res.code === 200) {
-          _this.message({
+          _this.$message({
             message: '该文档恢复成功',
             type: 'success'
           })
         } else {
-          _this.message({
+          _this.$message({
             message: res.msg,
             type: 'error'
           })

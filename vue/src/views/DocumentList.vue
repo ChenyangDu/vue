@@ -175,6 +175,7 @@ export default {
       console.log(typeof this.count);
       var _this = this;
       // 通过user_id直接跳转
+      console.log('跳转编辑页')
       _this.$router.push({
         path: '/docediter',
         query: {
