@@ -22,7 +22,7 @@
                 />
                 <div style="padding: 14px;">
                   <span>{{item.name}}</span>
-                  <span class="right">蔡徐坤</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <el-dropdown class="right" @command="handleCommand($event,item.id)">
@@ -55,8 +55,8 @@
                   @click="detail(item.id)"
                 />
                 <div style="padding: 14px;">
-                  <div>{{item.name}}</div>
-                  <div>蔡徐坤</div>
+                  <span>{{item.name}}</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <el-dropdown class="right" @command="handleCommand($event,item.id)">
@@ -89,8 +89,8 @@
                   @click="detail(item.id)"
                 />
                 <div style="padding: 14px;">
-                  <div>{{item.name}}</div>
-                  <div>蔡徐坤</div>
+                  <span>{{item.name}}</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <!-- <el-button type="text" class="button">操作按钮</el-button> -->
@@ -128,7 +128,6 @@ export default {
   },
   created: function () {
     this.getOwnList();
-    //this.activeName.substr()
   },
   methods: {
     handleNewDoc() {
@@ -264,8 +263,6 @@ export default {
     getOwnList: function () {
       let inf = { id: this.id }; // 用户id
       var that = this;
-      // console.log("created");
-      // console.log(inf);
       this.$api.user
         .own(inf)
         .then((response) => {
