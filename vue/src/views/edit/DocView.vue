@@ -220,26 +220,12 @@ export default {
   position: relative;
   margin-left: 100px;
 }
-.icon-submit{
-  float: right;
-  font-size: 24px;
-  position: relative;
-}
-.icon-favorite{
+.icon-submit,.icon-favorite, .icon-share, .icon-rename{
   float: right;
   font-size: 24px;
   position: relative;
   margin-left: 10px;
+  border: white;
 }
-.icon-share{
-  float: right;
-  font-size: 24px;
-  position: relative;
-  margin-left: 10px;
-}
-.icon-rename{
-  float: right;
-  font-size: 24px;
-  position: relative;
-}
+
 </style>

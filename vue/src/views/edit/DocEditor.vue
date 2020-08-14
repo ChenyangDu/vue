@@ -163,6 +163,7 @@ export default {
       }).then(res => {
         if (res.code === 200) { //无人在编辑
           _this.viewDoc()
+          _this.FavoInfo()
           this.edit_status = true
         } else if (res.code === 401) {
           console.log('start code = 401')
@@ -199,6 +200,11 @@ export default {
         }
       }).catch(failResponse => {})
       console.log("获取文章内容-完成")
+    },
+    //获取收藏信息
+    FavoInfo() {
+      var _this = this
+      this.$api
     },
     //修改标题
     handleRename() {
@@ -354,12 +360,14 @@ export default {
   font-size: 24px;
   position: relative;
   margin-left: 100px;
+  border: white;
 }
 .icon-submit{
   float: right;
   font-size: 24px;
   position: relative;
   margin-left: 10px;
+  border: white;
 }
 .icon-favorite, .icon-rename, .icon-share{
   float: right;
