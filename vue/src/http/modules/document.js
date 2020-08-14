@@ -8,14 +8,6 @@ export const create = params => {
     params
   })
 }
-// 保存文档
-// export const save = data => {
-//   return axios({
-//     url: '/document/save',
-//     method: 'post',
-//     data
-//   })
-// }
 // 请求文档信息
 export const info = params => {
   return axios({
@@ -53,6 +45,14 @@ export const end = (params, data) => {
 export const deleteDoc = params => {
   return axios({
     url: '/document/delete',
+    method: 'get',
+    params
+  })
+}
+// 收藏文档
+export const favorite = params => {
+  return axios({
+    url: '/document/favorite',
     method: 'get',
     params
   })
