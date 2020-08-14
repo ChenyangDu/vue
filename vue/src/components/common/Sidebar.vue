@@ -82,7 +82,7 @@
           {
             icon: "el-icon-s-cooperation",
             index: "documentlist",
-            title: "我的文档",
+            title: "工作台",
           },
           {
             icon: "el-icon-s-custom",
@@ -94,30 +94,6 @@
           //   index: "groupdocumentlist",
           //   title: "团队文档",
           // },
-          {
-            icon: "el-icon-rank",
-            index: "workhome",
-            title: "工作台",
-            subs: [
-              {
-                index: "getdoctest",
-                title: "最近使用",
-              },
-              {
-                index: "mylove",
-                title: "我的收藏",
-              },
-			  {
-			    index: "groupmember",
-			    title: "我的团队",
-			  },
-            ],
-          },
-          {
-            icon: "el-icon-folder",
-            index: "doceditor",
-            title: "文档编辑",
-          },
           {
             icon: "el-icon-delete",
             index: "trash",
