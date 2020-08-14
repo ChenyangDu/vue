@@ -71,11 +71,12 @@ export default {
         },
       ],
       documents: [],
-      id:1,
+      id:0,
       keyword: "",
     };
   },
   created: function () {
+    this.id = 0;
     let inf = { id: this.id }; // 用户id
     var that = this;
     console.log("created");
