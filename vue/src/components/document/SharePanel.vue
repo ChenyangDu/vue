@@ -56,10 +56,17 @@ export default {
       } else {
         // todo 提交权限
         if(this.shareForm.type === "1") {
+          this.shareAuthorityForm.can_read = true
           this.shareAuthorityForm.can_comment = false
           this.shareAuthorityForm.can_edit = false
         } else if (this.shareForm.type === "2"){
+          this.shareAuthorityForm.can_read = true
+          this.shareAuthorityForm.can_comment = true
           this.shareAuthorityForm.can_edit = false
+        } else {
+          this.shareAuthorityForm.can_read = true
+          this.shareAuthorityForm.can_comment = true
+          this.shareAuthorityForm.can_edit = true
         }
         this.shareAuthorityForm.document_id = this.doc_id
         this.$api.authority.shareAuthority(

@@ -38,7 +38,7 @@ export default {
   props: {
     edit_bar_show: {
       type: Boolean,
-      default: true
+      default: false
     },
     doc_id: {
       type: Number,
@@ -100,6 +100,8 @@ export default {
       this.init.toolbar = ''
       this.init.menubar = ''
     }
+    console.log('bar值')
+    console.log(this.edit_bar_show)
     tinymce.init({})
   },
   methods: {

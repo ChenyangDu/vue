@@ -83,7 +83,7 @@ export default {
   },
   created() {
     this.selfData[0] = this.$store.state.user.username
-    this.selfData[0]["authority_type"] = 3
+    this.selfData[0]["authority_type"] = '管理员'
   },
   methods: {
     // 通过手机/邮箱搜索

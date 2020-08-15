@@ -7,32 +7,58 @@
     <el-row :gutter="0">
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" style="width: 400px"></el-input>
 
-          <div class="creator-au" v-if="create_au_show">
-          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
-          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
-          <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
-          <!--分享弹窗-->
-          <el-dialog title="分享" :visible.sync="dialogFormVisible">
-            <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
-          </el-dialog>
+          <el-row :gutter="1">
+            <el-col :span="8" :push="0">
+              <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" class="title-input"></el-input>
+            </el-col>
 
-          <!--权限设置-->
-          <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
-            <authority-panel :doc_id="this.doc_id"></authority-panel>
-          </el-dialog>
-        </div>
+            <div class="edit-au" v-if="edit_au_show">
+              <el-col :span="1" :push="1">
+                <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
+              </el-col>
+              <el-col :span="1" :push="2">
+                <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
+              </el-col>
+              <el-col :span="1" :push="3">
+                <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
+              </el-col>
+            </div>
 
-          <div class="favo-au" v-if="favo_au_show">
-            <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
-          </div>
 
-          <div class="edit-au" v-if="edit_au_show">
-            <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
-            <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
-            <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
-          </div>
+            <div class="favo-au" v-if="favo_au_show">
+              <el-col :span="1" :push="4">
+                <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
+              </el-col>
+            </div>
+
+
+            <div class="creator-au" v-if="create_au_show">
+              <el-col :span="1" :push="5">
+                <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+              </el-col>
+              <el-col :span="1" :push="6">
+                <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
+              </el-col>
+              <el-col :span="1" :push="9">
+                <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
+              </el-col>
+
+              <!--分享弹窗-->
+              <el-dialog title="分享" :visible.sync="dialogFormVisible">
+                <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
+              </el-dialog>
+
+              <!--权限设置-->
+              <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+                <authority-panel :doc_id="this.doc_id"></authority-panel>
+              </el-dialog>
+
+            </div>
+
+          </el-row>
+
+
 
         </el-card>
       </el-col>
@@ -100,9 +126,9 @@ export default {
       disabled: true, // tinymce输入
       name_disabled: true, // 标题修改
       edit_status: false,
-      favo_au_show: true, // 不会隐藏
-      create_au_show: true, // 专属创建者
-      edit_au_show: true, // 编辑者
+      favo_au_show: false, // 不会隐藏
+      create_au_show: false, // 专属创建者
+      edit_au_show: false, // 编辑者
       edit_bar_show: true, // 编辑者
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
@@ -241,16 +267,19 @@ export default {
         _this.create_au_show = true
         _this.edit_au_show = true
         _this.edit_bar_show = true
+        _this.favo_au_show = true
       } else if (this.authority.can_edit) {
         console.log('可编辑')
         _this.create_au_show = false
         _this.edit_au_show = true
         _this.edit_bar_show = true
+        _this.favo_au_show = true
       } else if (this.authority.can_comment) {
         console.log('可评论')
         _this.create_au_show = false
         _this.edit_au_show = false
         _this.edit_bar_show = false
+        _this.favo_au_show = true
         // 评论模块由can_comment绑定 为true
       } else if (this.authority.can_read) {
         console.log('仅可查看')
@@ -508,17 +537,26 @@ export default {
   margin-top: 30px;
 }
 .icon-delete{
-  float: right;
+  /*float: right;*/
   font-size: 24px;
-  position: relative;
-  margin-left: 100px;
+  /*position: relative;*/
+  /*margin-left: 100px;*/
   border: white;
 }
 .icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority{
-  float: right;
+  /*float: right;*/
   font-size: 24px;
-  position: relative;
+  /*position: relative;*/
   border: white;
-  margin-left: 10px;
+  /*margin-left: 10px;*/
+}
+.icons{
+  /*display: inline;*/
+  /*position: relative;*/
+  /*bottom: 40px;*/
+}
+.title-input{
+  /*width: 10px;*/
+  /*display: inline;*/
 }
 </style>
