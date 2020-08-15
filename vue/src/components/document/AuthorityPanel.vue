@@ -69,14 +69,14 @@ export default {
       searchResults: [],
       selfData:[
         {
-          id: 3,
-          name: 'me',
+          id: '',
+          name: ' ',
           password: '',
-          phone: '17610066277',
+          phone: ' ',
           email: '',
           wechat: '',
           qq: '',
-          authority_type: '1'
+          authority_type: ''
         }
       ],
       user_id: this.$store.state.user.username.id
