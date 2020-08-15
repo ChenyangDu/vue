@@ -70,7 +70,6 @@ import bus from "../../utils/bus";
 
 export default {
   data() {
-    // console.log('data');
     return {
       collapse: false,
       fullscreen: false,
@@ -171,8 +170,6 @@ export default {
 
   },
   created:function(){
-    // console.log('created');
-    // console.log(this.$store.state.user.username);
     if(this.checkLogin())
     {
       console.log('在构造函数中检测到用户已经登录');
@@ -186,18 +183,18 @@ export default {
 
       this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
     }
-    bus.$on("login-event", () => {
-      console.log("home接受到了消息");
-      this.isLogin = true;
-      this.username = this.$store.state.user.username.name;
-      this.userid = this.$store.state.user.username.id;
-      this.userAvator =
-        this.global.baseUrl +
-        "image/avator/show?user_id=" +
-        this.$store.state.user.username.id;
+    // bus.$on("login-event", () => {
+    //   console.log("home接受到了消息");
+    //   this.isLogin = true;
+    //   this.username = this.$store.state.user.username.name;
+    //   this.userid = this.$store.state.user.username.id;
+    //   this.userAvator =
+    //     this.global.baseUrl +
+    //     "image/avator/show?user_id=" +
+    //     this.$store.state.user.username.id;
 
-      this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
-    });
+    //   this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+    // });
   }
 };
 </script>
