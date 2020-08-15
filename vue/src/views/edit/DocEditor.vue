@@ -7,11 +7,13 @@
     <el-row :gutter="0">
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-input type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px"></el-input>
+          <el-input type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px">
+          </el-input>
 
           <template class="creator-au" v-if="create_au_show">
             <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
             <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+            <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
             <!--分享弹窗-->
             <el-dialog title="分享" :visible.sync="dialogFormVisible">
               <el-form :model="shareForm">
@@ -20,7 +22,7 @@
                     <el-option label="可查看" value="1"></el-option>
                     <el-option label="可查看与评论" value="2"></el-option>
                     <el-option label="可查看与评论与编辑" value="3"></el-option>
-                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>
+<!--                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
                   </el-select>
                 </el-form-item>
               </el-form>
@@ -28,6 +30,10 @@
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="handleShare">确 定</el-button>
               </div>
+            </el-dialog>
+            <!--权限设置-->
+            <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+              <authority-panel :doc_id="this.doc_id"></authority-panel>
             </el-dialog>
           </template>
 
@@ -37,7 +43,6 @@
 
           <template class="edit-au" v-if="edit_au_show">
             <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
-
             <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
             <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
           </template>
@@ -77,9 +82,11 @@
 <script>
 import TinymceEditor from "@/components/document/TinymceEditor";
 import CommentPanel from "@/components/document/CommentPanel";
+import AuthorityPanel from "@/components/document/AuthorityPanel";
 export default {
   name: 'Home',
   components: {
+    AuthorityPanel,
     CommentPanel,
     TinymceEditor
   },
@@ -116,9 +123,10 @@ export default {
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
 
-      share_icon_data: 'el-icon-s-promotion',
+      share_icon_data: 'el-icon-share',
       dialogFormVisible: false,
       formLabelWidth:'100px',
+      authorityFormVisible: false,
       shareForm: {
         type: ''
       },
@@ -133,6 +141,7 @@ export default {
       delete_icon_data: 'el-icon-delete-solid',
       submit_icon_data: 'el-icon-upload',
       edit_icon_data: 'el-icon-edit-outline',
+      authority_icon_data: 'el-icon-s-tools',
       create_au_show: true,
       favo_au_show: true,
       edit_au_show: true,
@@ -143,7 +152,8 @@ export default {
   created() {
     console.log('编辑页')
     // 通过 doc_id 跳转的
-    this.doc_id = this.$route.query.doc_id
+    this.doc_id = parseInt(this.$route.query.doc_id)
+    console.log(typeof this.doc_id)
     this.user_id = this.$store.state.user.username.id
     console.log('文章id如下：')
     console.log(this.doc_id)
@@ -179,7 +189,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //获取doc info
+    // 获取doc info
     getInfo() {
       var _this = this
       this.$api.document.info({
@@ -251,18 +261,19 @@ export default {
         _this.create_au_show = false
       } else if (this.authority.can_comment) {
         console.log('可评论')
-        _this.edit_au_show = false
         _this.create_au_show = false
+        _this.edit_au_show = false
         _this.edit_bar_show = false
+        // 评论模块由can_comment绑定 为true
       } else if (this.authority.can_read) {
         console.log('仅可评论')
-        _this.edit_au_show = false
         _this.create_au_show = false
+        _this.edit_au_show = false
         _this.edit_bar_show = false
-        // 评论模块由can_comment绑定
+        // 评论模块由can_comment绑定 为false
       }
     },
-    //获取收藏信息
+    // 获取收藏信息
     favoInfo() {
       var _this = this
       this.$api.document.favoriteinfo({
@@ -308,7 +319,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //修改标题
+    // 修改标题
     handleRename() {
       var _this = this
       if (this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
@@ -395,15 +406,28 @@ export default {
         })
       } else {
         // todo 提交权限
-        _this.$alert('localhost:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
-          confirmButtonText: '确定',
-          callback: action => {
+        this.$api.authority.shareAuthority({
+          doc_id: _this.doc_id,
+          authority_type: _this.shareForm.type
+        }).then(rse=> {
+          if(res.code === 200 ){
+            _this.$alert('localhost:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+              confirmButtonText: '确定',
+              callback: action => {
+                _this.$message({
+                  message: '文档分享成功',
+                  type: 'success'
+                })
+              }
+            })
+          } else {
             _this.$message({
-              message: '文档分享成功',
-              type: 'success'
+              message: res.msg,
+              type: 'error'
             })
           }
-        })
+        }).catch(failResponse => {})
+
       }
     },
     // 提交
@@ -428,7 +452,7 @@ export default {
         }
       })
     },
-    //删除
+    // 删除
     handleDelete() {
       var _this = this
       this.$api.document.deleteDoc({
@@ -450,6 +474,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
+    // 返回 检测是否提交
     goBack() {
       if (this.edit_status === true) {
         this.$message({
@@ -460,7 +485,7 @@ export default {
         this.$router.back()
       }
     },
-    //鼠标单击的事件
+    // 鼠标单击的事件
     onClick(e, editor) {
       console.log('Element clicked')
       console.log(e)
@@ -494,7 +519,7 @@ export default {
   margin-left: 100px;
   border: white;
 }
-.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit{
+.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority{
   float: right;
   font-size: 24px;
   position: relative;

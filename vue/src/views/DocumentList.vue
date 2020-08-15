@@ -173,14 +173,13 @@ export default {
     detail: function (id) {
       console.log("点击detail");
       console.log(id);
-      console.log(typeof this.count);
       var _this = this;
       // 通过user_id直接跳转
       console.log('跳转编辑页')
       _this.$router.push({
-        path: '/docediter',
+        path: '/doceditor',
         query: {
-          doc_id: res.data.id
+          doc_id: id
         }
       });
     },
@@ -189,9 +188,9 @@ export default {
       var _this = this
       // 通过user_id直接跳转
       _this.$router.push({
-        path: '/docediter',
+        path: '/doceditor',
         query: {
-          doc_id: res.data.id
+          doc_id: id
         }
       })
     },
@@ -201,7 +200,7 @@ export default {
       this.$api.document
         .deleteDoc({
           doc_id: id,
-          user_id: _this.$store.state.user.username.id,
+          user_id: _this.id,
         })
         .then((res) => {
           if (res.code === 200) {
@@ -209,7 +208,6 @@ export default {
               message: "文章已被成功删除",
               type: "success",
             });
-            //_this.selectChange(_this.value);
             _this.handleClick();
           } else {
             _this.$message({
@@ -225,6 +223,7 @@ export default {
     },
     collect:function(id){
       console.log('collect');
+      // todo 需要在加载列表时获取收藏信息
     },
 
     handleClick: function () {
