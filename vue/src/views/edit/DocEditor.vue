@@ -7,45 +7,45 @@
     <el-row :gutter="0">
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-input type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px">
-          </el-input>
+          <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" style="width: 400px"></el-input>
 
-          <template class="creator-au" v-if="create_au_show">
-            <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
-            <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
-            <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
-            <!--分享弹窗-->
-            <el-dialog title="分享" :visible.sync="dialogFormVisible">
-              <el-form :model="shareForm">
-                <el-form-item label="权限给予：" :label-width="formLabelWidth">
-                  <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
-                    <el-option label="可查看" value="1"></el-option>
-                    <el-option label="可查看与评论" value="2"></el-option>
-                    <el-option label="可查看与评论与编辑" value="3"></el-option>
-<!--                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
-                  </el-select>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleShare">确 定</el-button>
-              </div>
-            </el-dialog>
-            <!--权限设置-->
-            <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
-              <authority-panel :doc_id="this.doc_id"></authority-panel>
-            </el-dialog>
-          </template>
+          <div class="creator-au" v-if="create_au_show">
+          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
+          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+          <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
+          <!--分享弹窗-->
+          <el-dialog title="分享" :visible.sync="dialogFormVisible">
+            <el-form :model="shareForm">
+              <el-form-item label="权限给予：" :label-width="formLabelWidth">
+                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
+                  <el-option label="可查看" value="1"></el-option>
+                  <el-option label="可查看与评论" value="2"></el-option>
+                  <el-option label="可查看与评论与编辑" value="3"></el-option>
+                  <!--                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleShare">确 定</el-button>
+            </div>
+          </el-dialog>
 
-          <template class="favo-au" v-if="favo_au_show">
+          <!--权限设置-->
+          <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+            <authority-panel :doc_id="this.doc_id"></authority-panel>
+          </el-dialog>
+        </div>
+
+          <div class="favo-au" v-if="favo_au_show">
             <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
-          </template>
+          </div>
 
-          <template class="edit-au" v-if="edit_au_show">
+          <div class="edit-au" v-if="edit_au_show">
             <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
             <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
             <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
-          </template>
+          </div>
 
         </el-card>
       </el-col>
@@ -59,7 +59,7 @@
               <tinymce-editor v-model="msg"
                               :disabled="disabled"
                               :edit_bar_show="edit_bar_show"
-                              :doc_id="this.doc.id"
+                              :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">
               </tinymce-editor>
@@ -93,7 +93,38 @@ export default {
   data() {
     return {
       msg: '',
-      disabled: true,
+      doc_id: '',
+      user_id:this.$store.state.user.username.id,
+      doc: {
+        id: '',
+        name: '',
+        creator_id: '',
+        group_id: '',
+        create_time: '',
+        last_edit_time: '',
+        is_deleted: '',
+        is_editing: '',
+        edit_times: '',
+        username: ''
+      },
+      disabled: true, // tinymce输入
+      name_disabled: true, // 标题修改
+      edit_status: false,
+      favo_au_show: true, // 不会隐藏
+      create_au_show: true, // 专属创建者
+      edit_au_show: true, // 编辑者
+      edit_bar_show: true, // 编辑者
+      rename_icon_data: 'el-icon-edit',
+      favorite_icon_data: 'el-icon-star-off',
+      share_icon_data: 'el-icon-share',
+      delete_icon_data: 'el-icon-delete-solid',
+      submit_icon_data: 'el-icon-upload',
+      edit_icon_data: 'el-icon-edit-outline',
+      authority_icon_data: 'el-icon-s-tools',
+      dialogFormVisible: false,
+      authorityFormVisible: false,
+      formLabelWidth:'100px',
+      //存获取的信息
       authority: {
         authority_userKey: {
           document_id: '',
@@ -104,32 +135,11 @@ export default {
         can_edit: '',
         can_read: ''
       },
-      doc_id: '',
-      user_id:_this.$store.state.user.username.id,
-      doc: {
-        id: 1,
-        name: '',
-        creator_id: 1,
-        group_id: -1,
-        create_time: '',
-        last_time: '',
-        last_edit_time: '',
-        is_deleted: false,
-        is_editing: false,
-        edit_times: -1
-      },
-      name_disabled: true,
-      edit_status: false,
-      rename_icon_data: 'el-icon-edit',
-      favorite_icon_data: 'el-icon-star-off',
-
-      share_icon_data: 'el-icon-share',
-      dialogFormVisible: false,
-      formLabelWidth:'100px',
-      authorityFormVisible: false,
+      // 用户选择的权限
       shareForm: {
         type: ''
       },
+      // 接口提交的数据
       shareAuthorityForm: {
         document_id: this.doc_id,
         user_id: 0,
@@ -137,28 +147,18 @@ export default {
         can_comment: true,
         can_edit: true,
       },
-      delete_icon_data: 'el-icon-delete-solid',
-      submit_icon_data: 'el-icon-upload',
-      edit_icon_data: 'el-icon-edit-outline',
-      authority_icon_data: 'el-icon-s-tools',
-      create_au_show: true,
-      favo_au_show: true,
-      edit_au_show: true,
-      // 记得在子组件里加 props
-      edit_bar_show: true
     }
   },
   created() {
-    console.log('编辑页')
     // 通过 doc_id 跳转的
+    console.log('编辑页')
     this.doc_id = parseInt(this.$route.query.doc_id)
-    console.log(typeof this.doc_id)
     this.user_id = this.$store.state.user.username.id
     console.log('文章id如下：')
+    console.log(typeof this.doc_id)
     console.log(this.doc_id)
-    var _this = this
     // 请求文档权限信息
-    _this.getAuthority()
+    this.getAuthority()
   },
   methods: {
     // 请求文章-用户权限信息
@@ -191,6 +191,8 @@ export default {
     // 获取doc info
     getInfo() {
       var _this = this
+      console.log('获取doc info')
+      console.log(this.doc_id)
       this.$api.document.info({
         doc_id: _this.doc_id
       }).then(res => {
@@ -229,14 +231,17 @@ export default {
     viewDoc() {
       var _this = this
       console.log("获取文章内容")
+      console.log('doc_id + user_id')
+      console.log(this.doc_id)
+      console.log(this.user_id)
       this.$api.document.view({
         doc_id: _this.doc_id, // 通过doc的id请求文档内容
-        user_id: _this.$store.state.user.username.id // 用作浏览记录
+        user_id: _this.user_id // 用作浏览记录
       }).then(res => {
         if (res.code === 200 ){
           _this.msg = res.data
           console.log('获取文章内容 code = 200')
-          console.log('here' + _this.msg)
+          console.log('here are msg =>' + _this.msg)
           _this.loadButton()
         } else {
           console.log('获取文章内容 code = 400')
@@ -296,13 +301,13 @@ export default {
     // 点击开始编辑（已经确定：有编辑权力 无人在编辑）
     editStart() {
       var _this = this
-      this.disabled=false
       this.$api.document.start({
-        doc_id: _this.doc.id, //封锁文章
+        doc_id: _this.doc_id, //封锁文章
       }).then(res => {
         if (res.code === 200) { //无人在编辑
           console.log('editStart code = 200')
           this.edit_status = true
+          this.disabled=false
         } else if (res.code === 401) { // 文章正在被编辑
           console.log('editStart code = 401')
           _this.$message({
@@ -321,22 +326,22 @@ export default {
     // 修改标题
     handleRename() {
       var _this = this
-      if (this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
+      if (_this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
         console.log('修改前')
         console.log(this.doc.name)
         _this.rename_icon_data = 'el-icon-check'
-        this.name_disabled = false
+        _this.name_disabled = false
       } else { // 当前为正在修改的状态,故再次点击进行保存
-        console.log('修改后')
-        console.log(this.doc.name)
-        _this.rename_icon_data = 'el-icon-edit'
-        this.name_disabled = true
         // 发送name修改后的请求
         _this.$api.document.rename({
          doc_id: this.doc_id,
          name: _this.doc.name
         }).then(res => {
           if (res.code === 200){
+            console.log('修改后')
+            console.log(this.doc.name)
+            _this.rename_icon_data = 'el-icon-edit'
+            _this.name_disabled = true
             _this.$message({
               message: '标题修改成功！',
               type: 'success'
@@ -367,6 +372,10 @@ export default {
             })
           } else {
             _this.$message({
+              message: '收藏失败',
+              type: 'error'
+            })
+            _this.$message({
               message: res.msg,
               type: 'error'
             })
@@ -375,7 +384,7 @@ export default {
       } else {
         _this.$api.document.favorite({
           doc_id: _this.doc.id,
-          user_id: _this.$store.state.user.username.id,
+          user_id: _this.user_id,
           favorite: false
         }).then(res => {
           if (res.code === 200) {

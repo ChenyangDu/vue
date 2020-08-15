@@ -178,13 +178,13 @@ export default {
       this.$api.document.favoriteinfo(inf).then(response => {
         if(response.data === 200)
           return response.data === 'true';
-        else {
-          that.$message({
-              // message: response.msg,
-              message: "列表为空",
-              type: "error",
-          })
-        }
+        // else {
+        //   that.$message({
+        //       // message: response.msg,
+        //       message: "列表为空",
+        //       type: "error",
+        //   })
+        // }
       }).catch(err => {
         console.log("判断收藏时捕获到了异常");
           that.$message({
