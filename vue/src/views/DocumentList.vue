@@ -177,7 +177,7 @@ export default {
       // 通过user_id直接跳转
       console.log('跳转编辑页')
       _this.$router.push({
-        path: '/doceditor',
+        path: '/docview',
         query: {
           doc_id: id
         }

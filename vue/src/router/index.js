@@ -35,7 +35,7 @@ const router = new VueRouter({
 		  component: () => import('../views/dashboard'),
 		  meta: {
 		    isLogin: false,
-			title: "系统首页"
+			  title: "系统首页"
 		  }
 		},
         {
@@ -44,7 +44,7 @@ const router = new VueRouter({
           component: () => import('../views/userInfo/PersonalInformation'),
           meta: {
             isLogin: false,
-			title: "我的信息"
+			      title: "我的信息"
           }
         },
         {
@@ -53,7 +53,7 @@ const router = new VueRouter({
           component: () => import('../views/userInfo/Revising'),
           meta: {
             isLogin: false,
-			title: "修改信息"
+			      title: "修改信息"
           }
         },
         {
@@ -62,7 +62,7 @@ const router = new VueRouter({
           component: () => import('../views/DocumentList'),
           meta: {
             isLogin: false,
-			title: "工作台"
+            title: "工作台"
           }
         },
         {
@@ -71,7 +71,7 @@ const router = new VueRouter({
           component: () => import('../views/GroupDocumentList'),
           meta:{
             isLogin:false,
-			title: "团队文档"
+            title: "团队文档"
           }
         },
         {
@@ -85,7 +85,7 @@ const router = new VueRouter({
           component: ()=>import('../views/GroupMember'),
           meta:{
             isLogin:false,
-			title: "团队成员"
+            title: "团队成员"
           }
         },
         {
@@ -94,7 +94,7 @@ const router = new VueRouter({
           component: () => import('../views/GroupList'),
           meta:{
             isLogin:false,
-			title: "我的团队"
+            title: "我的团队"
           }
         },
         {
@@ -103,7 +103,7 @@ const router = new VueRouter({
           component: () => import('../views/Trash'),
           meta:{
             isLogin:false,
-			title: "回收站"
+			      title: "回收站"
           }
         },
         {
@@ -112,8 +112,18 @@ const router = new VueRouter({
           component: () => import('../views/edit/DocEditor'),
           meta:{
             isLogin:false,
-			title: "文档编辑"
+			      title: "文档编辑"
           }
+        },
+        {
+          path: '/docview',
+          name: 'DocView',
+          component: () => import('../views/edit/DocView')
+        },
+        {
+          path: '/noauthority',
+          name: 'NoAuthority',
+          component: () => import('../views/edit/NoAuthority')
         }]
     },
     {
@@ -144,16 +154,6 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: () => import('../views/edit/GetDocTest')
-    },
-    {
-      path: '/docview',
-      name: 'DocView',
-      component: () => import('../views/edit/DocView')
-    },
-    {
-      path: '/noauthority',
-      name: 'NoAuthority',
-      component: () => import('../views/edit/NoAuthority')
     }
   ]
 })
