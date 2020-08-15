@@ -28,7 +28,7 @@ import 'tinymce/plugins/save'
 
 import 'tinymce/plugins/textcolor'
 import 'tinymce/plugins/contextmenu'
-
+import axios from "../../http/axios";
 export default {
   name: 'TinymceEditor',
   components: {
@@ -137,18 +137,40 @@ export default {
     //   console.log(decoded)
     // },
     // 用于上传图片的，后端需要提供好上传接口
-    // handleImgUpload (blobInfo, success, failure) {
-    //   let formdata = new FormData()
-    //   formdata.set('upload_file', blobInfo.blob())
-    //   let new_headers = { headers: this.headers}
-    //   let upload_url = process.env.BASE_API + '/website/uploadfile'
-    //   axios.post(upload_url, formdata, new_headers).then(res => {
-    //     // console.log(res.data.data)
-    //     success(res.data.data[0])
-    //   }).catch(res => {
-    //     failure('error')
-    //   })
-    // }
+    handleImgUpload (blobInfo, succFun, failFun) {
+      // let formdata = new FormData()
+      // formdata.set('upload_file', blobInfo.blob())
+      // let new_headers = { headers: this.headers}
+      // let upload_url = 'http://39.101.200.9:8081//image/avatar/upload?user_id=110'
+      // axios.post(upload_url, formdata, new_headers).then(res => {
+      //   // console.log(res.data.data)
+      //   success(res.data.data[0])
+      // }).catch(res => {
+      //   failure('error')
+      // })
+        var xhr, formData;
+        var file = blobInfo.blob();//转化为易于理解的file对象
+        xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.open('POST', 'http://39.101.200.9:8081/image/docimg/upload');
+        xhr.onload = function() {
+            var json;
+            if (xhr.status != 200) {
+                failFun('HTTP Error: ' + xhr.status);
+                return;
+            }
+            console.log(xhr)
+            json = JSON.parse(xhr.responseText);
+            if (!json || typeof json.location != 'string') {
+                failFun('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+            succFun(json.location);
+        };
+        formData = new FormData();
+        formData.append('file', file, file.name );//此处与源文档不一样
+        xhr.send(formData);
+    }
   },
   watch: {
     value(newValue) {
