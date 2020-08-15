@@ -75,6 +75,11 @@ const router = new VueRouter({
           }
         },
         {
+          path:'/groupdetail',
+          name: 'GroupDetail',
+          component:() => import('../views/GroupDetail')
+        },
+        {
           path:'/groupmember',
           name:'GroupMember',
           component: ()=>import('../views/GroupMember'),

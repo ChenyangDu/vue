@@ -8,13 +8,13 @@
 <!--      ${comments.length > 1 ? 'replies' : 'reply'}-->
       <a-list-item slot="renderItem" slot-scope="item, index">
         <a-comment
-          :author="item.user_id"
+          :author="item.username"
           :content="item.content"
           :datetime="item.time"/>
 <!--        :avatar="item.avatar"-->
       </a-list-item>
     </a-list>
-    <a-comment>
+    <a-comment v-if="this.can_comment">
 <!--      <a-avatar-->
 <!--          slot="avatar"-->
 <!--          src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"-->
@@ -24,7 +24,7 @@
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
         </a-form-item>
-        <a-form-item v-if="this.can_comment">
+        <a-form-item>
           <a-button html-type="submit" :loading="submitting" type="primary" @click="handleSubmit">
             添加评论
           </a-button>
@@ -52,13 +52,19 @@ export default {
     return {
       comments: [],//通过接口获得comments列表
       submitting: false,
-      value: ''
+      value: '',
+      user_id: ''
     };
   },
   methods: {
+    created() {
+      this.loadComments()
+      this.user_id = this.$store.state.user.username.id
+    },
     // 请求评论列表
     loadComments() {
-      // alert(this.doc_id)
+      console.log('评论加载')
+      console.log(this.doc_id)
       var _this = this
       this.$api.comment.list({
         doc_id: this.doc_id
@@ -75,22 +81,20 @@ export default {
     },
     // 提交评论
     handleSubmit() {
+      var _this = this
       if (!this.value) {
         return;
       }
       this.submitting = true;
-      var _this = this
       let newComment = {
-        user_id: this.$store.state.user.username.id,
-        // user_id: 1,
+        user_id: this.user_id,
         document_id: this.doc_id,
         content: this.value,
-        // time: this.getNowFormatDate()
         time: ''
       }
       this.$api.comment.create(newComment).then(res => {
         if (res.code === 200 ){
-          _this.comments.unshift(res.data)
+          _this.loadComments()
         } else {
           _this.$message({
             message: res.msg,
@@ -104,9 +108,6 @@ export default {
     handleChange(e) {
       this.value = e.target.value;
     },
-  },
-  created() {
-    this.loadComments()
   }
 };
 </script>

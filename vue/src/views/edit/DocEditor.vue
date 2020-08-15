@@ -8,12 +8,40 @@
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
           <el-input type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px"></el-input>
-<!--          authority.can_delete-->
-          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
-          <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
-          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="handleShare"></el-button>
-          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
-          <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
+
+          <template class="creator-au" v-if="create_au_show">
+            <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
+            <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+            <!--分享弹窗-->
+            <el-dialog title="分享" :visible.sync="dialogFormVisible">
+              <el-form :model="shareForm">
+                <el-form-item label="权限给予：" :label-width="formLabelWidth">
+                  <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
+                    <el-option label="可查看" value="1"></el-option>
+                    <el-option label="可查看与评论" value="2"></el-option>
+                    <el-option label="可查看与评论与编辑" value="3"></el-option>
+                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleShare">确 定</el-button>
+              </div>
+            </el-dialog>
+          </template>
+
+          <template class="favo-au" v-if="favo_au_show">
+            <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
+          </template>
+
+          <template class="edit-au" v-if="edit_au_show">
+            <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
+
+            <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
+            <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
+          </template>
+
         </el-card>
       </el-col>
     </el-row>
@@ -25,15 +53,12 @@
             <el-form-item>
               <tinymce-editor v-model="msg"
                               :disabled="disabled"
+                              :edit_bar_show="edit_bar_show"
                               :doc_id="this.doc.id"
                               @onClick="onClick"
                               ref="editor">
               </tinymce-editor>
             </el-form-item>
-<!--            <el-form-item class="button-item" >-->
-<!--              <el-button type="primary" @click="handleSubmit" style="float: right" >提交</el-button>-->
-<!--              <el-button type="danger" @click="handleDelete" style="float: left" v-if="authority.can_delete">删除</el-button>-->
-<!--            </el-form-item>-->
           </el-form>
         </el-card>
       </el-col>
@@ -42,7 +67,7 @@
     <el-row :gutter="0">
       <el-col :span="20" :push="2">
         <el-card class="comment-card">
-          <comment-panel :doc_id="this.doc.id" :can_comment="this.authority.can_comment"></comment-panel>
+          <comment-panel :doc_id=this.doc_id :can_comment="this.authority.can_comment"></comment-panel>
         </el-card>
       </el-col>
     </el-row>
@@ -61,7 +86,7 @@ export default {
   data() {
     return {
       msg: '',
-      disabled: false,
+      disabled: true,
       authority: {
         authority_userKey: {
           document_id: '',
@@ -72,6 +97,8 @@ export default {
         can_edit: '',
         can_read: ''
       },
+      doc_id: '',
+      user_id:'',
       doc: {
         id: 1,
         name: '',
@@ -88,15 +115,39 @@ export default {
       edit_status: false,
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
-      share_icon_data: 'el-icon-s-promotion',
+
+      share_icon_data: 'el-icon-share',
+      dialogFormVisible: false,
+      formLabelWidth:'100px',
+      shareForm: {
+        type: ''
+      },
+      shareAuthority: {
+        document_id: '',
+        user_id: '',
+        can_read: false,
+        can_comment: false,
+        can_edit: false,
+        can_delete: false
+      },
       delete_icon_data: 'el-icon-delete-solid',
-      submit_icon_data: 'el-icon-upload'
+      submit_icon_data: 'el-icon-upload',
+      edit_icon_data: 'el-icon-edit-outline',
+      create_au_show: true,
+      favo_au_show: true,
+      edit_au_show: true,
+      // 记得在子组件里加 props
+      edit_bar_show: true
     }
   },
   created() {
     console.log('编辑页')
-    this.doc = this.$route.params.doc // info
-    console.log(this.doc)
+    // 通过 doc_id 跳转的
+    this.doc_id = parseInt(this.$route.query.doc_id)
+    console.log(typeof this.doc_id)
+    this.user_id = this.$store.state.user.username.id
+    console.log('文章id如下：')
+    console.log(this.doc_id)
     var _this = this
     // 请求文档权限信息
     _this.getAuthority()
@@ -106,105 +157,160 @@ export default {
     getAuthority() {
       var _this = this
       this.$api.authority.authority({
-        user_id: _this.$store.state.user.username.id,
-        doc_id: _this.doc.id
+        user_id: _this.user_id,
+        doc_id: _this.doc_id
       }).then(res => {
-        if (res.code === 400 ){ // 非权限问题
+        if (res.code === 200 ){
+          console.log('authority code = 200')
+          _this.authority = res.data
+          console.log('authority如下：')
+          console.log(_this.authority)
+          if ( _this.authority.can_read === true) { //可查看
+            _this.getInfo()
+          } else { // 无权利查看
+            _this.$router.replace('/noauthority')
+          }
+        } else if (res.code === 400) {// 非权限问题
           console.log('authority code = 400 请求错误')
           _this.$message({
             message: res.msg,
             type: 'error'
           })
           _this.$router.back()
-        } else if (res.code === 200) {
-          console.log('authority code = 200')
-          _this.authority = res.data
-          console.log('authority')
-          console.log(_this.authority)
-          if ( _this.authority.can_read === true) { //可查看
-            if (_this.authority.can_edit === true && _this.doc.is_editing === false){ //有编辑权力 无人在编辑
-              console.log('有编辑权力 无人在编辑')
-              _this.editStart()
-            }
-            else if ( _this.authority.can_edit === true && _this.doc.is_editing === true ) { //有编辑权力 有人在编辑
-              console.log('有编辑权力 有人在编辑')
-              _this.$alert('此文档正在被编辑，将退出该页面。','提示',{
-                confirmButtonText: '确定',
-                callback: action => {
-                  _this.$router.back()
-                }
-              })
-            }
-            else if (_this.authority.can_edit === false && _this.doc.is_editing === false){ // 无编辑权力 无人在编辑
-              console.log('无编辑权力 无人在编辑')
-              _this.$router.push({ // 到单纯查看页面
-                name: 'DocView',
-                params: {
-                  doc: _this.doc
-                }
-              })
-            }
-            else if (_this.authority.can_edit === false && _this.doc.is_editing === true) { //无编辑权力 有人在编辑
-              console.log('无编辑权力 有人在编辑')
-              _this.$alert('此文档正在被编辑，将退出该页面。','提示',{
-                confirmButtonText: '确定',
-                callback: action => {
-                  _this.$router.back()
-                }
-              })
-            }
-          } else { // 无权利查看
-            _this.$router.push('/noauthority')
-          }
         }
       }).catch(failResponse => {})
     },
-    // 开始编辑（已经确定：有编辑权力 无人在编辑）
-    editStart() {
+    // 获取doc info
+    getInfo() {
       var _this = this
-      this.$api.document.start({
-        doc_id: _this.doc.id, //封锁文章
+      this.$api.document.info({
+        doc_id: _this.doc_id
       }).then(res => {
-        if (res.code === 200) { //无人在编辑
-          _this.viewDoc()
-          this.edit_status = true
-        } else if (res.code === 401) {
-          console.log('start code = 401')
-          _this.$message({
-            message: res.msg,
-            type: 'error'
-          })
+        if (res.code === 200) {
+          _this.doc = res.data
+          if (_this.doc.is_deleted){
+            _this.$message({
+              message: '该文档已删除',
+              type: 'error'
+            })
+            _this.goBack()
+          } else {
+            if (_this.doc.is_editing === true){ //文档正在被编辑
+              _this.$alert('此文档正在被编辑，即将返回','提示',{
+                confirmButtonText: '确定',
+                callback: action => {
+                  _this.$router.back()
+                }
+              })
+            } else {
+              _this.viewDoc()
+              _this.favoInfo()
+            }
+          }
         } else {
-          console.log('start code = others')
-          _this.$message({
-            message: res.msg,
-            type: 'error'
+          _this.$alert(res.msg,'提示',{
+            confirmButtonText: '确定',
+            callback: action => {
+              _this.$router.back()
+            }
           })
         }
       }).catch(failResponse => {})
     },
     // 显示文章
     viewDoc() {
-      console.log("获取文章内容")
       var _this = this
+      console.log("获取文章内容")
       this.$api.document.view({
-        doc_id: _this.doc.id, // 通过doc的id请求文档内容
+        doc_id: _this.doc_id, // 通过doc的id请求文档内容
+        user_id: _this.$store.state.user.username.id // 用作浏览记录
       }).then(res => {
         if (res.code === 200 ){
           _this.msg = res.data
           console.log('获取文章内容 code = 200')
           console.log('here' + _this.msg)
+          _this.loadButton()
         } else {
           console.log('获取文章内容 code = 400')
-          _this.$message({
-            message: res.msg, // 文章不存在
-            type: 'error'
+          _this.$alert(res.msg,'提示',{
+            confirmButtonText: '确定',
+            callback: action => {
+              _this.$router.back()
+            }
           })
         }
       }).catch(failResponse => {})
       console.log("获取文章内容-完成")
     },
-    //修改标题
+    // 根据权限加载按钮
+    loadButton() {
+      var _this = this
+      if (this.user_id === this.doc.creator_id) { // 对应情况8
+        console.log('是创建者')
+      } else if (this.authority.can_edit) {
+        console.log('可编辑')
+        _this.create_au_show = false
+      } else if (this.authority.can_comment) {
+        console.log('可评论')
+        _this.create_au_show = false
+        _this.edit_au_show = false
+        _this.edit_bar_show = false
+        // 评论模块由can_comment绑定 为true
+      } else if (this.authority.can_read) {
+        console.log('仅可评论')
+        _this.create_au_show = false
+        _this.edit_au_show = false
+        _this.edit_bar_show = false
+        // 评论模块由can_comment绑定 为false
+      }
+    },
+    // 获取收藏信息
+    favoInfo() {
+      var _this = this
+      this.$api.document.favoriteinfo({
+        doc_id: _this.doc_id,
+        user_id: _this.user_id
+      }).then(res => {
+        if (res.code === 200) {
+          if (res.data === true) {
+            _this.favorite_icon_data = 'el-icon-star-on'
+          } else {
+            _this.favorite_icon_data = 'el-icon-star-off'
+          }
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
+    // 点击开始编辑（已经确定：有编辑权力 无人在编辑）
+    editStart() {
+      var _this = this
+      this.disabled=false
+      this.$api.document.start({
+        doc_id: _this.doc.id, //封锁文章
+      }).then(res => {
+        if (res.code === 200) { //无人在编辑
+          console.log('editStart code = 200')
+          this.edit_status = true
+        } else if (res.code === 401) { // 文章正在被编辑
+          console.log('editStart code = 401')
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        } else {
+          console.log('editStart code = others')
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
+    // 修改标题
     handleRename() {
       var _this = this
       if (this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
@@ -218,28 +324,35 @@ export default {
         _this.rename_icon_data = 'el-icon-edit'
         this.name_disabled = true
         // 发送name修改后的请求
-        // _this.$api.document.rename({
-        //  doc_id: this.doc.id,
-        //  不确定user_id
-        //  user_id: this.$store.state.user.username.id
-        // })
-        _this.$message({
-          message: '标题修改成功！',
-          type: 'success'
-        })
+        _this.$api.document.rename({
+         doc_id: this.doc_id,
+         name: _this.doc.name
+        }).then(res => {
+          if (res.code === 200){
+            _this.$message({
+              message: '标题修改成功！',
+              type: 'success'
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       }
     },
     // 收藏
     handleFavo() {
       var _this = this
       if (this.favorite_icon_data === 'el-icon-star-off') {
-        this.favorite_icon_data = 'el-icon-star-on'
         _this.$api.document.favorite({
-          doc_id: _this.doc.id,
-          user_id: _this.$store.state.user.username.id,
+          doc_id: _this.doc_id,
+          user_id: _this.user_id,
           favorite: true
         }).then(res => {
           if (res.code === 200) {
+            this.favorite_icon_data = 'el-icon-star-on'
             _this.$message({
               message: '文档收藏成功',
               type: 'success'
@@ -252,7 +365,6 @@ export default {
           }
         }).catch(failResponse => {})
       } else {
-        this.favorite_icon_data = 'el-icon-star-off'
         _this.$api.document.favorite({
           doc_id: _this.doc.id,
           user_id: _this.$store.state.user.username.id,
@@ -263,6 +375,7 @@ export default {
               message: '文档已取消收藏',
               type: 'success'
             })
+            this.favorite_icon_data = 'el-icon-star-off'
           } else {
             _this.$message({
               message: res.msg,
@@ -274,11 +387,31 @@ export default {
     },
     // 分享
     handleShare() {
-
+      var _this = this
+      this.dialogFormVisible = false
+      console.log(this.shareForm.type)
+      if (this.shareForm.type === '') {
+        _this.$message({
+          message: '分享失败！',
+          type: 'error'
+        })
+      } else {
+        // todo 提交权限
+        _this.$alert('localhost:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+          confirmButtonText: '确定',
+          callback: action => {
+            _this.$message({
+              message: '文档分享成功',
+              type: 'success'
+            })
+          }
+        })
+      }
     },
     // 提交
     handleSubmit() {
       var _this = this
+      this.disabled=true
       console.log(this.msg)
       this.$api.document.end({
         doc_id: this.doc.id
@@ -297,36 +430,40 @@ export default {
         }
       })
     },
-    //删除
+    // 删除
     handleDelete() {
       var _this = this
       this.$api.document.deleteDoc({
-        doc_id: _this.doc.id,
-        user_id: _this.$store.state.user.username.id
-        // user_id: 1
+        doc_id: _this.doc_id,
+        user_id: _this.user_id
       }).then(res => {
         if (res.code === 200) {
-          _this.message({
+          _this.$message({
             message: '文章已被成功删除',
             type: 'success'
           })
           // 删除后返回列表页
           _this.$router.back()
         } else {
-          _this.message({
+          _this.$message({
             message: res.msg,
             type: 'error'
           })
         }
       }).catch(failResponse => {})
     },
+    // 返回 检测是否提交
     goBack() {
       if (this.edit_status === true) {
-        this.handleSubmit()
+        this.$message({
+          message: '文章仍未保存上传',
+          type: 'error'
+        })
+      } else {
+        this.$router.back()
       }
-      this.$router.back()
     },
-    //鼠标单击的事件
+    // 鼠标单击的事件
     onClick(e, editor) {
       console.log('Element clicked')
       console.log(e)
@@ -358,32 +495,13 @@ export default {
   font-size: 24px;
   position: relative;
   margin-left: 100px;
+  border: white;
 }
-.icon-submit{
+.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit{
   float: right;
   font-size: 24px;
   position: relative;
+  border: white;
   margin-left: 10px;
 }
-.icon-favorite, .icon-rename, .icon-share{
-  float: right;
-  font-size: 24px;
-  position: relative;
-}
-/*.edit-container{*/
-/*  margin: 30px 60px 30px 60px;*/
-/*  background: #fff;*/
-/*  border: 1px solid #eaeaea;*/
-/*  box-shadow: 0 0 25px #cac6c6;*/
-/*  padding: 40px;*/
-/*  border-radius: 15px;*/
-/*}*/
-/*.comment-container{*/
-/*  margin: 30px 60px 0 60px;*/
-/*  background: #fff;*/
-/*  border: 1px solid #eaeaea;*/
-/*  box-shadow: 0 0 25px #cac6c6;*/
-/*  padding: 20px 20px 20px 20px;*/
-/*  border-radius: 15px;*/
-/*}*/
 </style>

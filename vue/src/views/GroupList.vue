@@ -1,49 +1,56 @@
 <template>
   <div>
-    <el-card>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <el-select v-model="value" placeholder="请选择" @change="selectChange">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-col>
-        <!-- <el-col :span="6">
-          <el-input placeholder="请输入搜索内容" v-model="keyword" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-col>-->
-        <el-col :span="6">
-          <el-button type="primary" round @click="handleNewDoc">创建新团队</el-button>
-        </el-col>
-      </el-row>
 
-      <el-table :data="groups" stripe style="width: 100%">
-        <el-table-column type="index"></el-table-column>
-        <el-table-column prop="create_time" label="创建日期" width="150"></el-table-column>
-        <el-table-column prop="name" label="团队名称" width="300"></el-table-column>
+    <el-row></el-row>
+    <el-row >
+      <el-col :span="22" :offset="1">
+        <el-row :gutter="20">
+          <el-col :span="6" ><div ><h2>我创建的团队</h2></div></el-col>
+          <el-col :span="18" :offset="0">
+            <div  align="right">
+              <el-button type="primary" plain>创建团队</el-button>
+            </div>
+          </el-col>
+        </el-row>
+        <!--    <el-card>-->
+        <el-row :gutter="40">
+          <div v-for="i in 5">
+            <el-col :span="8">
+              <el-card shadow="always" @click.native="test" style="cursor:pointer">
+                <div onclick="console.log('hi')">
+                  <i class="el-icon-user"></i>
+                  团队名称
+                </div>
+              </el-card>
+              <br>
+            </el-col>
+          </div>
+        </el-row>
 
-        <el-table-column prop="last_edit_time" label="修改日期" width="150"></el-table-column>
-        <el-table-column fixed="right" label>
-          <template slot-scope="scope">
-            <el-button @click="detail(scope.row.id)" type="primary" round size="small">详情</el-button>
-
-            <el-button @click="out(scope.row.id)" type="danger" round size="small">退出</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <el-pagination
-        @current-change="currentChange"
-        :page-size="10"
-        layout="prev, pager, next"
-        :total="60"
-      ></el-pagination>
-    </el-card>
+        <el-row :gutter="20">
+          <el-col :span="6" ><div ><h2>我加入的团队</h2></div></el-col>
+          <el-col :span="18" :offset="0">
+            <div  align="right">
+              <el-button type="primary" plain>加入团队</el-button>
+            </div>
+          </el-col>
+        </el-row>
+        <!--    <el-card>-->
+        <el-row :gutter="40">
+          <div v-for="i in 5">
+            <el-col :span="8">
+              <el-card shadow="always" @click.native="test" style="cursor:pointer">
+                <div onclick="console.log('hi')">
+                  <i class="el-icon-user"></i>
+                  团队名称
+                </div>
+              </el-card>
+              <br>
+            </el-col>
+          </div>
+        </el-row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -56,7 +63,16 @@ export default {
       },
       out:function(id){
           console.log('退出');
-      }
+      },
+    test:function () {
+        console.log("test")
+        this.$router.push({
+            path: '/groupdetail',
+            params: {
+                group_id: 'dd'
+            }
+        })
+    }
   },
   data: function () {
     return {
@@ -104,6 +120,8 @@ export default {
       }]
     };
   },
+  created() {
+  }
 };
 </script>
 

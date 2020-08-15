@@ -5,7 +5,7 @@
 
       <div style="width:100%;text-align:center">
         <el-form-item>
-          <div class="block"><el-avatar shape="square" :size="100" :src="src"></el-avatar></div>
+          <div class="block" align="center"><el-avatar shape="square" :size="100" :src="src"></el-avatar></div>
         </el-form-item>
       </div>
 
