@@ -12,7 +12,10 @@
                     <el-col :span=4 :offset="1">
                       <el-card shadow="always" @click.native="test" style="cursor:pointer">
                         <div class="block">
-                          <el-image src="http://39.101.200.9:8081/image/system?id=document" width="100" height="100"></el-image>
+                          <div align="center">
+                            <i style="font-size: 100px;" class="el-icon-tickets"></i>
+                          </div>
+                          <br>
                           {{item.name}}
                           {{item.last_edit_time}}
 
@@ -20,6 +23,17 @@
                       </el-card>
                     </el-col>
                   </div>
+                  <el-col :span=4 :offset="1">
+                    <el-card shadow="always" @click.native="test" style="cursor:pointer">
+                      <div class="block">
+                        <div align="center">
+                          <i style="font-size: 100px;" class="el-icon-document-add"></i>
+                        </div>
+                        <br><br><br>
+
+                      </div>
+                    </el-card>
+                  </el-col>
                 </el-row>
                 <br>
               </div>
@@ -43,7 +57,14 @@
                     <p>人名字</p>
                   </el-col>
                 </div>
+                <el-col :span="8" align="center">
+                  <div align="center">
+                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline"></i>
+                  </div>
+                  <p>添加人</p>
+                </el-col>
               </el-row>
+
 
             </div></el-col>
         </el-row>
@@ -57,7 +78,7 @@
         name: "GroupDetail",
         data(){
             return{
-                list:[1,2,3,4,5,6],
+                list:[1,2,3,4,5],
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 showdocuments:[],
                 groupdocuments: [
@@ -91,68 +112,14 @@
                         is_deleted: false,
                         is_editing: false,
                     },
-                    {
-                        id: 3,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    },
-                    {
-                        id: 4,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    },
-                    {
-                        id: 5,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    },
-                    {
-                        id: 6,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    },
-                    {
-                        id: 7,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    },
-                    {
-                        id: 9,
-                        name: "鸡你太美",
-                        creator_id: 0,
-                        group_id: 0,
-                        create_time: "2016-05-02",
-                        last_edit_time: "20208-11",
-                        is_deleted: false,
-                        is_editing: false,
-                    }
-                ]
+
+                ],
+                group_id:null,
             }
+        },
+        created() {
+            this.group_id = this.$route.params.group_id
+            console.log('receive ',this.group_id)
         }
     }
 </script>
