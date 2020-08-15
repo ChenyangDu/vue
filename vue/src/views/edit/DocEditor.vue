@@ -430,27 +430,6 @@ export default {
     // 提交
     handleSubmit() {
       this.$refs.editor.handleSubmit()
-      // var _this = this
-      // console.log('提交内容')
-      // console.log(this.msg)
-      // console.log('提交内容-完毕')
-      // this.$api.document.end({
-      //   doc_id: _this.doc_id
-      // }, _this.msg).then(res => {
-      //   if (res.code === 200 ){
-      //     _this.$message({
-      //       message: '文章上传成功！',
-      //       type: 'success'
-      //     })
-      //     _this.disabled=true
-      //     _this.edit_status = false
-      //   } else {
-      //     _this.$message({
-      //       message: res.msg,
-      //       type: 'error'
-      //     })
-      //   }
-      // })
     },
     //监听
     submitSuccess() {
