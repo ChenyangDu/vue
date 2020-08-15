@@ -46,7 +46,6 @@ export default {
         ]
       },
       checked: false,
-      loginstatus:false
     }
   },
   methods: {
@@ -67,7 +66,6 @@ export default {
             } else {
               _this.$store.commit('login',res.data)
               console.log(_this.$store.state.user.username.id)
-              this.loginstatus = true;
               _this.$router.push('/home')
             }
           }).catch(failResponse => {})
@@ -83,12 +81,12 @@ export default {
       this.$refs.loginForm.resetFields()
     }
   },
-  destroyed:function(){
-    if(this.loginstatus)
-    {
-      bus.$emit('login-event');
-    }
-  }
+  // destroyed:function(){
+  //   if(this.loginstatus)
+  //   {
+  //     bus.$emit('login-event');
+  //   }
+  // }
 }
 </script>
 

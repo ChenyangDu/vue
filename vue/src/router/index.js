@@ -29,22 +29,22 @@ const router = new VueRouter({
         requireAuth: false
       },
       children: [
-		{
-		  path: '/dashboard',
-		  name: 'DashBoard',
-		  component: () => import('../views/dashboard'),
-		  meta: {
-		    isLogin: false,
-			  title: "系统首页"
-		  }
-		},
+        {
+          path: '/dashboard',
+          name: 'DashBoard',
+          component: () => import('../views/dashboard'),
+          meta: {
+            isLogin: false,
+            title: "系统首页"
+          }
+        },
         {
           path: '/personalinformation',
           name: 'PersonalInformation',
           component: () => import('../views/userInfo/PersonalInformation'),
           meta: {
             isLogin: false,
-			      title: "我的信息"
+            title: "我的信息"
           }
         },
         {
@@ -53,7 +53,7 @@ const router = new VueRouter({
           component: () => import('../views/userInfo/Revising'),
           meta: {
             isLogin: false,
-			      title: "修改信息"
+            title: "修改信息"
           }
         },
         {
@@ -66,25 +66,25 @@ const router = new VueRouter({
           }
         },
         {
-          path:'/groupdocumentlist',
-          name:'GroupDocumentList',
+          path: '/groupdocumentlist',
+          name: 'GroupDocumentList',
           component: () => import('../views/GroupDocumentList'),
-          meta:{
-            isLogin:false,
+          meta: {
+            isLogin: false,
             title: "团队文档"
           }
         },
         {
-          path:'/groupdetail',
+          path: '/groupdetail',
           name: 'GroupDetail',
-          component:() => import('../views/GroupDetail')
+          component: () => import('../views/GroupDetail')
         },
         {
-          path:'/groupmember',
-          name:'GroupMember',
-          component: ()=>import('../views/GroupMember'),
-          meta:{
-            isLogin:false,
+          path: '/groupmember',
+          name: 'GroupMember',
+          component: () => import('../views/GroupMember'),
+          meta: {
+            isLogin: false,
             title: "团队成员"
           }
         },
@@ -92,8 +92,8 @@ const router = new VueRouter({
           path: '/grouplist',
           name: 'GroupList',
           component: () => import('../views/GroupList'),
-          meta:{
-            isLogin:false,
+          meta: {
+            isLogin: false,
             title: "我的团队"
           }
         },
@@ -101,29 +101,19 @@ const router = new VueRouter({
           path: '/trash',
           name: 'Trash',
           component: () => import('../views/Trash'),
-          meta:{
-            isLogin:false,
-			      title: "回收站"
+          meta: {
+            isLogin: false,
+            title: "回收站"
           }
         },
         {
           path: '/doceditor',
           name: 'DocEditor',
           component: () => import('../views/edit/DocEditor'),
-          meta:{
-            isLogin:false,
-			      title: "文档编辑"
+          meta: {
+            isLogin: false,
+            title: "文档编辑"
           }
-        },
-        {
-          path: '/docview',
-          name: 'DocView',
-          component: () => import('../views/edit/DocView')
-        },
-        {
-          path: '/noauthority',
-          name: 'NoAuthority',
-          component: () => import('../views/edit/NoAuthority')
         }]
     },
     {
@@ -154,6 +144,16 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: () => import('../views/edit/GetDocTest')
+    },
+    {
+      path: '/docview',
+      name: 'DocView',
+      component: () => import('../views/edit/DocView')
+    },
+    {
+      path: '/noauthority',
+      name: 'NoAuthority',
+      component: () => import('../views/edit/NoAuthority')
     }
   ]
 })

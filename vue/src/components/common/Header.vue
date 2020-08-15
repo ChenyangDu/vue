@@ -96,7 +96,6 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       //退出登录事件
-      console.log(this);
       if (command == "loginout") {
         // 从本地存储中删除用户名
         // localStorage.removeItem("username");
@@ -153,6 +152,10 @@ export default {
       }
       this.fullscreen = !this.fullscreen;
     },
+
+    checkLogin:function(){
+      return localStorage.getItem('username') !== null;
+    }
   },
 
   // 初始化页面完成后，对页面可见区域宽度进行判定，如果页面宽度小于1500，则触发 collapseChage 方法。
@@ -167,8 +170,9 @@ export default {
 
   },
   created:function(){
-    bus.$on("login-event", () => {
-      console.log("home接受到了消息");
+    if(this.checkLogin())
+    {
+      console.log('在构造函数中检测到用户已经登录');
       this.isLogin = true;
       this.username = this.$store.state.user.username.name;
       this.userid = this.$store.state.user.username.id;
@@ -178,7 +182,19 @@ export default {
         this.$store.state.user.username.id;
 
       this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
-    });
+    }
+    // bus.$on("login-event", () => {
+    //   console.log("home接受到了消息");
+    //   this.isLogin = true;
+    //   this.username = this.$store.state.user.username.name;
+    //   this.userid = this.$store.state.user.username.id;
+    //   this.userAvator =
+    //     this.global.baseUrl +
+    //     "image/avator/show?user_id=" +
+    //     this.$store.state.user.username.id;
+
+    //   this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+    // });
   }
 };
 </script>
@@ -205,6 +221,7 @@ export default {
   width: 250px;
   line-height: 70px;
 }
+
 .header-right {
   float: right;
   padding-right: 50px;
@@ -236,8 +253,6 @@ export default {
   position: absolute;
   top:30%;
   left:85%;
-
-  /* transform: translate(50%,-50%); */
 }
 .btn-bell-badge {
   position: absolute;
