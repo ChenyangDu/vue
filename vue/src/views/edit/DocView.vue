@@ -115,13 +115,11 @@ export default {
 
   },
   created() {
-    // <<<<<< 之间为注释的
     console.log('查看文章页')
     this.doc_id = this.$route.params.doc_id
     console.log('以下为文章信息info')
-    console.log(this_doc)
-    // >>>>>>
-    // 调用viewDoc()方法
+    console.log(this.doc_id)
+    this.getInfo()
   },
   methods: {
     getInfo() {
@@ -131,6 +129,7 @@ export default {
       }).then(res =>{
         if(res.code === 200){
           _this.doc = res.data
+          _this.viewDoc()
         } else {
           _this.$message({
             message: res.msg,
