@@ -1,56 +1,57 @@
 <template>
   <div>
+    <br>
+    <el-col :span="22" :offset="1">
+      <el-tabs v-model="activeName" @tab-click="handleClick" >
+        <el-tab-pane label="我创建的团队" name="first">
+          <br>
+            <el-row :gutter="40">
+              <div v-for="(item,i) in created_groups">
+                <el-col :span="8">
+                  <el-card shadow="always" @click.native="groupDetail(item.id)" style="cursor:pointer">
+                    <i style="font-size: 15px;" class="el-icon-user-solid"></i>
+                    {{item.name}}
+                  </el-card>
+                  <br><br>
+                </el-col>
+              </div>
 
-    <el-row></el-row>
-    <el-row >
-      <el-col :span="22" :offset="1">
-        <el-row :gutter="20">
-          <el-col :span="6" ><div ><h2>我创建的团队</h2></div></el-col>
-          <el-col :span="18" :offset="0">
-            <div  align="right">
-              <el-button type="primary" plain>创建团队</el-button>
+              <el-col :span="8">
+                <el-card shadow="always" @click.native="test" style="cursor:pointer">
+                  <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
+                  新建团队
+                </el-card>
+                <br><br>
+              </el-col>
+            </el-row>
+
+        </el-tab-pane>
+        <el-tab-pane label="我加入的团队" name="second">
+          <br>
+          <el-row :gutter="40">
+            <div v-for="(item,i) in joined_groups">
+              <el-col :span="8">
+                <el-card shadow="always" @click.native="groupDetail(item.id)" style="cursor:pointer">
+                    <i style="font-size: 15px;" class="el-icon-user-solid"></i>
+                    {{item.name}}
+                </el-card>
+                <br><br>
+              </el-col>
             </div>
-          </el-col>
-        </el-row>
-        <!--    <el-card>-->
-        <el-row :gutter="40">
-          <div v-for="i in 5">
+
             <el-col :span="8">
               <el-card shadow="always" @click.native="test" style="cursor:pointer">
-                <div onclick="console.log('hi')">
-                  <i class="el-icon-user"></i>
-                  团队名称
-                </div>
+<!--              <div align="center">-->
+                <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
+                新建团队
+<!--              </div>-->
               </el-card>
-              <br>
+              <br><br>
             </el-col>
-          </div>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="6" ><div ><h2>我加入的团队</h2></div></el-col>
-          <el-col :span="18" :offset="0">
-            <div  align="right">
-              <el-button type="primary" plain>加入团队</el-button>
-            </div>
-          </el-col>
-        </el-row>
-        <!--    <el-card>-->
-        <el-row :gutter="40">
-          <div v-for="i in 5">
-            <el-col :span="8">
-              <el-card shadow="always" @click.native="test" style="cursor:pointer">
-                <div onclick="console.log('hi')">
-                  <i class="el-icon-user"></i>
-                  团队名称
-                </div>
-              </el-card>
-              <br>
-            </el-col>
-          </div>
-        </el-row>
-      </el-col>
-    </el-row>
+          </el-row>
+        </el-tab-pane>
+      </el-tabs>
+    </el-col>
   </div>
 </template>
 
@@ -64,63 +65,53 @@ export default {
       out:function(id){
           console.log('退出');
       },
-    test:function () {
-        console.log("test")
+    groupDetail:function (group_id) {
+        console.log("groupId",group_id)
         this.$router.push({
-            path: '/groupdetail',
+            name: 'GroupDetail',
             params: {
-                group_id: 'dd'
+                group_id: group_id
             }
         })
     }
   },
   data: function () {
     return {
-      value: "选项1",
-      options: [
-        {
-          value: "选项1",
-          label: "我加入的团队",
-        },
-        {
-          value: "选项2",
-          label: "我创建的团队",
-        },
-      ],
-      groups:[{
-          id:0,
-          name:'团队1',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      },{
-          id:1,
-          name:'团队2',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      },{
-          id:2,
-          name:'团队3',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      },{
-          id:3,
-          name:'团队4',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      },{
-          id:4,
-          name:'团队5',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      },{
-          id:4,
-          name:'团队5',
-          last_edit_time:'2020-8-13',
-          create_time:'2020-8-10'
-      }]
+        joined_groups:[],
+        created_groups:[],
     };
   },
   created() {
+      let _this = this
+      //参加的group
+      this.$api.user.group({
+          id: _this.$store.state.user.username.id
+      }).then(res => {
+          if(res.code == 200){
+              _this.joined_groups = res.data;
+              _this.created_groups = res.data.filter((g)=>(g.creator_id === _this.$store.state.user.username.id))
+              console.log(_this.joined_groups)
+          } else {
+              _this.$message({
+                  message: res.msg,
+                  type: 'error'
+              })
+          }
+      })
+      // //创建的gruop
+      // this.$api.user.groupCreated({
+      //     id: _this.$store.state.user.username.id
+      // }).then(res => {
+      //     if(res.code == 200){
+      //         _this.created_groups = res.data;
+      //     } else {
+      //         _this.$message({
+      //             message: res.msg,
+      //             type: 'error'
+      //         })
+      //     }
+      // })
+
   }
 };
 </script>

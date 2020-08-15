@@ -17,3 +17,10 @@ export const kick = params => {
         params,
     })
 }
+export const document = params => {
+    return axios({
+        url:'/group/document',
+        method:'get',
+        params,
+    })
+}
