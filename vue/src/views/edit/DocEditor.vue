@@ -116,7 +116,7 @@ export default {
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
 
-      share_icon_data: 'el-icon-s-promotion',
+      share_icon_data: 'el-icon-share',
       dialogFormVisible: false,
       formLabelWidth:'100px',
       shareForm: {
@@ -143,7 +143,8 @@ export default {
   created() {
     console.log('编辑页')
     // 通过 doc_id 跳转的
-    this.doc_id = this.$route.query.doc_id
+    this.doc_id = parseInt(this.$route.query.doc_id)
+    console.log(typeof this.doc_id)
     this.user_id = this.$store.state.user.username.id
     console.log('文章id如下：')
     console.log(this.doc_id)
@@ -179,7 +180,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //获取doc info
+    // 获取doc info
     getInfo() {
       var _this = this
       this.$api.document.info({
@@ -251,18 +252,19 @@ export default {
         _this.create_au_show = false
       } else if (this.authority.can_comment) {
         console.log('可评论')
-        _this.edit_au_show = false
         _this.create_au_show = false
+        _this.edit_au_show = false
         _this.edit_bar_show = false
+        // 评论模块由can_comment绑定 为true
       } else if (this.authority.can_read) {
         console.log('仅可评论')
-        _this.edit_au_show = false
         _this.create_au_show = false
+        _this.edit_au_show = false
         _this.edit_bar_show = false
-        // 评论模块由can_comment绑定
+        // 评论模块由can_comment绑定 为false
       }
     },
-    //获取收藏信息
+    // 获取收藏信息
     favoInfo() {
       var _this = this
       this.$api.document.favoriteinfo({
@@ -308,7 +310,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //修改标题
+    // 修改标题
     handleRename() {
       var _this = this
       if (this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
@@ -428,7 +430,7 @@ export default {
         }
       })
     },
-    //删除
+    // 删除
     handleDelete() {
       var _this = this
       this.$api.document.deleteDoc({
@@ -450,6 +452,7 @@ export default {
         }
       }).catch(failResponse => {})
     },
+    // 返回 检测是否提交
     goBack() {
       if (this.edit_status === true) {
         this.$message({
@@ -460,7 +463,7 @@ export default {
         this.$router.back()
       }
     },
-    //鼠标单击的事件
+    // 鼠标单击的事件
     onClick(e, editor) {
       console.log('Element clicked')
       console.log(e)

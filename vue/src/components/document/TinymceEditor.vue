@@ -35,6 +35,10 @@ export default {
     Editor
   },
   props: {
+    edit_bar_show: {
+      type: Boolean,
+      default: true
+    },
     doc_id: {
       type: Number,
       default: -1
@@ -88,6 +92,13 @@ export default {
     }
   },
   mounted() {
+    if (this.edit_bar_show === true) {
+      this.init.toolbar = this.toolbar
+      this.init.menubar = true
+    } else {
+      this.init.toolbar = ''
+      this.init.menubar = ''
+    }
     tinymce.init({})
   },
   methods: {
