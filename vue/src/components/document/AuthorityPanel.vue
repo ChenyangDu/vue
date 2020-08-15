@@ -13,15 +13,16 @@
       <el-col :span="24" :push="0">
         <span class="title">协作者</span>
         <el-divider class="title-divider"></el-divider>
-        <el-table :data="searchResults" stripe style="width: 100%" :show-header="false" size="mini">
-          <el-table-column prop="name" label="昵称"  width="160"></el-table-column>
-          <el-table-column prop="key" label="手机号/邮箱" width="auto"></el-table-column>
+        <el-table :data="this.searchResults" stripe style="width: 100%" :show-header="false" size="mini">
+          <el-table-column prop="name" label="昵称"  width="120"></el-table-column>
+          <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
+          <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.authority_key" placeholder="请选择" @change="handleEdit">
-                <el-option  label="查看" value="1"></el-option>
-                <el-option  label="查看/评论" value="2"></el-option>
-                <el-option  label="查看/评论/编辑" value="3"></el-option>
+              <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
+                <el-option  label="查看" :value='1'></el-option>
+                <el-option  label="查看/评论" :value='2'></el-option>
+                <el-option  label="查看/评论/编辑" :value='3'></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -35,14 +36,13 @@
         <span class="title">管理者</span>
         <el-divider class="title-divider"></el-divider>
         <el-table :data="selfData" stripe  style="width: 100%" :show-header="false" size="mini">
-          <el-table-column prop="name" label="昵称" width="160"></el-table-column>
-          <el-table-column prop="key" label="手机号/邮箱" width="auto"></el-table-column>
+          <el-table-column prop="name" label="昵称" width="120"></el-table-column>
+          <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
+          <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row)" disabled>
-                <el-option  label="查看" value="1"></el-option>
-                <el-option  label="查看/评论" value="2"></el-option>
-                <el-option  label="查看/评论/编辑" value="3"></el-option>
+              <el-select v-model="scope.row.authority_type" placeholder="管理者" disabled>
+                <el-option  label="管理者" value="1"></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -66,35 +66,58 @@ export default {
       searchForm: {
         key: ''
       },
-      searchResults: [
-        {
-          id: 12313,
-          name: 'user_a',
-          key: 123123123,
-          authority_type: '3'
-        }
-      ],
+      searchResults: [],
       selfData:[
         {
+          id: 3,
           name: 'me',
-          key: 123456789,
-          authority_type: ''
+          password: '',
+          phone: '17610066277',
+          email: '',
+          wechat: '',
+          qq: '',
+          authority_type: '1'
         }
-      ]
+      ],
+      user_id: this.$store.state.user.username.id
     }
+  },
+  created() {
   },
   methods: {
     // 通过手机/邮箱搜索
     handleSearch() {
       var _this = this
       console.log('search click')
-      this.$api.
+      // this.searchResults = [
+      //   {
+      //     id: 1,
+      //     name: 'user_a',
+      //     password: '',
+      //     phone: '123',
+      //     email: '',
+      //     wechat: '',
+      //     qq: '',
+      //     // authority_type:''
+      //   },
+      //   {
+      //     id: 2,
+      //     name: 'user_b',
+      //     password: '',
+      //     phone: '',
+      //     email: '123211@qq.com',
+      //     wechat: '',
+      //     qq: '',
+      //     // authority_type:''
+      //   }
+      // ]
       this.$api.searchModule.searchTheUser({
         key: _this.searchForm.key
       }).then(res => {
         if (res.code === 200) {
           console.log('搜索成功')
           _this.searchResults = res.data
+          _this.loadAuthority()
         } else if (res.code === 401) {
           console.log('没有结果')
           _this.$message({
@@ -104,20 +127,61 @@ export default {
         }
       }).catch(failResponse => {})
     },
+    //增加权限属性
+    loadAuthority() {
+      var _this = this
+      console.log(_this.searchResults)
+      for (var i=0;i<_this.searchResults.length;i++){
+        _this.$api.authority.authority({
+          user_id: _this.user_id,
+          doc_id: _this.doc_id
+        }).then(res=>{
+          if(res.code === 200) {
+            if(res.data.can_edit){
+              _this.searchResults[i]["authority_type"] = 3
+            } else if (res.data.can_comment){
+              _this.searchResults[i]["authority_type"] = 2
+            } else if (res.data.can_read) {
+              _this.searchResults[i]["authority_type"] = 1
+            }
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
+      }
+      console.log(_this.searchResults)
+    },
     // 修改权限
-    handleEdit(user) {
+    handleEdit(user,index) {
       var _this = this
       console.log('edit click')
-      console.log(typeof this.searchResults[0].authority_type)
-      console.log(this.searchResults[0].authority_type)
+      console.log(user.authority_type)
+      console.log(typeof user.authority_type)
+      console.log(user)
+      // 刷新
+      this.searchResults.splice(index,1,this.searchResults[index])
+      let info = {
+        document_id: _this.doc_id,
+        user_id:_this.user_id,
+        can_read: true,
+        can_comment: true,
+        can_edit: true
+      }
+      if (user.authority_type === 1){
+        info.can_comment = false
+        info.can_edit = false
+      } else if (user.authority_type === 2){
+        info.can_edit = false
+      }
       this.$api.authority.setUserAuthority({
-        doc_id: _this.doc_id,
-        key: user.id,
-        authority_type: user.authority_type
+        info
       }).then(res => {
-        if(res.code === 200){
+        if (res.code === 200) {
           _this.$message({
-            message: '权限设置成功',
+            message: '权限设置成功！',
             type: 'success'
           })
         } else {
