@@ -9,6 +9,13 @@ export const member = params => {
         params
     })
 }
+export const info = params => {
+    return axios({
+        url: '/group/info',
+        method: 'get',
+        params
+    })
+}
 
 export const kick = params => {
     return axios({
