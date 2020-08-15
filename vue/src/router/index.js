@@ -19,7 +19,7 @@ const router = new VueRouter({
     {
       path: "/",
       name: "Index",
-      redirect: "/home",
+      redirect: "/dashboard",
     },
     {
       path: "/home",
@@ -29,6 +29,15 @@ const router = new VueRouter({
         requireAuth: false
       },
       children: [
+		{
+		  path: '/dashboard',
+		  name: 'DashBoard',
+		  component: () => import('../views/dashboard'),
+		  meta: {
+		    isLogin: false,
+			title: "系统首页"
+		  }
+		},
         {
           path: '/personalinformation',
           name: 'PersonalInformation',
