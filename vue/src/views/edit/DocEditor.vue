@@ -130,13 +130,12 @@ export default {
       shareForm: {
         type: ''
       },
-      shareAuthority: {
-        document_id: '',
-        user_id: '',
-        can_read: false,
-        can_comment: false,
-        can_edit: false,
-        can_delete: false
+      shareAuthorityForm: {
+        document_id: this.doc_id,
+        user_id: 0,
+        can_read: true,
+        can_comment: true,
+        can_edit: true,
       },
       delete_icon_data: 'el-icon-delete-solid',
       submit_icon_data: 'el-icon-upload',
@@ -406,10 +405,15 @@ export default {
         })
       } else {
         // todo 提交权限
-        this.$api.authority.shareAuthority({
-          doc_id: _this.doc_id,
-          authority_type: _this.shareForm.type
-        }).then(rse=> {
+        if(this.shareForm.type === "1") {
+          this.shareAuthorityForm.can_comment = false
+          this.shareAuthorityForm.can_edit = false
+        } else if (this.shareForm.type === "2"){
+          this.shareAuthorityForm.can_edit = false
+        }
+        this.$api.authority.shareAuthority(
+          _this.shareAuthorityForm
+        ).then(rse=> {
           if(res.code === 200 ){
             _this.$alert('localhost:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
               confirmButtonText: '确定',
