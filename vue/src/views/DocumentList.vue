@@ -32,7 +32,16 @@
                         <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-star-on" command="collect">收藏</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-star-off"
+                          command="collect"
+                          v-if="!isCollect(item.creator_id)"
+                        >收藏</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-star-on"
+                          command="collect"
+                          v-if="isCollect(item.creator_id)"
+                        >取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -63,10 +72,27 @@
                       <i class="el-icon-more"></i>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-edit"
+                          command="edit"
+                          v-if="isMyDoc(item.creator_id)"
+                        >编辑</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-delete-solid"
+                          command="del"
+                          v-if="isMyDoc(item.creator_id)"
+                        >删除</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-star-on" command="collect">收藏</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-star-off"
+                          command="collect"
+                          v-if="!isCollect(item.creator_id)"
+                        >收藏</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-star-on"
+                          command="collect"
+                          v-if="isCollect(item.creator_id)"
+                        >取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
                   </div>
@@ -98,8 +124,16 @@
                       <i class="el-icon-more"></i>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-edit"
+                          command="edit"
+                          v-if="isMyDoc(item.creator_id)"
+                        >编辑</el-dropdown-item>
+                        <el-dropdown-item
+                          icon="el-icon-delete-solid"
+                          command="del"
+                          v-if="isMyDoc(item.creator_id)"
+                        >删除</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-star-on" command="collect">取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
@@ -121,16 +155,47 @@ export default {
   name: "DocumentList",
   data: function () {
     return {
-      documents: [],
+      documents: [
+        {
+          id: 0,
+          creator_id: this.$store.state.user.username.id,
+          name: "鸡你太美",
+          username: "蔡徐坤",
+          last_edit_time: "2020-8-15",
+        },
+      ],
       id: this.$store.state.user.username.id,
       activeName: "first",
     };
   },
   created: function () {
-    //console.log(this.$store.state.user);
     this.getOwnList();
   },
   methods: {
+    isCollect: function (id) {
+      let inf = {doc_id:id,user_id:this.id};
+      var that = this;
+      this.$api.document.favoriteinfo(inf).then(response => {
+        if(response.data === 200)
+          return response.data === 'true';
+        else {
+          that.$message({
+              // message: response.msg,
+              message: "列表为空",
+              type: "error",
+          })
+        }
+      }).catch(err => {
+        console.log("判断收藏时捕获到了异常");
+          that.$message({
+            message: err.msg,
+            type: "error",
+          });
+      });
+    },
+    isMyDoc: function (id) {
+      return id === this.id;
+    },
     handleNewDoc() {
       var _this = this;
       this.$api.document
@@ -157,42 +222,37 @@ export default {
         })
         .catch((failResponse) => {});
     },
-    handleCommand:function(command,id){
+    handleCommand: function (command, id) {
       //console.log(command,id);
-      if(command === 'view')
-        this.detail(id);
-      else if(command === 'edit')
-        this.edit(id);
-      else if(command === 'del')
-        this.del(id);
-      else if(command === 'share')
-        this.share(id);
-      else if(command === 'collect')
-        this.collect(id);
+      if (command === "view") this.detail(id);
+      else if (command === "edit") this.edit(id);
+      else if (command === "del") this.del(id);
+      else if (command === "share") this.share(id);
+      else if (command === "collect") this.collect(id);
     },
     detail: function (id) {
       console.log("点击detail");
       console.log(id);
       var _this = this;
       // 通过user_id直接跳转
-      console.log('跳转编辑页')
+      console.log("跳转编辑页");
       _this.$router.push({
-        path: '/docview',
+        path: "/docview",
         query: {
-          doc_id: id
-        }
+          doc_id: id,
+        },
       });
     },
     edit: function (id) {
       console.log(id);
-      var _this = this
+      var _this = this;
       // 通过user_id直接跳转
       _this.$router.push({
-        path: '/doceditor',
+        path: "/doceditor",
         query: {
-          doc_id: id
-        }
-      })
+          doc_id: id,
+        },
+      });
     },
     del: function (id) {
       console.log(id);
@@ -218,11 +278,11 @@ export default {
         })
         .catch((failResponse) => {});
     },
-    share:function(id){
-      console.log('share');
+    share: function (id) {
+      console.log("share");
     },
-    collect:function(id){
-      console.log('collect');
+    collect: function (id) {
+      console.log("collect");
       // todo 需要在加载列表时获取收藏信息
     },
 
