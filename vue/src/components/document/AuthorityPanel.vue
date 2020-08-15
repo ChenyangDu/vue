@@ -76,13 +76,14 @@ export default {
           email: '',
           wechat: '',
           qq: '',
-          authority_type: ''
         }
       ],
       user_id: this.$store.state.user.username.id
     }
   },
   created() {
+    this.selfData[0] = this.$store.state.user.username
+    this.selfData[0]["authority_type"] = 3
   },
   methods: {
     // 通过手机/邮箱搜索
@@ -176,9 +177,9 @@ export default {
       } else if (user.authority_type === 2){
         info.can_edit = false
       }
-      this.$api.authority.setUserAuthority({
+      this.$api.authority.setUserAuthority(
         info
-      }).then(res => {
+      ).then(res => {
         if (res.code === 200) {
           _this.$message({
             message: '权限设置成功！',
