@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import bus from "../utils/bus";
+
 export default {
   name: "Login",
   data() {
@@ -43,7 +45,8 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       },
-      checked: false
+      checked: false,
+      loginstatus:false
     }
   },
   methods: {
@@ -64,6 +67,7 @@ export default {
             } else {
               _this.$store.commit('login',res.data)
               console.log(_this.$store.state.user.username.id)
+              this.loginstatus = true;
               _this.$router.push('/home')
             }
           }).catch(failResponse => {})
@@ -77,6 +81,12 @@ export default {
     },
     reset() {
       this.$refs.loginForm.resetFields()
+    }
+  },
+  destroyed:function(){
+    if(this.loginstatus)
+    {
+      bus.$emit('login-event');
     }
   }
 }
