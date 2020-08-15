@@ -41,7 +41,7 @@
 <!--              不能编辑：禁用-->
               <tinymce-editor v-model="msg"
                               :disabled=true
-                              :edit_bar_show=false
+                              :edit_bar_show="this.edit_bar_show"
                               :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">
@@ -101,6 +101,7 @@ export default {
       share_icon_data: 'el-icon-s-promotion',
       dialogFormVisible: false,
       formLabelWidth:'100px',
+      edit_bar_show: false,
       shareForm: {
         type: ''
       },

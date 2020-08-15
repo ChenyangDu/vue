@@ -3,7 +3,8 @@
     <editor v-model="myValue"
             :init="init"
             :disabled="disabled"
-            @onClick="onClick">
+            >
+<!--      @onClick="onClick"-->
     </editor>
   </div>
 </template>
@@ -105,9 +106,9 @@ export default {
 
     //添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events
     //需要什么事件可以自己增加
-    onClick(e) {
-      this.$emit('onClick', e, tinymce)
-    },
+    // onClick(e) {
+    //   this.$emit('onClick', e, tinymce)
+    // },
     //可以添加一些自己的自定义事件
     // handleSubmit() {
     //   var _this = this

@@ -213,9 +213,9 @@ export default {
             .then((res) => {
               if (res.code === 200) {
                 _this.$router.push({
-                  name: "DocEditor",
-                  params: {
-                    doc: res.data, // 返回一个新的文档信息document
+                  path: "/doceditor",
+                  query: {
+                    doc_id: res.data.id,
                   },
                 });
               } else {

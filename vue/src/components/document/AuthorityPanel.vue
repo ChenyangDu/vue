@@ -166,7 +166,7 @@ export default {
       this.searchResults.splice(index,1,this.searchResults[index])
       let info = {
         document_id: _this.doc_id,
-        user_id:_this.user_id,
+        user_id:user.id,
         can_read: true,
         can_comment: true,
         can_edit: true

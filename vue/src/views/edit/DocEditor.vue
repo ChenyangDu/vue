@@ -10,7 +10,7 @@
           <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" style="width: 400px"></el-input>
 
           <div class="creator-au" v-if="create_au_show">
-          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete" v-if="authority.can_delete"></el-button>
+          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
           <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
           <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
           <!--分享弹窗-->
@@ -56,9 +56,9 @@
         <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">
           <el-form class="edit-container" >
             <el-form-item>
-              <tinymce-editor v-model="msg"
-                              :disabled="disabled"
-                              :edit_bar_show="edit_bar_show"
+              <tinymce-editor v-model="this.msg"
+                              :disabled="this.disabled"
+                              :edit_bar_show="this.edit_bar_show"
                               :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">
@@ -141,7 +141,7 @@ export default {
       },
       // 接口提交的数据
       shareAuthorityForm: {
-        document_id: this.doc_id,
+        document_id: 0,
         user_id: 0,
         can_read: true,
         can_comment: true,
@@ -260,9 +260,14 @@ export default {
       var _this = this
       if (this.user_id === this.doc.creator_id) { // 对应情况8
         console.log('是创建者')
+        _this.create_au_show = true
+        _this.edit_au_show = true
+        _this.edit_bar_show = true
       } else if (this.authority.can_edit) {
         console.log('可编辑')
         _this.create_au_show = false
+        _this.edit_au_show = true
+        _this.edit_bar_show = true
       } else if (this.authority.can_comment) {
         console.log('可评论')
         _this.create_au_show = false
@@ -270,7 +275,7 @@ export default {
         _this.edit_bar_show = false
         // 评论模块由can_comment绑定 为true
       } else if (this.authority.can_read) {
-        console.log('仅可评论')
+        console.log('仅可查看')
         _this.create_au_show = false
         _this.edit_au_show = false
         _this.edit_bar_show = false
@@ -420,11 +425,12 @@ export default {
         } else if (this.shareForm.type === "2"){
           this.shareAuthorityForm.can_edit = false
         }
+        this.shareAuthorityForm.document_id = this.doc_id
         this.$api.authority.shareAuthority(
           _this.shareAuthorityForm
-        ).then(rse=> {
+        ).then(res=> {
           if(res.code === 200 ){
-            _this.$alert('localhost:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+            _this.$alert('http://39.101.200.9:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
               confirmButtonText: '确定',
               callback: action => {
                 _this.$message({
@@ -446,16 +452,16 @@ export default {
     // 提交
     handleSubmit() {
       var _this = this
-      this.disabled=true
       console.log(this.msg)
       this.$api.document.end({
-        doc_id: this.doc.id
-      }, this.msg).then(res => {
+        doc_id: _this.doc_id
+      }, _this.msg).then(res => {
         if (res.code === 200 ){
           _this.$message({
             message: '文章上传成功！',
             type: 'success'
           })
+          _this.disabled=true
           _this.edit_status = false
         } else {
           _this.$message({
