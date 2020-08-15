@@ -154,7 +154,7 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: () => import('../views/edit/GetDocTest')
-    }
+    },
   ]
 })
 
