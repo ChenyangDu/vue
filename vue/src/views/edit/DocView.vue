@@ -42,7 +42,7 @@
               <tinymce-editor v-model="msg"
                               :disabled="false"
                               :edit_bar_show="false"
-                              :doc_id="this.doc.id"
+                              :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">
               </tinymce-editor>
@@ -57,7 +57,7 @@
         <el-card class="comment-card">
           <div class="comment-container">
 <!--            不能评论：禁用‘发表评论’-->
-            <comment-panel :doc_id="this.doc.id" :can_comment="false"></comment-panel>
+            <comment-panel :doc_id="this.doc_id" :can_comment="false"></comment-panel>
           </div>
         </el-card>
       </el-col>
@@ -81,7 +81,7 @@ export default {
       msg: '',
       doc: {
         id: 1,
-        name: '我是标题我是标题',
+        name: '',
         creator_id: 1,
         group_id: -1,
         create_time: '',
@@ -117,13 +117,28 @@ export default {
   created() {
     // <<<<<< 之间为注释的
     console.log('查看文章页')
-    this.doc.id = this.$route.params.doc_id
+    this.doc_id = this.$route.params.doc_id
     console.log('以下为文章信息info')
-    console.log(this.doc)
+    console.log(this_doc)
     // >>>>>>
     // 调用viewDoc()方法
   },
   methods: {
+    getInfo() {
+      var _this = this
+      this.$api.document.info({
+        doc_id: _this.doc_id
+      }).then(res =>{
+        if(res.code === 200){
+          _this.doc = res.data
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
     viewDoc() {
       console.log("viewDoc-获取文章内容")
       var _this = this
