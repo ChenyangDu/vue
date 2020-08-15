@@ -22,7 +22,7 @@
                 />
                 <div style="padding: 14px;">
                   <span>{{item.name}}</span>
-                  <span class="right">蔡徐坤</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <el-dropdown class="right" @command="handleCommand($event,item.id)">
@@ -55,8 +55,8 @@
                   @click="detail(item.id)"
                 />
                 <div style="padding: 14px;">
-                  <div>{{item.name}}</div>
-                  <div>蔡徐坤</div>
+                  <span>{{item.name}}</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <el-dropdown class="right" @command="handleCommand($event,item.id)">
@@ -89,8 +89,8 @@
                   @click="detail(item.id)"
                 />
                 <div style="padding: 14px;">
-                  <div>{{item.name}}</div>
-                  <div>蔡徐坤</div>
+                  <span>{{item.name}}</span>
+                  <span class="right">{{item.username}}</span>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                     <!-- <el-button type="text" class="button">操作按钮</el-button> -->
@@ -128,7 +128,6 @@ export default {
   },
   created: function () {
     this.getOwnList();
-    //this.activeName.substr()
   },
   methods: {
     handleNewDoc() {
@@ -173,55 +172,26 @@ export default {
     detail: function (id) {
       console.log("点击detail");
       console.log(id);
-      console.log(typeof this.count);
       var _this = this;
-      // 获取doc_id文章的信息info
-      this.$api.document
-        .info({
-          doc_id: id,
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            // 跳转编辑页
-            console.log("跳转编辑页");
-            _this.$router.push({
-              name: "DocEditor",
-              params: {
-                doc: res.data, // 返回document信息
-              },
-            });
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
+      // 通过user_id直接跳转
+      console.log('跳转编辑页')
+      _this.$router.push({
+        path: '/doceditor',
+        query: {
+          doc_id: id
+        }
+      });
     },
     edit: function (id) {
       console.log(id);
-      this.$api.document
-        .info({
-          doc_id: id,
-        })
-        .then((res) => {
-          if (res.code === 200) {
-            // 跳转编辑页
-            _this.$router.push({
-              name: "DocEditor",
-              params: {
-                doc: res.data, // 返回document信息
-              },
-            });
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
+      var _this = this
+      // 通过user_id直接跳转
+      _this.$router.push({
+        path: '/doceditor',
+        query: {
+          doc_id: id
+        }
+      })
     },
     del: function (id) {
       console.log(id);
@@ -229,7 +199,7 @@ export default {
       this.$api.document
         .deleteDoc({
           doc_id: id,
-          user_id: _this.$store.state.user.username.id,
+          user_id: _this.id,
         })
         .then((res) => {
           if (res.code === 200) {
@@ -237,7 +207,6 @@ export default {
               message: "文章已被成功删除",
               type: "success",
             });
-            //_this.selectChange(_this.value);
             _this.handleClick();
           } else {
             _this.$message({
@@ -253,6 +222,7 @@ export default {
     },
     collect:function(id){
       console.log('collect');
+      // todo 需要在加载列表时获取收藏信息
     },
 
     handleClick: function () {
@@ -264,8 +234,6 @@ export default {
     getOwnList: function () {
       let inf = { id: this.id }; // 用户id
       var that = this;
-      // console.log("created");
-      // console.log(inf);
       this.$api.user
         .own(inf)
         .then((response) => {

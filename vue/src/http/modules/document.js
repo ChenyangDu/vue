@@ -49,6 +49,14 @@ export const deleteDoc = params => {
     params
   })
 }
+//收藏信息
+export const favoriteinfo = params => {
+  return axios({
+    url: '/document/favoriteinfo',
+    method: 'get',
+    params
+  })
+}
 // 收藏文档
 export const favorite = params => {
   return axios({
@@ -77,6 +85,15 @@ export const recover =  params => {
 export const remove = params => {
   return axios({
     url: 'document/remove',
+    method: 'get',
+    params
+  })
+}
+
+// 修改文章标题
+export const rename = params => {
+  return axios({
+    url: 'document/rename',
     method: 'get',
     params
   })

@@ -15,7 +15,7 @@
               />
               <div style="padding: 14px;">
                 <span>{{item.name}}</span>
-                <span class="right">蔡徐坤</span>
+                <span class="right">{{item.username}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                 </div>
@@ -138,6 +138,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .el-row {
   margin-bottom: 20px;
