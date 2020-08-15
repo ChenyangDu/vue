@@ -105,7 +105,7 @@ export default {
         can_read: ''
       },
       doc_id: '',
-      user_id:'',
+      user_id:_this.$store.state.user.username.id,
       doc: {
         id: 1,
         name: '',

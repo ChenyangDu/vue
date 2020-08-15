@@ -40,8 +40,8 @@
             <el-form-item>
 <!--              不能编辑：禁用-->
               <tinymce-editor v-model="msg"
-                              :disabled="false"
-                              :edit_bar_show="false"
+                              :disabled=true
+                              :edit_bar_show=false
                               :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">

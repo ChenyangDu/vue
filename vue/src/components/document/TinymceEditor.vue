@@ -50,7 +50,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: true
     },
     plugins: {
       type: [String, Array],
