@@ -15,20 +15,7 @@
           <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
           <!--分享弹窗-->
           <el-dialog title="分享" :visible.sync="dialogFormVisible">
-            <el-form :model="shareForm">
-              <el-form-item label="权限给予：" :label-width="formLabelWidth">
-                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
-                  <el-option label="可查看" value="1"></el-option>
-                  <el-option label="可查看与评论" value="2"></el-option>
-                  <el-option label="可查看与评论与编辑" value="3"></el-option>
-                  <!--                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="handleShare">确 定</el-button>
-            </div>
+            <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
           </el-dialog>
 
           <!--权限设置-->
@@ -83,9 +70,11 @@
 import TinymceEditor from "@/components/document/TinymceEditor";
 import CommentPanel from "@/components/document/CommentPanel";
 import AuthorityPanel from "@/components/document/AuthorityPanel";
+import SharePanel from "@/components/document/SharePanel";
 export default {
   name: 'Home',
   components: {
+    SharePanel,
     AuthorityPanel,
     CommentPanel,
     TinymceEditor
@@ -134,18 +123,6 @@ export default {
         can_delete: '',
         can_edit: '',
         can_read: ''
-      },
-      // 用户选择的权限
-      shareForm: {
-        type: ''
-      },
-      // 接口提交的数据
-      shareAuthorityForm: {
-        document_id: 0,
-        user_id: 0,
-        can_read: true,
-        can_comment: true,
-        can_edit: true,
       },
     }
   },
@@ -509,7 +486,13 @@ export default {
       console.log('Element clicked')
       console.log(e)
       console.log(editor)
+    },
+    cancelShare() {
+      this.dialogFormVisible = false
     }
+  },
+  watch: {
+
   },
   beforeDestroy() {
     this.handleSubmit()

@@ -35,12 +35,12 @@
                         <el-dropdown-item
                           icon="el-icon-star-off"
                           command="collect"
-                          v-if="!isCollect(item.creator_id)"
+                          v-if="!isCollect(item.id)"
                         >收藏</el-dropdown-item>
                         <el-dropdown-item
                           icon="el-icon-star-on"
                           command="collect"
-                          v-if="isCollect(item.creator_id)"
+                          v-if="isCollect(item.id)"
                         >取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -86,12 +86,12 @@
                         <el-dropdown-item
                           icon="el-icon-star-off"
                           command="collect"
-                          v-if="!isCollect(item.creator_id)"
+                          v-if="!isCollect(item.id)"
                         >收藏</el-dropdown-item>
                         <el-dropdown-item
                           icon="el-icon-star-on"
                           command="collect"
-                          v-if="isCollect(item.creator_id)"
+                          v-if="isCollect(item.id)"
                         >取消收藏</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -146,13 +146,19 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
+    <!--分享弹窗-->
+    <el-dialog title="分享" :visible.sync="dialogFormVisible">
+      <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
+import SharePanel from "@/components/document/SharePanel";
 export default {
   name: "DocumentList",
+  components: { SharePanel },
   data: function () {
     return {
       documents: [
@@ -165,7 +171,9 @@ export default {
         },
       ],
       id: this.$store.state.user.username.id,
+      doc_id: '',
       activeName: "first",
+      dialogFormVisible: false
     };
   },
   created: function () {
@@ -293,10 +301,59 @@ export default {
     },
     share: function (id) {
       console.log("share");
+      this.doc_id = id
+      this.dialogFormVisible = true
+    },
+    cancelShare() {
+      this.dialogFormVisible = false
     },
     collect: function (id) {
       console.log("collect");
+      var _this = this
+      this.doc_id = id
       // todo 需要在加载列表时获取收藏信息
+      if(this.isCollect()) {
+        _this.$api.document.favorite({
+          doc_id: _this.doc.id,
+          user_id: _this.id,
+          favorite: false
+        }).then(res => {
+          if (res.code === 200) {
+            _this.$message({
+              message: '文档已取消收藏',
+              type: 'success'
+            })
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
+      } else {
+        _this.$api.document.favorite({
+          doc_id: _this.doc_id,
+          user_id: _this.id,
+          favorite: true
+        }).then(res => {
+          if (res.code === 200) {
+            _this.$message({
+              message: '文档收藏成功',
+              type: 'success'
+            })
+          } else {
+            _this.$message({
+              message: '收藏失败',
+              type: 'error'
+            })
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
+
+      }
     },
 
     handleClick: function () {
