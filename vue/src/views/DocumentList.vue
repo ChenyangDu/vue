@@ -198,29 +198,42 @@ export default {
     },
     handleNewDoc() {
       var _this = this;
-      this.$api.document
-        .create({
-          user_id: this.id,
-          group_id: -1,
-          type: -1,
-          // type: 1
+      this.$prompt('请输入标题','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({value}) => {
+        _this.$api.document
+            .create({
+              user_id: this.id,
+              group_id: -1,
+              name: value,
+              type: -1,
+              // type: 1
+            })
+            .then((res) => {
+              if (res.code === 200) {
+                _this.$router.push({
+                  name: "DocEditor",
+                  params: {
+                    doc: res.data, // 返回一个新的文档信息document
+                  },
+                });
+              } else {
+                _this.$message({
+                  message: res.msg,
+                  type: "error",
+                });
+              }
+            })
+            .catch((failResponse) => {});
+      }).catch(()=>{
+        _this.$message({
+          type: 'info',
+          message: '取消输入'
         })
-        .then((res) => {
-          if (res.code === 200) {
-            _this.$router.push({
-              name: "DocEditor",
-              params: {
-                doc: res.data, // 返回一个新的文档信息document
-              },
-            });
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
+      })
+
+
     },
     handleCommand: function (command, id) {
       //console.log(command,id);

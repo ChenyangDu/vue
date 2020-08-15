@@ -92,6 +92,7 @@ export default {
         edit_times: -1
       },
       doc_id: '',
+      user_id: this.$store.state.user.username.id,
       name_disabled: true,
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
@@ -116,8 +117,8 @@ export default {
   },
   created() {
     console.log('查看文章页')
-    this.doc_id = this.$route.params.doc_id
-    console.log('以下为文章信息info')
+    this.doc_id = parseInt(this.$route.query.doc_id)
+    console.log('以下为文章id')
     console.log(this.doc_id)
     this.getInfo()
   },
@@ -143,7 +144,8 @@ export default {
       var _this = this
       // 请求接口
       this.$api.document.view({
-        doc_id: _this.doc_id
+        doc_id: _this.doc_id,
+        user_id: _this.user_id
       }).then(res => {
         if (res.code === 200) {
           console.log('view 200')
