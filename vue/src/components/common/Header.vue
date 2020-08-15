@@ -14,7 +14,8 @@
     <!-- 头部组件右边功能区 -->
     <div class="header-right">
       <div class="header-user-con">
-        <!-- 全屏显示 -->
+        <!--从这里开始写右边功能区-->
+
         <div class="btn-fullscreen" @click="handleFullScreen">
           <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
           <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
@@ -22,12 +23,17 @@
             <i class="el-icon-sort"></i>
           </el-tooltip>
         </div>
+        <!--这里是未登录看到的登录/注册链接-->
+        <div v-if="!isLogin">
+          <el-link :underline="false" href="./#/login">登录</el-link>/
+          <el-link :underline="false" href="./#/register">注册</el-link>
+        </div>
+        <!--登录注册链接到此结束-->
 
-        <!-- 如果登录，则显示消息中心、用户头像 -->
+        <!--从这里开始是登录后才能看到的消息提示和用户头像-->
         <div v-if="isLogin">
-          <!-- 消息中心 -->
+          <!--这里是消息提示-->
           <div class="btn-bell">
-            <!--  -->
             <el-tooltip
               effect="light"
               :content="message?`有${message}条未读消息`:`消息中心`"
@@ -40,9 +46,10 @@
             <!-- 通过对message的判定，来决定是否显示小红点 -->
             <span class="btn-bell-badge" v-if="message"></span>
           </div>
+          <!--消息提示到此结束-->
 
-          <!--用户头像-->
-          <div>
+          <!--这里是用户头像-->
+          <div class="avator">
             <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
               <div class="block"><el-avatar :size="50" :src="userAvator"></el-avatar></div>
               <!-- slot设置下拉列表 -->
@@ -52,13 +59,9 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
+          <!--用户头像到此结束-->
         </div>
-
-        <!--如果没有登录，则显示登录的注册链接-->
-        <div v-if="!isLogin">
-          <el-link :underline="false" href="./#/login">登录</el-link>/
-          <el-link :underline="false" href="./#/register">注册</el-link>
-        </div>
+        <!--右边功能区到此结束-->
       </div>
     </div>
   </div>
@@ -75,7 +78,8 @@ export default {
       fullscreen: false,
       userid: 0,
       username: "还没有用户登录",
-      userAvator:"https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      userAvator:
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
       message: 2,
       isLogin: false,
     };
@@ -102,8 +106,9 @@ export default {
         this.$store.commit("logout");
         this.isLogin = false;
         this.userid = 0;
-        this.username = '还没有用户登录';
-        this.userAvator = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+        this.username = "还没有用户登录";
+        this.userAvator =
+          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png";
         // 跳转到登录页面
         this.$router.push("/login");
       } else if (command == "myinfo") {
@@ -153,9 +158,9 @@ export default {
       this.fullscreen = !this.fullscreen;
     },
 
-    checkLogin:function(){
-      return localStorage.getItem('username') !== null;
-    }
+    checkLogin: function () {
+      return localStorage.getItem("username") !== null;
+    },
   },
 
   // 初始化页面完成后，对页面可见区域宽度进行判定，如果页面宽度小于1500，则触发 collapseChage 方法。
@@ -167,12 +172,10 @@ export default {
     bus.$on("msg", (e) => {
       this.message = e;
     });
-
   },
-  created:function(){
-    if(this.checkLogin())
-    {
-      console.log('在构造函数中检测到用户已经登录');
+  created: function () {
+    if (this.checkLogin()) {
+      console.log("在构造函数中检测到用户已经登录");
       this.isLogin = true;
       this.username = this.$store.state.user.username.name;
       this.userid = this.$store.state.user.username.id;
@@ -181,7 +184,8 @@ export default {
         "image/avator/show?user_id=" +
         this.$store.state.user.username.id;
 
-      this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+      this.userAvator =
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
     }
     // bus.$on("login-event", () => {
     //   console.log("home接受到了消息");
@@ -195,7 +199,7 @@ export default {
 
     //   this.userAvator = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
     // });
-  }
+  },
 };
 </script>
 
@@ -238,21 +242,20 @@ export default {
 }
 .btn-bell {
   height: 30px;
-  width:30px;
+  width: 20px;
   position: absolute;
-  top: 50%;
-  left:90%;
-  transform: translate(-50%,-50%);
+  /* top: 50%;
+  left: 90%;*/
+  transform: translate(0, 50%); 
 }
 .btn-fullscreen {
-  height:30px;
+  height: 30px;
   width: 30px;
   text-align: center;
   border-radius: 15px;
   cursor: pointer;
-  position: absolute;
-  top:30%;
-  left:85%;
+  position: relative;
+  transform: rotate(45deg);
 }
 .btn-bell-badge {
   position: absolute;
@@ -271,7 +274,7 @@ export default {
   margin-left: 10px;
   color: #000000;
 }
-.user-avator {
+.avator {
   margin-left: 20px;
 }
 .user-avator img {
