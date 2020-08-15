@@ -62,6 +62,14 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- 评论列表 -->
+    <el-card class="commentlist">
+      <el-row><h1>评论列表</h1></el-row>
+      <el-row v-for="item in comments" :key="item.id">
+        <comment :author_avator="img" :author_name="item.author_name" :content="item.content" :create_time="item.create_time"></comment>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -69,12 +77,14 @@
 import TinymceEditor from "@/components/document/TinymceEditor";
 import CommentPanel from "@/components/document/CommentPanel";
 import {favorite} from "@/http/modules/user";
+import comment from '../../components/comment/Comment.vue';
 
 export default {
   name: "DocView",
   components: {
     CommentPanel,
-    TinymceEditor
+    TinymceEditor,
+    comment
   },
   data() {
     return {
@@ -111,7 +121,47 @@ export default {
         can_comment: false,
         can_edit: false,
         can_delete: false
-      }
+      },
+      //一个测试用的头像图片
+      img:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      comments:[
+        {
+          id:0,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+        {
+          id:1,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+        {
+          id:2,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+        {
+          id:3,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+        {
+          id:4,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+        {
+          id:5,
+          author_name:'蔡徐坤',
+          create_time:'2020-8-15',
+          content:'豫章故郡，洪都新府。星分翼轸，地接衡庐。襟三江而带五湖，控蛮荆而引瓯越。物华天宝，龙光射牛斗之墟；人杰地灵，徐孺下陈蕃之榻。雄州雾列，俊采星驰。台隍枕夷夏之交，宾主尽东南之美。都督阎公之雅望，棨戟遥临；宇文新州之懿范，襜帷暂驻。十旬休假，胜友如云；千里逢迎，高朋满座'
+        },
+      ]
     }
 
   },
@@ -244,6 +294,10 @@ export default {
   position: relative;
   margin-left: 10px;
   border: white;
+}
+.commentlist{
+  width:75%;
+  transform: translate(20%,0);
 }
 
 </style>
