@@ -510,6 +510,9 @@ export default {
       console.log(e)
       console.log(editor)
     }
+  },
+  beforeDestroy() {
+    this.handleSubmit()
   }
 }
 </script>
