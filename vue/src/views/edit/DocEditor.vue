@@ -43,7 +43,8 @@
         <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">
           <el-form class="edit-container" >
             <el-form-item>
-              <tinymce-editor v-model="this.msg"
+              <tinymce-editor v-model="msg"
+                              v-on:submitSuccess="submitSuccess"
                               :disabled="this.disabled"
                               :edit_bar_show="this.edit_bar_show"
                               :doc_id="this.doc_id"
@@ -92,7 +93,7 @@ export default {
         create_time: '',
         last_edit_time: '',
         is_deleted: '',
-        is_editing: '',
+        is_editting: '',
         edit_times: '',
         username: ''
       },
@@ -182,7 +183,7 @@ export default {
             })
             _this.goBack()
           } else {
-            if (_this.doc.is_editing === true){ //文档正在被编辑
+            if (_this.doc.is_editting === true){ //文档正在被编辑
               _this.$alert('此文档正在被编辑，即将返回','提示',{
                 confirmButtonText: '确定',
                 callback: action => {
@@ -428,25 +429,33 @@ export default {
     },
     // 提交
     handleSubmit() {
-      var _this = this
-      console.log(this.msg)
-      this.$api.document.end({
-        doc_id: _this.doc_id
-      }, _this.msg).then(res => {
-        if (res.code === 200 ){
-          _this.$message({
-            message: '文章上传成功！',
-            type: 'success'
-          })
-          _this.disabled=true
-          _this.edit_status = false
-        } else {
-          _this.$message({
-            message: res.msg,
-            type: 'error'
-          })
-        }
-      })
+      this.$refs.editor.handleSubmit()
+      // var _this = this
+      // console.log('提交内容')
+      // console.log(this.msg)
+      // console.log('提交内容-完毕')
+      // this.$api.document.end({
+      //   doc_id: _this.doc_id
+      // }, _this.msg).then(res => {
+      //   if (res.code === 200 ){
+      //     _this.$message({
+      //       message: '文章上传成功！',
+      //       type: 'success'
+      //     })
+      //     _this.disabled=true
+      //     _this.edit_status = false
+      //   } else {
+      //     _this.$message({
+      //       message: res.msg,
+      //       type: 'error'
+      //     })
+      //   }
+      // })
+    },
+    //监听
+    submitSuccess() {
+      this.disabled = true
+      this.edit_status = false
     },
     // 删除
     handleDelete() {
@@ -495,7 +504,9 @@ export default {
 
   },
   beforeDestroy() {
-    this.handleSubmit()
+    if (this.edit_status) {
+      this.handleSubmit()
+    }
   }
 }
 </script>
