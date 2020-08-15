@@ -8,26 +8,26 @@
           <el-input class="title-input" type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
 <!--          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>-->
 <!--          <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>-->
-          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
-          <!--分享弹窗-->
-          <el-dialog title="分享" :visible.sync="dialogFormVisible">
-            <el-form :model="shareForm">
-              <el-form-item label="权限给予：" :label-width="formLabelWidth">
-                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
-                  <el-option label="可查看" value="1"></el-option>
-                  <el-option label="可查看与评论" value="2"></el-option>
-                  <el-option label="可查看与评论与编辑" value="3"></el-option>
-                  <el-option label="可查看与评论与编辑与删除" value="4"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="handleShare">确 定</el-button>
-            </div>
-          </el-dialog>
+<!--          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>-->
+<!--          &lt;!&ndash;分享弹窗&ndash;&gt;-->
+<!--          <el-dialog title="分享" :visible.sync="dialogFormVisible">-->
+<!--            <el-form :model="shareForm">-->
+<!--              <el-form-item label="权限给予：" :label-width="formLabelWidth">-->
+<!--                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">-->
+<!--                  <el-option label="可查看" value="1"></el-option>-->
+<!--                  <el-option label="可查看与评论" value="2"></el-option>-->
+<!--                  <el-option label="可查看与评论与编辑" value="3"></el-option>-->
+<!--                  <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
+<!--                </el-select>-->
+<!--              </el-form-item>-->
+<!--            </el-form>-->
+<!--            <div slot="footer" class="dialog-footer">-->
+<!--              <el-button @click="dialogFormVisible = false">取 消</el-button>-->
+<!--              <el-button type="primary" @click="handleShare">确 定</el-button>-->
+<!--            </div>-->
+<!--          </el-dialog>-->
 
-          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
+<!--          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>-->
 <!--          <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>-->
         </el-card>
       </el-col>
@@ -40,8 +40,9 @@
             <el-form-item>
 <!--              不能编辑：禁用-->
               <tinymce-editor v-model="msg"
-                              :disabled="true"
-                              :doc_id="this.doc.id"
+                              :disabled="false"
+                              :edit_bar_show="false"
+                              :doc_id="this.doc_id"
                               @onClick="onClick"
                               ref="editor">
               </tinymce-editor>
@@ -56,7 +57,7 @@
         <el-card class="comment-card">
           <div class="comment-container">
 <!--            不能评论：禁用‘发表评论’-->
-            <comment-panel :doc_id="this.doc.id" :can_comment="false"></comment-panel>
+            <comment-panel :doc_id="this.doc_id" :can_comment="false"></comment-panel>
           </div>
         </el-card>
       </el-col>
@@ -77,10 +78,10 @@ export default {
   },
   data() {
     return {
-      msg: '<p>dfkjskf<b>hdsfgkasdjfga</b></p>',
+      msg: '',
       doc: {
         id: 1,
-        name: '我是标题我是标题',
+        name: '',
         creator_id: 1,
         group_id: -1,
         create_time: '',
@@ -90,6 +91,7 @@ export default {
         is_editing: false,
         edit_times: -1
       },
+      doc_id: '',
       name_disabled: true,
       rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
@@ -112,22 +114,36 @@ export default {
     }
 
   },
-  // created() {
-    // <<<<<< 之间为注释的
-    // console.log('查看文章页')
-    // this.doc = this.$route.params.doc
-    // console.log('以下为文章信息info')
-    // console.log(this.doc)
-    // >>>>>>
-    // 调用viewDoc()方法
-  // },
+  created() {
+    console.log('查看文章页')
+    this.doc_id = this.$route.params.doc_id
+    console.log('以下为文章信息info')
+    console.log(this.doc_id)
+    this.getInfo()
+  },
   methods: {
+    getInfo() {
+      var _this = this
+      this.$api.document.info({
+        doc_id: _this.doc_id
+      }).then(res =>{
+        if(res.code === 200){
+          _this.doc = res.data
+          _this.viewDoc()
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
     viewDoc() {
       console.log("viewDoc-获取文章内容")
       var _this = this
       // 请求接口
       this.$api.document.view({
-        doc_id: _this.doc.id
+        doc_id: _this.doc_id
       }).then(res => {
         if (res.code === 200) {
           console.log('view 200')

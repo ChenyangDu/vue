@@ -114,6 +114,16 @@ const router = new VueRouter({
             isLogin: false,
             title: "文档编辑"
           }
+        },
+        {
+          path: '/docview',
+          name: 'DocView',
+          component: () => import('../views/edit/DocView')
+        },
+        {
+          path: '/noauthority',
+          name: 'NoAuthority',
+          component: () => import('../views/edit/NoAuthority')
         }]
     },
     {
@@ -144,16 +154,6 @@ const router = new VueRouter({
       path: '/getdoctest',
       name: 'GetDocTest',
       component: () => import('../views/edit/GetDocTest')
-    },
-    {
-      path: '/docview',
-      name: 'DocView',
-      component: () => import('../views/edit/DocView')
-    },
-    {
-      path: '/noauthority',
-      name: 'NoAuthority',
-      component: () => import('../views/edit/NoAuthority')
     }
   ]
 })

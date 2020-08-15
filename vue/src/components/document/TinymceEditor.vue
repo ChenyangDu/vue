@@ -91,7 +91,7 @@ export default {
       myValue: this.value
     }
   },
-  mounted() {
+  created() {
     if (this.edit_bar_show === true) {
       this.init.toolbar = this.toolbar
       this.init.menubar = true
