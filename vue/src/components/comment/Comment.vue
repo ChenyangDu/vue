@@ -1,5 +1,5 @@
 <template>
-    <el-card>
+    <el-card shadow="hover">
         <!-- 这里一行是用户信息 -->
         <el-row align="middle" type="flex" class="authorInf" >
             <el-col :span="2" ><el-avatar :src="author_avator"></el-avatar></el-col>
@@ -38,6 +38,8 @@ export default {
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
+    border-radius: 5%;
+    background-color: #9a9aaf;
 }
 .authorInf {
     margin-bottom: 10px;
@@ -46,8 +48,8 @@ export default {
 
 .time {
     position: absolute;
-    right: 0px;
-    width: 100px;
-    padding: 10px;
+    right: -12px;
+    width: 90px;
+    padding: 0px;
 }
 </style>

@@ -5,7 +5,7 @@
       <el-container>
         <!-- 作者信息  -->
         <el-aside width="200px">
-          <el-card class="aside">
+          <el-card class="aside" shadow="always">
             <div class="author-avator">
               <el-avatar :size="150" :src="author_img"></el-avatar>
               <h2><b>蔡徐坤</b></h2>
@@ -396,6 +396,7 @@ body > .el-container {
 .aside {
   width: 100%;
   height: 100%;
+  background-color: #7f8892;
 }
 
 .author-avator{
