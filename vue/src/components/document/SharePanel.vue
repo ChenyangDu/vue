@@ -10,10 +10,15 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="handleShare">确 定</el-button>
-    </div>
+    <el-row :gutter="0">
+      <el-col :span="24" :push="16">
+<!--        <div slot="footer" class="dialog-footer">-->
+          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="handleShare">确 定</el-button>
+<!--        </div>-->
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
