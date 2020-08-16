@@ -12,7 +12,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in owndocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -55,7 +55,7 @@
       <el-tab-pane label="我最近浏览的文档" name="second">
         <h1>我最近浏览的文档</h1>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in recentdocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -106,7 +106,7 @@
       <el-tab-pane label="我收藏的文档" name="third">
         <h1>我收藏的文档</h1>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in favoritedocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -170,7 +170,7 @@ export default {
   components: {TypePanel, SharePanel },
   data: function () {
     return {
-      documents: [
+      owndocuments: [
         {
           id: 0,
           creator_id: this.$store.state.user.username.id,
@@ -179,6 +179,8 @@ export default {
           last_edit_time: "2020-8-15"
         },
       ],
+      favoritedocuments:[],
+      recentdocuments:[],
       id: this.$store.state.user.username.id,
       doc_id: '',
       activeName: "first",
@@ -407,11 +409,8 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.owndocuments = response.data; // 文档列表
             console.log("获取数据成功");
-                for (const item of this.documents) {
-      console.log(item.id+":"+item.name);
-    }
           }
         })
         .catch((err) => {
@@ -437,7 +436,7 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.favoritedocuments = response.data; // 文档列表
             console.log("获取数据成功");
           }
         })
@@ -466,7 +465,7 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.recentdocuments = response.data; // 文档列表
             console.log("获取数据成功");
           }
         })
