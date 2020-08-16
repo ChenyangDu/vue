@@ -39,10 +39,10 @@ export const create = data => {
     })
 }
 
-export const invite = data => {
+export const invite = params => {
     return axios({
-        url : 'group/invite',
+        url : '/group/invite',
         method: 'post',
-        data
+        params
     })
 }
