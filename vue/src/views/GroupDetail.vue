@@ -5,6 +5,7 @@
       <div style="letter-spacing:8px;font-size:20px">
         <h1>{{ group_info.name }}</h1>
       </div>
+      <hr style="height:1px;border:none;border-top:1px dashed #CCCCCC; width:80% " />
     </el-col></el-row>
     <el-row >
       <el-col :span="22" :offset="1">
