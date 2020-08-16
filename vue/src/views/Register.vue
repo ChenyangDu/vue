@@ -9,7 +9,7 @@
         <el-input type="password" v-model="registerForm.password"  auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
       <el-form-item prop="password2">
-        <el-input type="password" v-model="password2"  auto-complete="off" placeholder="请再次输入密码"></el-input>
+        <el-input type="password" v-model="registerForm.password2"  auto-complete="off" placeholder="请再次输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="phone">
         <el-input type="text" v-model="registerForm.phone"  auto-complete="off" placeholder="手机号"></el-input>
@@ -65,10 +65,22 @@ export default {
         callback();
       }
     };
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      } else {
+        if (this.registerForm.password2 !== '') {
+          this.$refs.registerForm.validateField('password2');
+        }
+        callback();
+      }
+    };
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
+        console.log(value)
         callback(new Error('请再次输入密码'));
       } else if (value !== this.registerForm.password){
+        console.log(value)
         callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
@@ -78,6 +90,7 @@ export default {
       registerForm: {
         name: '',
         password: '',
+        password2:'',
         phone: '',
         email: '',
         wechat: '',
@@ -95,7 +108,8 @@ export default {
         password: [
           {
             required: true,
-            message: '请输入密码',
+            validator: validatePass,
+            // message: '请输入密码',
             trigger: 'blur'
           }
         ],
@@ -103,7 +117,7 @@ export default {
           {
             required: true,
             validator: validatePass2,
-            message: '请再次填写密码',
+            // message: '请再次填写密码',
             trigger: 'blur'
           }
         ],
@@ -111,7 +125,7 @@ export default {
           {
             required: true,
             validator: validateMobilePhone,
-            message: '请输入正确完整的手机号',
+            // message: '请输入正确完整的手机号',
             trigger: 'blur'
           }
         ],
@@ -119,7 +133,7 @@ export default {
           {
             required: true,
             validator: validateEmail,
-            message: '请输入正确完整的邮箱号',
+            // message: '请输入正确完整的邮箱号',
             trigger: 'blur'
           }
         ]
@@ -128,11 +142,12 @@ export default {
   },
   methods: {
     register(formName) {
-      alert(this.registerForm.wechat === '')
       var _this = this
       this.$refs[formName].validate(valid => {
         if (valid) {
+          delete this.registerForm.password2
           let userInfo = this.registerForm
+          console.log(this.registerForm)
           this.$api.login.register(userInfo).then(res => {
             if (res.code !== 200) {
               _this.$message({
