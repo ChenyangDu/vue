@@ -1,12 +1,15 @@
 <template>
   <div class="register-page">
     <el-form class="register-container" :model="registerForm" :rules="fieldRules" ref="registerForm">
-      <h2 class="title">用户注册</h2>
+      <h2 class="title"><b>用户注册</b></h2>
       <el-form-item prop="name">
         <el-input type="text" v-model="registerForm.name" auto-complete="off" placeholder="昵称"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" v-model="registerForm.password"  auto-complete="off" placeholder="密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="password2">
+        <el-input type="password" v-model="password2"  auto-complete="off" placeholder="请再次输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="phone">
         <el-input type="text" v-model="registerForm.phone"  auto-complete="off" placeholder="手机号"></el-input>
@@ -21,9 +24,13 @@
         <el-input type="text" v-model="registerForm.qq"  auto-complete="off" placeholder="QQ号"></el-input>
       </el-form-item>
       <el-form-item class="button-item" style="margin-bottom: 10px">
-        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="reset" round>重 置</el-button>
-        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="register('registerForm')" round>注 册</el-button>
+        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="reset" round><span style="font-size: 110%">重 置</span></el-button>
+        <el-button type="primary" style="width:30%;background: #505458;border: none;margin-left: 47px;" @click="register('registerForm')" round><span style="font-size: 110%">注 册</span></el-button>
       </el-form-item>
+      <span style="color: #505458;margin-left: 235px">已有账号?</span>
+      <router-link to="/login">
+        <el-button type="text">去登录</el-button>
+      </router-link>
     </el-form>
   </div>
 </template>
@@ -32,6 +39,41 @@
 export default {
   name: "Register",
   data() {
+    var validateEmail = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入邮箱'));
+      } else {
+        if (value !== '') {
+          var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+          if(!reg.test(value)){
+            callback(new Error('邮箱不合法'));
+          }
+        }
+        callback();
+      }
+    };
+    var validateMobilePhone = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号'));
+      } else {
+        if (value !== '') {
+          var reg=/^1[3456789]\d{9}$/;
+          if(!reg.test(value)){
+            callback(new Error('手机号不合法'));
+          }
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.registerForm.password){
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    }
     return {
       registerForm: {
         name: '',
@@ -41,6 +83,7 @@ export default {
         wechat: '',
         qq: ''
       },
+      password2: '',
       fieldRules: {
         name: [
           {
@@ -56,10 +99,27 @@ export default {
             trigger: 'blur'
           }
         ],
+        password2: [
+          {
+            required: true,
+            validator: validatePass2,
+            message: '请再次填写密码',
+            trigger: 'blur'
+          }
+        ],
         phone: [
           {
             required: true,
-            message: '请输入手机号',
+            validator: validateMobilePhone,
+            message: '请输入正确完整的手机号',
+            trigger: 'blur'
+          }
+        ],
+        email: [
+          {
+            required: true,
+            validator: validateEmail,
+            message: '请输入正确完整的邮箱号',
             trigger: 'blur'
           }
         ]
@@ -115,7 +175,7 @@ export default {
   -moz-border-radius: 5px;
   background-clip: padding-box;
   margin: 100px auto;
-  width: 350px;
+  width: 420px;
   padding: 35px 35px 15px 35px;
   background: #fff;
   border: 1px solid #eaeaea;

@@ -1,7 +1,7 @@
 <template>
   <div class="login-page">
     <el-form class="login-container" :model="loginForm" ref="loginForm" :rules="fieldRules" label-position="left" label-width="0px">
-      <h2 class="title">系统登陆</h2>
+      <h2 class="title"><b>系统登陆</b></h2>
       <el-form-item prop="phone">
         <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="账号"></el-input>
       </el-form-item>
@@ -107,7 +107,7 @@ export default {
   -moz-border-radius: 5px;
   background-clip: padding-box;
   margin: 100px auto;
-  width: 350px;
+  width: 420px;
   padding: 35px 35px 15px 35px;
   background: #fff;
   border: 1px solid #eaeaea;
