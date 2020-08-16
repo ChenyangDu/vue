@@ -53,7 +53,7 @@
               <el-card shadow="always" @click.native="test" style="cursor:pointer">
                 <!--              <div align="center">-->
                 <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
-                新建团队
+                加入团队
                 <!--              </div>-->
               </el-card>
               <br />

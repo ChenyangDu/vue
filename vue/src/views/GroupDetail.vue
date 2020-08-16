@@ -101,10 +101,14 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-dialog title='邀请新成员' :visible.sync="inviteDialogVisible">
+      <invite-panel :group_id="group_id"></invite-panel>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import InvitePanel from '../components/group/InvitePanel.vue';
     export default {
         name: "GroupDetail",
         data(){
@@ -113,6 +117,7 @@
                 fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
                 //用户id
                 id: this.$store.state.user.username.id,
+                inviteDialogVisible:false,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
@@ -168,6 +173,9 @@
                 }
             })
         },
+        components:{
+          InvitePanel
+        },
         methods:{
             handleCommand: function (command, id) {
                 //console.log(command,id);
@@ -206,6 +214,7 @@
             },
             invite:function(){
               console.log('邀请别人');
+              this.inviteDialogVisible = true;
             },
             handleNewDoc() {
                 let _this = this;
