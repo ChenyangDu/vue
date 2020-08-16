@@ -53,9 +53,10 @@ export default {
       });
     },
     invite: function (id) {
-      console.log(id + "被邀请了");
+      console.log(id + "被邀请了加入团队"+this.group_id);
+      let inviteInf = { user_id: id,group_id:this.group_id};
       var that = this;
-      this.$api.group.invite({user_id:id,group_id:this.group_id}).then(response => {
+      this.$api.group.invite(inviteInf).then(response => {
           if(response.code === 200)
             console.log('成功发送邀请');
           else console.log('发送邀请出错');
