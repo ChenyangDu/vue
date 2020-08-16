@@ -20,6 +20,26 @@
                           {{item.last_edit_time.substring(0,10)}}
                           {{item.last_edit_time.substring(11,19)}}
 
+                          <div align="right" >
+                            <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                              <i class="el-icon-more"></i>
+                              <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                                <el-dropdown-item
+                                        icon="el-icon-edit"
+                                        command="edit"
+                                        v-if="item.creator_id == id"
+                                >编辑</el-dropdown-item>
+                                <el-dropdown-item
+                                        icon="el-icon-delete-solid"
+                                        command="del"
+                                        v-if="item.creator_id == id"
+                                >删除</el-dropdown-item>
+                                <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                                <el-dropdown-item icon="el-icon-star-on" command="collect">取消收藏</el-dropdown-item>
+                              </el-dropdown-menu>
+                            </el-dropdown>
+                          </div>
                         </div>
                       </el-card>
                     </el-col>
@@ -61,11 +81,18 @@
                     <p>{{item.name}}</p>
                   </el-col>
                 </div>
+
+                <el-col :span="8" align="center">
+                  <div align="center">
+                    <i style="font-size: 50px;" class="el-icon-setting"></i>
+                  </div>
+                  <p>管 理</p>
+                </el-col>
                 <el-col :span="8" align="center">
                   <div align="center">
                     <i style="font-size: 50px;" class="el-icon-circle-plus-outline" @click="invite"></i>
                   </div>
-                  <p>添加人</p>
+                  <p>添 加</p>
                 </el-col>
               </el-row>
 
@@ -88,7 +115,7 @@
                 avatarUrl:null,
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 showdocuments:[],
-                groupdocuments: [],
+                groupdocuments: null,
                 group_id:null,
                 group_info:null,
                 group_member:[],
@@ -119,8 +146,6 @@
                 "group_id":_this.group_id
             }).then(res=>{
                 if(res.code == 200){
-                    console.log("groupdocuments",_this.groupdocuments)
-                    console.log(_this.groupdocuments[0])
                     _this.groupdocuments = res.data;
                 } else {
                     _this.$message({
@@ -131,6 +156,14 @@
             })
         },
         methods:{
+            handleCommand: function (command, id) {
+                //console.log(command,id);
+                if (command === "view") this.detail(id);
+                else if (command === "edit") this.edit(id);
+                else if (command === "del") this.del(id);
+                else if (command === "share") this.share(id);
+                else if (command === "collect") this.collect(id);
+            },
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
                 for(let member of this.group_member){

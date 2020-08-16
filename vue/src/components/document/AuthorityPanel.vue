@@ -13,7 +13,29 @@
       <el-col :span="24" :push="0">
         <span class="title">协作者</span>
         <el-divider class="title-divider"></el-divider>
-        <el-table :data="this.searchResults" stripe style="width: 100%" :show-header="false" size="mini">
+        <el-table :data="this.searchResults" stripe style="width: 100%" :show-header="false" size="mini" :key="Math.random()">
+          <el-table-column prop="name" label="昵称"  width="120"></el-table-column>
+          <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
+          <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
+          <el-table-column prop="operation" label="操作" width="200">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
+                <el-option  label="查看" :value='1'></el-option>
+                <el-option  label="查看/评论" :value='2'></el-option>
+                <el-option  label="查看/评论/编辑" :value='3'></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+    <br/>
+    <!--展示成员信息-->
+    <el-row :gutter="0">
+      <el-col :span="24" :push="0">
+        <span class="title">协作者</span>
+        <el-divider class="title-divider"></el-divider>
+        <el-table :data="this.memberList" stripe style="width: 100%" :show-header="false" size="mini" :key="Math.random()">
           <el-table-column prop="name" label="昵称"  width="120"></el-table-column>
           <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
           <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
@@ -41,8 +63,10 @@
           <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.authority_type" placeholder="管理者" disabled>
-                <el-option  label="管理者" value="1"></el-option>
+              <el-select v-model="scope.row.authority_type" placeholder="请选择" disabled>
+                <el-option  label="查看" :value='1'></el-option>
+                <el-option  label="查看/评论" :value='2'></el-option>
+                <el-option  label="管理者" :value='3'></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -67,6 +91,7 @@ export default {
         key: ''
       },
       searchResults: [],
+      memberList:[],
       selfData:[
         {
           id: '',
@@ -83,7 +108,7 @@ export default {
   },
   created() {
     this.selfData[0] = this.$store.state.user.username
-    this.selfData[0]["authority_type"] = '管理员'
+    this.selfData[0]["authority_type"] = parseInt('3')
   },
   methods: {
     // 通过手机/邮箱搜索
@@ -132,32 +157,40 @@ export default {
     loadAuthority() {
       var _this = this
       console.log(_this.searchResults)
-      for (var i=0;i<_this.searchResults.length;i++){
-        _this.$api.authority.authority({
-          user_id: _this.user_id,
-          doc_id: _this.doc_id
-        }).then(res=>{
-          if(res.code === 200) {
-            if(res.data.can_edit){
-              _this.searchResults[i]["authority_type"] = 3
-            } else if (res.data.can_comment){
-              _this.searchResults[i]["authority_type"] = 2
-            } else if (res.data.can_read) {
-              _this.searchResults[i]["authority_type"] = 1
-            }
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
+      console.log('length',_this.searchResults.length)
+      _this.$api.authority.authority({
+        user_id: _this.searchResults[0].id,
+        doc_id: _this.doc_id
+      }).then(res=>{
+        if(res.code === 200) {
+          if(res.data.can_edit){
+            console.log('can_edit')
+            _this.searchResults[0].authority_type = parseInt('3')
+            console.log('type',_this.searchResults[0].authority_type)
+          } else if (res.data.can_comment){
+            console.log('can_comment')
+            _this.searchResults[0].authority_type =parseInt('2')
+          } else if (res.data.can_read) {
+            console.log('can_read')
+            _this.searchResults[0].authority_type = parseInt('1')
           }
-        }).catch(failResponse => {})
-      }
-      console.log(_this.searchResults)
+          _this.$set(this.searchResults,0,this.searchResults[0])
+          // _this.searchResults.splice(0,1,_this.searchResults[0])
+          // 二选一
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
     },
     // 修改权限
     handleEdit(user,index) {
       var _this = this
+      console.log('index')
+      console.log(index)
+      console.log(typeof index)
       console.log('edit click')
       console.log(user.authority_type)
       console.log(typeof user.authority_type)
