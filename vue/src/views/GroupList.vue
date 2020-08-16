@@ -2,36 +2,8 @@
   <div>
     <br />
     <el-col :span="22" :offset="1">
-      <el-tabs >
-        <el-tab-pane label="我创建的团队" name="first">
-          <br />
-          <el-row :gutter="40">
-            <div v-for="(item) in created_groups" :key="item.id">
-              <el-col :span="8">
-                <el-card
-                  shadow="always"
-                  @click.native="groupDetail(item.id)"
-                  style="cursor:pointer"
-                >
-                  <i style="font-size: 15px;" class="el-icon-user-solid"></i>
-                  {{item.name}}
-                </el-card>
-                <br />
-                <br />
-              </el-col>
-            </div>
-
-            <el-col :span="8">
-              <el-card shadow="always" @click.native="createNewGroup" style="cursor:pointer">
-                <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
-                新建团队
-              </el-card>
-              <br />
-              <br />
-            </el-col>
-          </el-row>
-        </el-tab-pane>
-        <el-tab-pane label="我加入的团队" name="second">
+      <el-tabs value="first">
+        <el-tab-pane label="我加入的团队" name="first">
           <br />
           <el-row :gutter="40">
             <div v-for="(item) in joined_groups" :key="item.id">
@@ -55,6 +27,34 @@
                 <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
                 加入团队
                 <!--              </div>-->
+              </el-card>
+              <br />
+              <br />
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="我创建的团队" name="second">
+          <br />
+          <el-row :gutter="40">
+            <div v-for="(item) in created_groups" :key="item.id">
+              <el-col :span="8">
+                <el-card
+                        shadow="always"
+                        @click.native="groupDetail(item.id)"
+                        style="cursor:pointer"
+                >
+                  <i style="font-size: 15px;" class="el-icon-user-solid"></i>
+                  {{item.name}}
+                </el-card>
+                <br />
+                <br />
+              </el-col>
+            </div>
+
+            <el-col :span="8">
+              <el-card shadow="always" @click.native="createNewGroup" style="cursor:pointer">
+                <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
+                新建团队
               </el-card>
               <br />
               <br />
