@@ -7,11 +7,12 @@
             <h1>我创建的文档</h1>
           </el-col>
           <el-col :span="8">
-            <el-button type="primary" round @click="handleNewDoc">创建新文档</el-button>
+            <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>
+            <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in owndocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -54,7 +55,7 @@
       <el-tab-pane label="我最近浏览的文档" name="second">
         <h1>我最近浏览的文档</h1>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in recentdocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -105,7 +106,7 @@
       <el-tab-pane label="我收藏的文档" name="third">
         <h1>我收藏的文档</h1>
         <el-row :gutter="20">
-          <el-col :span="4" v-for="item in documents" :key="item.id">
+          <el-col :span="4" v-for="item in favoritedocuments" :key="item.id">
             <div>
               <br />
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
@@ -146,22 +147,30 @@
         </el-row>
       </el-tab-pane>
     </el-tabs>
+
     <!--分享弹窗-->
     <el-dialog title="分享" :visible.sync="dialogFormVisible">
       <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
     </el-dialog>
+
+    <!-- 模板弹窗-->
+    <el-dialog title="使用模板" :visible.sync="typePanelVisible">
+      <type-panel v-on:cancelCreate="cancelCreate" v-on:confirmCreate="confirmCreate"></type-panel>
+    </el-dialog>
+
   </div>
 </template>
 
 
 <script>
 import SharePanel from "@/components/document/SharePanel";
+import TypePanel from "@/components/document/TypePanel";
 export default {
   name: "DocumentList",
-  components: { SharePanel },
+  components: {TypePanel, SharePanel },
   data: function () {
     return {
-      documents: [
+      owndocuments: [
         {
           id: 0,
           creator_id: this.$store.state.user.username.id,
@@ -170,11 +179,14 @@ export default {
           last_edit_time: "2020-8-15"
         },
       ],
+      favoritedocuments:[],
+      recentdocuments:[],
       id: this.$store.state.user.username.id,
       doc_id: '',
       activeName: "first",
       dialogFormVisible: false,
-      iscollect:false
+      iscollect:false,
+      typePanelVisible: false
     };
   },
   created: function () {
@@ -182,7 +194,7 @@ export default {
   },
   methods: {
     isCollect: function (id) {
-      return true;
+      return false;
       // //return !this.iscollect;
       // let inf = {doc_id:id,user_id:this.id};
       // var that = this;
@@ -213,7 +225,19 @@ export default {
     isMyDoc: function (id) {
       return id === this.id;
     },
-    handleNewDoc() {
+    cancelCreate(){
+      this.typePanelVisible = false
+      this.$message({
+        type: 'info',
+        message: '已取消创建'
+      })
+    },
+    confirmCreate(typeNum) {
+      console.log(typeNum)
+      this.typePanelVisible = false
+      this.handleNewDoc(typeNum)
+    },
+    handleNewDoc(typeNum) {
       var _this = this;
       this.$prompt('请输入标题','提示',{
         confirmButtonText: '确定',
@@ -224,7 +248,7 @@ export default {
               user_id: this.id,
               group_id: -1,
               name: value,
-              type: -1,
+              type: typeNum,
               // type: 1
             })
             .then((res) => {
@@ -385,11 +409,8 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.owndocuments = response.data; // 文档列表
             console.log("获取数据成功");
-                for (const item of this.documents) {
-      console.log(item.id+":"+item.name);
-    }
           }
         })
         .catch((err) => {
@@ -415,7 +436,7 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.favoritedocuments = response.data; // 文档列表
             console.log("获取数据成功");
           }
         })
@@ -444,7 +465,7 @@ export default {
             });
             console.log("返回了400");
           } else {
-            that.documents = response.data; // 文档列表
+            that.recentdocuments = response.data; // 文档列表
             console.log("获取数据成功");
           }
         })

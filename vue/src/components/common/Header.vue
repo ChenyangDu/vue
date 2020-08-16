@@ -79,7 +79,7 @@ export default {
       userid: 0,
       username: "还没有用户登录",
       userAvator:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id,
       message: 2,
       isLogin: false,
     };
@@ -112,7 +112,8 @@ export default {
         // 跳转到登录页面
         this.$router.push("/login");
       } else if (command == "myinfo") {
-        this.$router.push("/personalinformation");
+        //this.$router.push({path:"/personalinformation",params:{user_id:this.$store.state.user.username.id}});
+        this.$router.push('/personalinformation');
       }
     },
 
@@ -183,9 +184,12 @@ export default {
         this.global.baseUrl +
         "image/avator/show?user_id=" +
         this.$store.state.user.username.id;
+      
+      this.userAvator = this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id;
 
-      this.userAvator =
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+
+      // this.userAvator =
+      //   "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
     }
     // bus.$on("login-event", () => {
     //   console.log("home接受到了消息");

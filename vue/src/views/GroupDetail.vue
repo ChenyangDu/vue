@@ -1,13 +1,14 @@
 <template>
   <div>
     <br>
+    <el-row ><el-col :span="10" :push="8"><h1>{{ group_info.name }}</h1></el-col></el-row>
     <el-row >
       <el-col :span="22" :offset="1">
         <el-row :gutter="20">
             <el-col :span="18"><div >
               <h1>团队文档</h1>
                 <el-row :gutter="20">
-                  <div v-for="(item,i) in groupdocuments">
+                  <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
                       <el-card shadow="always" @click.native="detail(item.id)" style="cursor:pointer">
                         <div class="block">
@@ -65,8 +66,8 @@
 
               <el-row>
                 <el-col :span="24" align="center">
-                  <div class="block">
-                    <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer"></el-avatar>
+                  <div class="block"  @click="memberDetail(creator.id)">
+                    <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer" ></el-avatar>
                     <p>{{creator.name}}</p>
                   </div>
                 </el-col>
@@ -74,7 +75,7 @@
               </el-row>
               <br>
               <el-row>
-                <div v-for="(item,i) in group_member" >
+                <div v-for="(item) in group_member" :key="item.id" @click="memberDetail(item.id)">
                   <el-col :span="8" align="center" v-if="item.id != group_info.creator_id">
                     <el-avatar :size="50" :src="avatarUrl+item.id" style="cursor:pointer"></el-avatar>
                     <p>{{item.name}}</p>
@@ -89,7 +90,7 @@
                 </el-col>
                 <el-col :span="8" align="center">
                   <div align="center">
-                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline"></i>
+                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline" @click="invite"></i>
                   </div>
                   <p>添 加</p>
                 </el-col>
@@ -107,28 +108,37 @@
     export default {
         name: "GroupDetail",
         data(){
+            console.log('data函数执行');
             return{
                 fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+                //用户id
                 id: this.$store.state.user.username.id,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
                 showdocuments:[],
-                groupdocuments: null,
-                group_id:null,
-                group_info:null,
+                //团队文档
+                groupdocuments: [],
+                //团队id
+                group_id:this.$route.params.group_id,
+                //团队信息id、name、creator_id
+                group_info:{},
+                //团队成员
                 group_member:[],
+                //团队创建者
                 creator:null,
 
             }
         },
         created() {
             let _this = this;
+            //将团队的id设置为传入的值
             this.group_id = this.$route.params.group_id
-
             //团队基本信息
             this.$api.group.info({
                 group_id:_this.group_id
             }).then(res=>{
+                console.log("group_info获取到了");
+                console.log(res.data);
                 _this.group_info = res.data;
                 _this.avatarUrl = this.global.baseUrl + "/image/avatar/show?user_id=";
                 //团队成员
@@ -136,6 +146,8 @@
                     group_id:_this.group_id
                 }).then(res=>{
                     _this.group_member = res.data
+                    console.log('group_member获取到了');
+                    console.log(_this.group_member);
                     _this.getCreator();
                 })
             })
@@ -145,6 +157,8 @@
             }).then(res=>{
                 if(res.code == 200){
                     _this.groupdocuments = res.data;
+                    console.log('groupdocument');
+                    console.log(_this.groupdocuments);
                 } else {
                     _this.$message({
                         message: res.msg,
@@ -175,7 +189,9 @@
                 for(let member of this.group_member){
                     if(member.id == this.group_info.creator_id){
                         this.creator = member
-                        console.log("creator!!!",this.creator.id)
+                        // console.log("creator!!!",this.creator.id)
+                        console.log('creator获取到了');
+                        console.log(this.creator);
                     }
                 }
             },
@@ -191,6 +207,12 @@
                         doc_id: id,
                     },
                 });
+            },
+            memberDetail:function(id){
+              console.log('点击了用户详情'+id);
+            },
+            invite:function(){
+              console.log('邀请别人');
             },
             handleNewDoc() {
                 let _this = this;
@@ -240,6 +262,9 @@
 </style>
 
 <style>
+.title {
+  align-content: center;
+}
   .el-row {
     margin-bottom: 20px;
 

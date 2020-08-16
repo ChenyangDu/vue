@@ -18,10 +18,17 @@
                 <span class="right">{{item.username}}</span>
                 <div class="bottom clearfix">
                   <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                  <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                      <i class="el-icon-more"></i>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-refresh" command="recover">还原</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-delete" command="del">删除</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
                 </div>
               </div>
-              <el-button type="primary" class="left" round @click="recover(item.id)">还原</el-button>
-              <el-button type="danger" class="right" round @click="del(item.id)">彻底删除</el-button>
+              <!-- <el-button type="primary" class="left" round @click="recover(item.id)">还原</el-button>
+              <el-button type="danger" class="right" round @click="del(item.id)">彻底删除</el-button> -->
             </el-card>
           </div>
         </el-col>
@@ -40,6 +47,12 @@ export default {
     };
   },
   methods: {
+    handleCommand(event,id){
+      if(event === 'recover')
+        this.recover(id);
+      else if(event === 'del')
+      this.del(id);
+    },
     getTrashList: function () {
       let inf = { user_id: this.id }; // 用户id
       var that = this;
