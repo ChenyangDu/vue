@@ -5,15 +5,15 @@
 
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我创建的文档" name="first">
-<!--          <el-row :gutter="40">-->
+          <el-row :gutter="40">
 <!--            <el-col :span="8">-->
 <!--              <h1>我创建的文档</h1>-->
 <!--            </el-col>-->
-<!--            <el-col :span="8">-->
-<!--              <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>-->
-<!--              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>-->
-<!--            </el-col>-->
-<!--          </el-row>-->
+            <el-col :span="8">
+              <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>
+              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>
+            </el-col>
+          </el-row>
           <el-row :gutter="20">
 
             <el-col :span="4">

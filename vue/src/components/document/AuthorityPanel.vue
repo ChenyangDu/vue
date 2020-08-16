@@ -80,6 +80,7 @@
 </template>
 
 <script>
+
 export default {
   name: "AuthorityPanel",
   props: {
@@ -161,16 +162,34 @@ export default {
     // 请求权限
     getAuthority() {
       var _this = this
-      let user_ids = []
-      for(let user of this.memberList){
-        user_ids.push(user.id)
+      var myid = this.user_id
+      for(var user of this.memberList){
+        if(user.id === myid){
+          var index = this.memberList.indexOf(user)
+          this.memberList.splice(index,1)
+        }
       }
+      console.log('fasong')
+      console.log(this.memberList)
+      let userstring = ''
+      for (var user of this.memberList){
+        userstring = userstring+user.id
+        userstring +=','
+        console.log('final',userstring)
+      }
+      console.log('final',userstring)
+      userstring = userstring.substring(0,userstring.length-1)
       this.$api.authority.authorityUsers({
         doc_id: _this.doc_id,
-        users: user_ids
+        users: userstring
       }).then(res => {
         if(res.code === 200){
           _this.addAuthority(res.data)
+        }else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
         }
       })
     },

@@ -212,7 +212,7 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 console.log("点击detail");
                 console.log(id);
                 var _this = this;
-                // 通过user_id直接跳转
+                // 通过doc_id直接跳转
                 console.log("跳转编辑页");
                 _this.$router.push({
                     path: "/docview",
@@ -220,6 +220,18 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                         doc_id: id,
                     },
                 });
+            },
+
+            edit: function (id) {
+              console.log(id);
+              var _this = this;
+              // 通过doc_id直接跳转
+              _this.$router.push({
+                path: "/doceditor",
+                query: {
+                  doc_id: id,
+                },
+              });
             },
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
