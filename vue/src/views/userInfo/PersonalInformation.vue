@@ -1,40 +1,93 @@
 <template>
-  <div class='user_info_page'>
-    <el-form class="person">
-      <h2 class="title">个人信息</h2>
+  <div class="userinfo-page">
+    <el-tabs tab-position="left" class='user_info_page'>
+      <el-tab-pane label="用户信息">
+        <h2 class="title">个人信息</h2>
+        <el-row :gutter="20">
+          <!--头像-->
+          <el-col :span="8" :offset="0">
+            <div class="block" align="center">
+              <el-avatar shape="square" :size="100" :src="src"></el-avatar>
+            </div>
+          </el-col>
+          <!--信息-->
+          <el-col :span="14" :offset="0">
+            <el-form class="person" label-position="right" label-width="60px">
+              <el-form-item label="昵称" prop="name" class="descClass">
+                <el-input type="text" v-model="userinfoForm.name" readonly="readonly"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="phone">
+                <el-input type="text" v-model="userinfoForm.phone" readonly="readonly"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email">
+                <el-input type="text" v-model="userinfoForm.email" readonly="readonly"></el-input>
+              </el-form-item>
+              <el-form-item label="微信号" prop="wechat">
+                <el-input type="text" v-model="userinfoForm.wechat" readonly="readonly"></el-input>
+              </el-form-item>
+              <el-form-item label="QQ号" prop="qq">
+                <el-input type="text" v-model="userinfoForm.qq" readonly="readonly"></el-input>
+              </el-form-item>
+<!--              <el-form-item class="button-item">-->
+<!--                <router-link to="/Revising">-->
+<!--                  <el-button type="primary" style="width:50%;" round>修 改 个 人 信 息</el-button>-->
+<!--                </router-link>-->
+<!--                <router-link to="/">-->
+<!--                  <el-button type="primary" style="width:50%;" round>返 回 主 页</el-button>-->
+<!--                </router-link>-->
+<!--              </el-form-item>-->
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane label="修改信息">
+        <h2 class="title">修改信息</h2>
+        <el-row :gutter="20">
+          <!--头像-->
+          <el-col :span="8" :offset="0">
+            <div class="block" align="center">
+              <el-upload
+                  class="upload-demo"
+                  drag
+                  :action="'http://39.101.200.9:8081//image/avatar/upload?user_id='+this.$store.state.user.username.id"
+                  multiple>
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+              </el-upload>
+            </div>
+          </el-col>
+          <!--信息-->
+          <el-col :span="14" :offset="0">
+            <el-form class="revise" label-position="right" label-width="60px">
+              <el-form-item label="昵称">
+                <el-input type="text" v-model="formLabelAlign.name"></el-input>
+              </el-form-item>
+              <el-form-item label="密码">
+                <el-input type="password" v-model="formLabelAlign.password"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号">
+                <el-input type="text" v-model="formLabelAlign.phone"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱">
+                <el-input type="email" v-model="formLabelAlign.email" ></el-input>
+              </el-form-item>
+              <el-form-item label="微信号">
+                <el-input type="text" v-model="formLabelAlign.wechat"></el-input>
+              </el-form-item>
+              <el-form-item label="QQ号">
+                <el-input type="text" v-model="formLabelAlign.qq" ></el-input>
+              </el-form-item>
 
-      <div style="width:100%;text-align:center">
-        <el-form-item>
-          <div class="block" align="center"><el-avatar shape="square" :size="100" :src="src"></el-avatar></div>
-        </el-form-item>
-      </div>
+              <el-form-item class="button-item">
+                <el-button type="primary" style="width:36%;" @click="handleSubmit" round>保 存</el-button>
+              </el-form-item >
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+    </el-tabs>
 
-      
-      <el-form-item label="昵称" prop="name" class="descClass">
-        <el-input type="text" v-model="formLabelAlign.name" readonly="readonly"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input type="text" v-model="formLabelAlign.phone" readonly="readonly"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input type="text" v-model="formLabelAlign.email" readonly="readonly"></el-input>
-      </el-form-item>
-      <el-form-item label="微信号" prop="wechat">
-        <el-input type="text" v-model="formLabelAlign.wechat" readonly="readonly"></el-input>
-      </el-form-item>
-      <el-form-item label="QQ号" prop="qq">
-        <el-input type="text" v-model="formLabelAlign.qq" readonly="readonly"></el-input>
-      </el-form-item>
-
-      <el-form-item class="button-item">
-        <router-link to="/Revising">
-          <el-button type="primary" style="width:50%;" round>修 改 个 人 信 息</el-button>
-        </router-link>
-        <router-link to="/">
-          <el-button type="primary" style="width:50%;" round>返 回 主 页</el-button>
-        </router-link>
-      </el-form-item>
-     </el-form>
   </div>
 </template>
 
@@ -44,7 +97,7 @@ export default {
   data() {
     return {
       labelPosition: 'right',
-      formLabelAlign: {
+      userinfoForm: {
         id: '',
         name: '',
         password: '',
@@ -53,10 +106,38 @@ export default {
         qq: '',
         email: '',
       },
+      formLabelAlign: {
+        id: 1,
+        name: '',
+        password: '',
+        phone: '',
+        wechat: '',
+        qq: '',
+        email: ''
+      },
       src:this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id
     };
   },
-  methods : {},
+  methods : {
+    handleSubmit () {
+      var _this = this
+      this.$api.user.save(this.formLabelAlign).then(res => {
+        if (res.code === 200) {
+          _this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          _this.$store.commit('login',_this.formLabelAlign)
+          // _this.$router.push('/personalInformation')
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {});
+    }
+  },
   created() {
     var _this = this
     this.$api.user.info({
@@ -64,6 +145,7 @@ export default {
       id: _this.$store.state.user.username.id
     }).then(res=>{
       if (res.code === 200) {
+        this.userinfoForm=res.data
         this.formLabelAlign=res.data
       } else {
         _this.$message({
@@ -80,45 +162,36 @@ export default {
 
 <style scoped>
   .title {
-
   margin: 0 auto 30px auto;
-
   text-align: center;
-
   color: #505458;
-
 }
 .el-form-item {
-
   margin-bottom: 30px;
-
 }
-.person {
+.el-tabs /deep/ .el-tabs_header{
+  position: relative;
+  top: 100px;
+}
+.userinfo-page {
   -webkit-border-radius: 5px;
-
   border-radius: 5px;
-
   -moz-border-radius: 5px;
-
   background-clip: padding-box;
-
-  margin: 100px auto;
-
-  width: 350px;
-
-  padding: 35px 35px 15px 35px;
-
+  margin: 60px auto;
+  width: 800px;
+  padding: 35px 50px 15px 50px;
   background: #fff;
-
   border: 1px solid #eaeaea;
-
   box-shadow: 0 0 25px #cac6c6;
+}
+.block{
+  position: relative;
+  top: 80px;
 }
 .button-item {
     margin: 0 auto 30px auto;
-
     text-align: center;
   }
-
 </style>
 
