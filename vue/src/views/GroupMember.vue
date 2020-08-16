@@ -45,7 +45,7 @@
         name: "GroupMember",
         data() {
             return {
-                group_id:1234250088,
+                group_id:this.$route.params.group_id,
                 groupmember:[],
                 avatarPath : this.global.baseUrl + '/image/avatar/show'
             }
@@ -57,9 +57,12 @@
             }
         },
         created() {
+            this.group_id = this.$route.params.group_id
+            console.log("group_id member",this.group_id)
             this.$api.group.member({group_id:this.group_id}).then(response =>{
                 if(response.code == 200){
                     this.groupmember = response.data;
+                    console.log(this.groupmember)
                 }
             })
         }

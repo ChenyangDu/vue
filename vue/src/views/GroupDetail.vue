@@ -82,9 +82,9 @@
                   </el-col>
                 </div>
 
-                <el-col :span="8" align="center">
+                <el-col :span="8" align="center" v-if="id==creator.id">
                   <div align="center">
-                    <i style="font-size: 50px;" class="el-icon-setting"></i>
+                    <i @click="memberCtrl" style="font-size: 50px;cursor:pointer" class="el-icon-setting"></i>
                   </div>
                   <p>管 理</p>
                 </el-col>
@@ -120,7 +120,6 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 inviteDialogVisible:false,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
-                circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 showdocuments:[],
                 //团队文档
                 groupdocuments: [],
@@ -177,6 +176,14 @@ import InvitePanel from '../components/group/InvitePanel.vue';
           InvitePanel
         },
         methods:{
+            memberCtrl:function(){
+                this.$router.push({
+                    name: "GroupMember",
+                    params: {
+                        group_id:this.group_id
+                    },
+                });
+            },
             handleCommand: function (command, id) {
                 //console.log(command,id);
                 if (command === "view") this.detail(id);

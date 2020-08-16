@@ -5,7 +5,7 @@
         <br/>
         <el-card @click.native="choose(item.typeNum)">
           <div style="text-align: center">
-            <img :src="item.src" alt="模板缩略图" width="100px" height="80px">
+            <img :src="item.src" alt="模板缩略图" width="100px" height="140px">
             <div>
               <span><b>{{ item.name }}</b></span>
             </div>
