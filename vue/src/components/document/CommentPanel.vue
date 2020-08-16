@@ -10,16 +10,19 @@
         <a-comment
           :author="item.username"
           :content="item.content"
-          :datetime="item.time.substring(0,10)+' '+item.time.substring(11,19)"/>
-<!--        :avatar="item.avatar"-->
+          :datetime="item.time.substring(0,10)+' '+item.time.substring(11,19)"
+          :avatar="item.avatar"
+        />
+
+        <!--          :avatar='this.global.baseUrl + "/image/avatar/show?user_id="+item.user_id'-->
       </a-list-item>
     </a-list>
     <a-comment v-if="this.can_comment">
-<!--      <a-avatar-->
-<!--          slot="avatar"-->
-<!--          src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"-->
-<!--          alt="Han Solo"-->
-<!--      /> -->
+      <a-avatar
+          slot="avatar"
+          :src="myavatar"
+          alt="theAvatar"
+      />
       <div slot="content">
         <a-form-item>
           <a-textarea :rows="4" :value="value" @change="handleChange" />
@@ -53,7 +56,8 @@ export default {
       comments: [],//通过接口获得comments列表
       submitting: false,
       value: '',
-      user_id: ''
+      user_id: '',
+      myavatar: this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id
     };
   },
   created() {
@@ -71,6 +75,9 @@ export default {
       }).then(res => {
         if(res.code === 200) {
           this.comments = res.data
+          for(var comment of _this.comments){
+            comment.avatar = this.global.baseUrl + "/image/avatar/show?user_id="+comment.user_id
+          }
         } else {
           _this.$message({
             message: res.msg,
