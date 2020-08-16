@@ -156,6 +156,7 @@ export default {
   created() {
     // 通过 doc_id 跳转的
     console.log('编辑页')
+    window.addEventListener('beforeunload', this.handleSubmit)
     this.doc_id = parseInt(this.$route.query.doc_id)
     this.user_id = this.$store.state.user.username.id
     console.log('文章id如下：')
@@ -460,7 +461,7 @@ export default {
     handleSubmit() {
       this.$refs.editor.handleSubmit()
     },
-    //监听
+    // 监听
     submitSuccess() {
       this.disabled = true
       this.edit_status = false
@@ -515,6 +516,9 @@ export default {
     if (this.edit_status) {
       this.handleSubmit()
     }
+  },
+  destroyed() {
+    window.removeEventListener('beforeunload', this.handleSubmit)
   }
 }
 </script>
