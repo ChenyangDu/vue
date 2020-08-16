@@ -2,7 +2,7 @@
   <div>
     <br />
     <el-col :span="22" :offset="1">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs >
         <el-tab-pane label="我创建的团队" name="first">
           <br />
           <el-row :gutter="40">
@@ -101,8 +101,9 @@ export default {
             })
             .then((res) => {
               if (res.code === 200) {
+                console.log('创建成功，id为:'+res.data.id);
                 _this.$router.push({
-                  path: "/groupdetail",
+                  name: "GroupDetail",
                   params: {
                     group_id: res.data.id,
                   },

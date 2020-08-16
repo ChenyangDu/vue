@@ -108,29 +108,38 @@
     export default {
         name: "GroupDetail",
         data(){
+            console.log('data函数执行');
             return{
                 fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
+                //用户id
                 id: this.$store.state.user.username.id,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
                 circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
                 showdocuments:[],
-                groupdocuments: null,
-                group_id:null,
-                group_info:null,
+                //团队文档
+                groupdocuments: [],
+                //团队id
+                group_id:this.$route.params.group_id,
+                //团队信息id、name、creator_id
+                group_info:{},
+                //团队成员
                 group_member:[],
+                //团队创建者
                 creator:null,
 
             }
         },
         created() {
             let _this = this;
+            //将团队的id设置为传入的值
             this.group_id = this.$route.params.group_id
-
             //团队基本信息
             this.$api.group.info({
                 group_id:_this.group_id
             }).then(res=>{
+                console.log("group_info获取到了");
+                console.log(res.data);
                 _this.group_info = res.data;
                 _this.avatarUrl = this.global.baseUrl + "/image/avatar/show?user_id=";
                 //团队成员
@@ -138,6 +147,8 @@
                     group_id:_this.group_id
                 }).then(res=>{
                     _this.group_member = res.data
+                    console.log('group_member获取到了');
+                    console.log(_this.group_member);
                     _this.getCreator();
                 })
             })
@@ -147,6 +158,8 @@
             }).then(res=>{
                 if(res.code == 200){
                     _this.groupdocuments = res.data;
+                    console.log('groupdocument');
+                    console.log(_this.groupdocuments);
                 } else {
                     _this.$message({
                         message: res.msg,
@@ -169,7 +182,9 @@
                 for(let member of this.group_member){
                     if(member.id == this.group_info.creator_id){
                         this.creator = member
-                        console.log("creator!!!",this.creator.id)
+                        // console.log("creator!!!",this.creator.id)
+                        console.log('creator获取到了');
+                        console.log(this.creator);
                     }
                 }
             },
