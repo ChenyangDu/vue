@@ -10,7 +10,7 @@
 
           <el-row :gutter="1" class="title-row">
             <el-col :span="8" :push="0">
-              <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" class="title-input"></el-input>
+              <el-input type="text" v-model="doc.name" :disabled="name_disabled" class="title-input"></el-input>
             </el-col>
 
             <div class="edit-au" v-if="edit_au_show">
@@ -25,13 +25,11 @@
               </el-col>
             </div>
 
-
             <div class="favo-au" v-if="favo_au_show">
               <el-col :span="1" :push="4">
                 <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
               </el-col>
             </div>
-
 
             <div class="creator-au" v-if="create_au_show">
               <el-col :span="1" :push="5">
@@ -57,8 +55,6 @@
             </div>
 
           </el-row>
-
-
 
         </el-card>
       </el-col>
