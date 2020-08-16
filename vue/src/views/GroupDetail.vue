@@ -1,7 +1,11 @@
 <template>
   <div>
     <br>
-    <el-row ><el-col :span="10" :push="8"><h1>{{ group_info.name }}</h1></el-col></el-row>
+    <el-row ><el-col :span="24" align="center">
+      <div style="letter-spacing:8px;font-size:20px">
+        <h1>{{ group_info.name }}</h1>
+      </div>
+    </el-col></el-row>
     <el-row >
       <el-col :span="22" :offset="1">
         <el-row :gutter="20">
