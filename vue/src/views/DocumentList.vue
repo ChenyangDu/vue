@@ -167,13 +167,14 @@ export default {
           creator_id: this.$store.state.user.username.id,
           name: "鸡你太美",
           username: "蔡徐坤",
-          last_edit_time: "2020-8-15",
+          last_edit_time: "2020-8-15"
         },
       ],
       id: this.$store.state.user.username.id,
       doc_id: '',
       activeName: "first",
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      iscollect:false
     };
   },
   created: function () {
@@ -181,25 +182,33 @@ export default {
   },
   methods: {
     isCollect: function (id) {
-      let inf = {doc_id:id,user_id:this.id};
-      var that = this;
-      this.$api.document.favoriteinfo(inf).then(response => {
-        if(response.data === 200)
-          return response.data === 'true';
-        // else {
-        //   that.$message({
-        //       // message: response.msg,
-        //       message: "列表为空",
-        //       type: "error",
-        //   })
-        // }
-      }).catch(err => {
-        console.log("判断收藏时捕获到了异常");
-          that.$message({
-            message: err.msg,
-            type: "error",
-          });
-      });
+      return true;
+      // //return !this.iscollect;
+      // let inf = {doc_id:id,user_id:this.id};
+      // var that = this;
+      // this.$api.document.favoriteinfo(inf).then(response => {
+      //   if(response.code === 200)
+      //   {
+      //     // console.log(id+":"+response.data);
+      //     //return response.data;
+      //     that.iscollect = response.data;
+      //   }
+      //   // else {
+      //   //   that.$message({
+      //   //       // message: response.msg,
+      //   //       message: "列表为空",
+      //   //       type: "error",
+      //   //   })
+      //   // }
+      // }).catch(err => {
+      //   console.log("判断收藏时捕获到了异常");
+      //     that.$message({
+      //       message: err.msg,
+      //       type: "error",
+      //     });
+      // });
+      // console.log(this.iscollect);
+      // return this.iscollect;
     },
     isMyDoc: function (id) {
       return id === this.id;
@@ -358,8 +367,8 @@ export default {
 
     handleClick: function () {
       if (this.activeName === "first") this.getOwnList();
-      else if (this.activeName === "second") this.getFavoriteList();
-      else if (this.activeName === "third") this.getRecentList();
+      else if (this.activeName === "second") this.getRecentList();
+      else if (this.activeName === "third") this.getFavoriteList();
     },
 
     getOwnList: function () {
@@ -378,6 +387,9 @@ export default {
           } else {
             that.documents = response.data; // 文档列表
             console.log("获取数据成功");
+                for (const item of this.documents) {
+      console.log(item.id+":"+item.name);
+    }
           }
         })
         .catch((err) => {
