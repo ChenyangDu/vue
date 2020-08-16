@@ -31,27 +31,30 @@
     </el-row>
     <br/>
     <!--展示成员信息-->
-    <el-row :gutter="0">
-      <el-col :span="24" :push="0">
-        <span class="title">协作者</span>
-        <el-divider class="title-divider"></el-divider>
-        <el-table :data="this.memberList" stripe style="width: 100%" :show-header="false" size="mini" :key="Math.random()">
-          <el-table-column prop="name" label="昵称"  width="120"></el-table-column>
-          <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
-          <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
-          <el-table-column prop="operation" label="操作" width="200">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
-                <el-option  label="查看" :value='1'></el-option>
-                <el-option  label="查看/评论" :value='2'></el-option>
-                <el-option  label="查看/评论/编辑" :value='3'></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
-    <br/>
+    <div  v-if="this.group_id > 0">
+      <el-row :gutter="0">
+        <el-col :span="24" :push="0">
+          <span class="title">团队成员</span>
+          <el-divider class="title-divider"></el-divider>
+          <el-table :data="this.memberList" stripe style="width: 100%" :show-header="false" size="mini" :key="Math.random()">
+            <el-table-column prop="name" label="昵称"  width="120"></el-table-column>
+            <el-table-column prop="phone" label="手机号" width="auto"></el-table-column>
+            <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
+            <el-table-column prop="operation" label="操作" width="200">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
+                  <el-option  label="查看" :value='1'></el-option>
+                  <el-option  label="查看/评论" :value='2'></el-option>
+                  <el-option  label="查看/评论/编辑" :value='3'></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <br/>
+    </div>
+
     <!--展示个人信息-->
     <el-row :gutter="0">
       <el-col :span="24" :push="0">
@@ -83,6 +86,10 @@ export default {
     doc_id: {
       type: Number,
       default:1
+    },
+    group_id: {
+      type: Number,
+      default:-1
     }
   },
   data() {
@@ -107,36 +114,34 @@ export default {
     }
   },
   created() {
+    console.log('权限panel',this.group_id)
     this.selfData[0] = this.$store.state.user.username
     this.selfData[0]["authority_type"] = parseInt('3')
+    if (this.group_id > 0) {
+      this.loadMember()
+    }
   },
   methods: {
+    loadMember() {
+      var _this = this
+      this.$api.group.member({
+        group_id: _this.group_id
+      }).then(res => {
+        if (res.code === 200) {
+          _this.memberList = res.data
+          _this.getAuthority()
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      }).catch(failResponse => {})
+    },
     // 通过手机/邮箱搜索
     handleSearch() {
       var _this = this
       console.log('search click')
-      // this.searchResults = [
-      //   {
-      //     id: 1,
-      //     name: 'user_a',
-      //     password: '',
-      //     phone: '123',
-      //     email: '',
-      //     wechat: '',
-      //     qq: '',
-      //     // authority_type:''
-      //   },
-      //   {
-      //     id: 2,
-      //     name: 'user_b',
-      //     password: '',
-      //     phone: '',
-      //     email: '123211@qq.com',
-      //     wechat: '',
-      //     qq: '',
-      //     // authority_type:''
-      //   }
-      // ]
       this.$api.searchModule.searchTheUser({
         key: _this.searchForm.key
       }).then(res => {
@@ -153,7 +158,34 @@ export default {
         }
       }).catch(failResponse => {})
     },
-    //增加权限属性
+    // 请求权限
+    getAuthority() {
+      var _this = this
+      let user_ids = []
+      for(let user of this.memberList){
+        user_ids.push(user.id)
+      }
+      this.$api.authority.authorityUsers({
+        doc_id: _this.doc_id,
+        users: user_ids
+      }).then(res => {
+        if(res.code === 200){
+          _this.addAuthority(res.data)
+        }
+      })
+    },
+    //赋值权限属性
+    addAuthority(auList) {
+      var _this = this
+      var i=0
+      for(let user of this.memberList){
+        console.log(i,auList[i],user.id)
+        user.authority_type = parseInt(auList[i])
+        _this.$set(this.memberList,i,this.memberList[i])
+        i++
+      }
+    },
+    // 显示权限属性
     loadAuthority() {
       var _this = this
       console.log(_this.searchResults)

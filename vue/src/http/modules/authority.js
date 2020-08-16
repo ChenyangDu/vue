@@ -26,3 +26,12 @@ export const setUserAuthority = params => {
     params
   })
 }
+
+// 根据用户id列表，返回权限列表
+export const authorityUsers = params => {
+    return axios({
+      url: '/authority/users',
+      method: 'get',
+      params
+    })
+}

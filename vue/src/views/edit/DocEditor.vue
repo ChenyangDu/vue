@@ -8,7 +8,7 @@
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
 
-          <el-row :gutter="1">
+          <el-row :gutter="1" class="title-row">
             <el-col :span="8" :push="0">
               <el-input type="text" v-model="this.doc.name" :disabled="this.name_disabled" class="title-input"></el-input>
             </el-col>
@@ -51,7 +51,7 @@
 
               <!--权限设置-->
               <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
-                <authority-panel :doc_id="this.doc_id"></authority-panel>
+                <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
               </el-dialog>
 
             </div>
@@ -287,6 +287,7 @@ export default {
         _this.create_au_show = false
         _this.edit_au_show = false
         _this.edit_bar_show = false
+        _this.favo_au_show = true
         // 评论模块由can_comment绑定 为false
       }
     },
@@ -538,6 +539,9 @@ export default {
 }
 .title-card{
   margin-top: 30px;
+}
+.title-row{
+  margin-bottom: 0;
 }
 .content-card{
   margin-top: 30px;
