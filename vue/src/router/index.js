@@ -124,6 +124,11 @@ const router = new VueRouter({
           path: '/noauthority',
           name: 'NoAuthority',
           component: () => import('../views/edit/NoAuthority')
+        },
+        {
+          path: '/model',
+          name: 'Model',
+          component: () => import('../views/Model')
         }]
     },
     {
