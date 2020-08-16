@@ -47,14 +47,14 @@
           <el-col :span="8" :offset="0">
             <div class="block" align="center">
               <el-upload
-                  class="upload-demo"
-                  drag
-                  :action="'http://39.101.200.9:8081//image/avatar/upload?user_id='+this.$store.state.user.username.id"
-                  multiple>
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                      class="avatar-uploader"
+                      :action="'http://39.101.200.9:8081//image/avatar/upload?user_id='+this.$store.state.user.username.id"
+                      :show-file-list="false"
+                      :before-upload="beforeAvatarUpload">
+                <i class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
+              <div>修改个人头像</div>
+              <div >将文件拖到上面，或<strong>点击上传</strong></div>
             </div>
           </el-col>
           <!--信息-->
@@ -136,7 +136,19 @@ export default {
           })
         }
       }).catch(failResponse => {});
-    }
+    },
+      beforeAvatarUpload(file) {
+          const isJPG = file.type === 'image/jpeg';
+          const isLt2M = file.size / 1024 / 1024 < 2;
+
+          if (!isJPG) {
+              this.$message.error('上传头像图片只能是 JPG 格式!');
+          }
+          if (!isLt2M) {
+              this.$message.error('上传头像图片大小不能超过 2MB!');
+          }
+          return isJPG && isLt2M;
+      }
   },
   created() {
     var _this = this
@@ -194,4 +206,30 @@ export default {
     text-align: center;
   }
 </style>
-
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 178px;
+    height: 178px;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
