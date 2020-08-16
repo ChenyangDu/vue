@@ -15,17 +15,16 @@
                 <el-row :gutter="20">
                   <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
-                      <el-card shadow="always" @click.native="detail(item.id)" style="cursor:pointer">
-                        <div class="block">
-                          <div align="center">
-                            <i style="font-size: 100px;" class="el-icon-tickets"></i>
-                          </div>
+                      <div>
+                        <br>
+                        <el-card :body-style="{ padding: '0px' }" shadow="always">
                           <br>
-                          {{item.name}}
-                          {{item.last_edit_time.substring(0,10)}}
-                          {{item.last_edit_time.substring(11,19)}}
-
-                          <div align="right" >
+                          <div align="center">
+                            <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                          </div>
+                          <div style="padding: 14px;">
+                            <span>{{item.name}}</span><br>
+                            <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                             <el-dropdown class="right" @command="handleCommand($event,item.id)">
                               <i class="el-icon-more"></i>
                               <el-dropdown-menu slot="dropdown">
@@ -33,20 +32,24 @@
                                 <el-dropdown-item
                                         icon="el-icon-edit"
                                         command="edit"
-                                        v-if="item.creator_id == id"
+                                        v-if="isMyDoc(item.creator_id)"
                                 >编辑</el-dropdown-item>
                                 <el-dropdown-item
                                         icon="el-icon-delete-solid"
                                         command="del"
-                                        v-if="item.creator_id == id"
+                                        v-if="isMyDoc(item.creator_id)"
                                 >删除</el-dropdown-item>
                                 <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                                <el-dropdown-item icon="el-icon-star-on" command="collect">取消收藏</el-dropdown-item>
                               </el-dropdown-menu>
                             </el-dropdown>
+                            <div class="bottom clearfix">
+                              <i class="el-icon-view"></i> {{item.views}}
+                              <i class="el-icon-chat-dot-square"></i> {{item.comments}}
+                              <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                            </div>
                           </div>
-                        </div>
-                      </el-card>
+                        </el-card>
+                      </div>
                     </el-col>
                   </div>
                   <el-col :span=4 :offset="1">
@@ -163,7 +166,8 @@ import InvitePanel from '../components/group/InvitePanel.vue';
             })
             //团队文档
             this.$api.group.document({
-                "group_id":_this.group_id
+                "group_id":_this.group_id,
+                user_id:_this.id
             }).then(res=>{
                 if(res.code == 200){
                     _this.groupdocuments = res.data;
@@ -181,6 +185,38 @@ import InvitePanel from '../components/group/InvitePanel.vue';
           InvitePanel
         },
         methods:{
+            isCollect: function (id) {
+                return false;
+                // //return !this.iscollect;
+                // let inf = {doc_id:id,user_id:this.id};
+                // var that = this;
+                // this.$api.document.favoriteinfo(inf).then(response => {
+                //   if(response.code === 200)
+                //   {
+                //     // console.log(id+":"+response.data);
+                //     //return response.data;
+                //     that.iscollect = response.data;
+                //   }
+                //   // else {
+                //   //   that.$message({
+                //   //       // message: response.msg,
+                //   //       message: "列表为空",
+                //   //       type: "error",
+                //   //   })
+                //   // }
+                // }).catch(err => {
+                //   console.log("判断收藏时捕获到了异常");
+                //     that.$message({
+                //       message: err.msg,
+                //       type: "error",
+                //     });
+                // });
+                // console.log(this.iscollect);
+                // return this.iscollect;
+            },
+            isMyDoc: function (id) {
+                return id === this.id;
+            },
             memberCtrl:function(){
                 this.$router.push({
                     name: "GroupMember",
@@ -197,6 +233,54 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 else if (command === "share") this.share(id);
                 else if (command === "collect") this.collect(id);
             },
+            collect: function (id) {
+                console.log("collect");
+                var _this = this
+                this.doc_id = id
+                // todo 需要在加载列表时获取收藏信息
+                if(this.isCollect(id)) {
+                    _this.$api.document.favorite({
+                        doc_id: _this.doc.id,
+                        user_id: _this.id,
+                        favorite: false
+                    }).then(res => {
+                        if (res.code === 200) {
+                            _this.$message({
+                                message: '文档已取消收藏',
+                                type: 'success'
+                            })
+                        } else {
+                            _this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            })
+                        }
+                    }).catch(failResponse => {})
+                } else {
+                    _this.$api.document.favorite({
+                        doc_id: _this.doc_id,
+                        user_id: _this.id,
+                        favorite: true
+                    }).then(res => {
+                        if (res.code === 200) {
+                            _this.$message({
+                                message: '文档收藏成功',
+                                type: 'success'
+                            })
+                        } else {
+                            _this.$message({
+                                message: '收藏失败',
+                                type: 'error'
+                            })
+                            _this.$message({
+                                message: res.msg,
+                                type: 'error'
+                            })
+                        }
+                    }).catch(failResponse => {})
+
+                }
+            },
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
                 for(let member of this.group_member){
@@ -212,7 +296,7 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 console.log("点击detail");
                 console.log(id);
                 var _this = this;
-                // 通过doc_id直接跳转
+                // 通过user_id直接跳转
                 console.log("跳转编辑页");
                 _this.$router.push({
                     path: "/docview",
@@ -220,18 +304,6 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                         doc_id: id,
                     },
                 });
-            },
-
-            edit: function (id) {
-              console.log(id);
-              var _this = this;
-              // 通过doc_id直接跳转
-              _this.$router.push({
-                path: "/doceditor",
-                query: {
-                  doc_id: id,
-                },
-              });
             },
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
@@ -288,6 +360,15 @@ import InvitePanel from '../components/group/InvitePanel.vue';
 </style>
 
 <style>
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both;
+  }
 .title {
   align-content: center;
 }
@@ -317,5 +398,9 @@ import InvitePanel from '../components/group/InvitePanel.vue';
   .row-bg {
     padding: 10px 0;
     background-color: #f9fafc;
+  }
+  .right {
+    padding: 0;
+    float: right;
   }
 </style>

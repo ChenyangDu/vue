@@ -14,151 +14,161 @@
 <!--              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>-->
 <!--            </el-col>-->
 <!--          </el-row>-->
-          <el-row :gutter="20">
+          <el-row>
+            <el-col :span="22" offset="1">
+              <el-row :gutter="40">
 
-            <el-col :span="4">
-              <div>
-                <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always" @click.native="handleNewDoc(-1)">
-                  <div align="center">
-                    <i style="font-size: 100px;" class="el-icon-document-add"></i>
-                  </div>
-                  <div style="padding: 14px;">
+                <el-col :span="4">
+                  <div>
                     <br/>
-                    <div  class="bottom clearfix">
+                    <el-card :body-style="{ padding: '0px' }" shadow="always" @click.native="handleNewDoc(-1)" style="cursor:pointer">
                       <br/>
-                    </div>
+                      <div align="center">
+                        <i style="font-size: 100px;" class="el-icon-document-add"></i>
+                      </div>
+                      <div style="padding: 14px;">
+                        <br/>
+                        <div  class="bottom clearfix">
+                          <br/>
+                        </div>
+                      </div>
+                      <br/>
+                    </el-card>
                   </div>
-                </el-card>
-              </div>
-            </el-col>
+                </el-col>
 
-            <el-col :span="4" v-for="item in owndocuments" :key="item.id">
-              <div>
-                <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always">
-                  <div align="center">
-                    <i style="font-size: 100px;" class="el-icon-tickets"></i>
+                <el-col :span="4" v-for="item in owndocuments" :key="item.id">
+                  <div>
+                    <br>
+                    <el-card :body-style="{ padding: '0px' }" shadow="always" >
+                      <br>
+                      <div align="center">
+                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                      </div>
+                      <div style="padding: 14px;">
+                        <span>{{item.name}}</span><br>
+                        <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                          <i class="el-icon-more"></i>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-edit"
+                                    command="edit"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >编辑</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-delete-solid"
+                                    command="del"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >删除</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                        <div class="bottom clearfix">
+                          <i class="el-icon-view"></i> {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                        </div>
+                      </div>
+                    </el-card>
                   </div>
-                  <div style="padding: 14px;">
-                    <span>{{item.name}}</span>
-                    <span class="right">{{item.username}}</span>
-                    <div class="bottom clearfix">
-                      <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                      <el-dropdown class="right" @command="handleCommand($event,item.id)">
-                        <i class="el-icon-more"></i>
-                        <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-delete-solid" command="del">删除</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-star-off"
-                              command="collect"
-                              v-if="!isCollect(item.id)"
-                          >收藏</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-star-on"
-                              command="collect"
-                              v-if="isCollect(item.id)"
-                          >取消收藏</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </el-dropdown>
-                    </div>
-                  </div>
-                </el-card>
-              </div>
+                </el-col>
+              </el-row>
             </el-col>
-
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="我最近浏览的文档" name="second">
 <!--          <h1>我最近浏览的文档</h1>-->
-          <el-row :gutter="20">
-            <el-col :span="4" v-for="item in recentdocuments" :key="item.id">
-              <div>
-                <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always">
-                  <div align="center">
-                    <i style="font-size: 100px;" class="el-icon-tickets"></i>
+          <el-row>
+            <el-col :span="22" offset="1">
+              <el-row :gutter="40">
+                <el-col :span="4" v-for="(item,index) in recentdocuments" :key="item.id">
+                  <div>
+                    <br>
+                    <el-card :body-style="{ padding: '0px' }" shadow="always">
+                      <br>
+                      <div align="center">
+                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                      </div>
+                      <div style="padding: 14px;">
+                        <span>{{item.name}}</span><br>
+                        <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                          <i class="el-icon-more"></i>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-edit"
+                                    command="edit"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >编辑</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-delete-solid"
+                                    command="del"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >删除</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                        <div class="bottom clearfix">
+                          <i class="el-icon-view"></i> {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                        </div>
+                      </div>
+                    </el-card>
                   </div>
-                  <div style="padding: 14px;">
-                    <span>{{item.name}}</span>
-                    <span class="right">{{item.username}}</span>
-                    <div class="bottom clearfix">
-                      <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                      <el-dropdown class="right" @command="handleCommand($event,item.id)">
-                        <i class="el-icon-more"></i>
-                        <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-edit"
-                              command="edit"
-                              v-if="isMyDoc(item.creator_id)"
-                          >编辑</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-delete-solid"
-                              command="del"
-                              v-if="isMyDoc(item.creator_id)"
-                          >删除</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-star-off"
-                              command="collect"
-                              v-if="!isCollect(item.id)"
-                          >收藏</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-star-on"
-                              command="collect"
-                              v-if="isCollect(item.id)"
-                          >取消收藏</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </el-dropdown>
-                    </div>
-                  </div>
-                </el-card>
-              </div>
+                  <br>
+                </el-col>
+              </el-row>
             </el-col>
           </el-row>
+
         </el-tab-pane>
         <el-tab-pane label="我收藏的文档" name="third">
 <!--          <h1>我收藏的文档</h1>-->
-          <el-row :gutter="20">
-            <el-col :span="4" v-for="item in favoritedocuments" :key="item.id">
-              <div>
-                <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always">
-                  <div align="center">
-                    <i style="font-size: 100px;" class="el-icon-tickets"></i>
+          <el-row>
+            <el-col :span="22" offset="1">
+              <el-row :gutter="40">
+                <el-col :span="4" v-for="item in favoritedocuments" :key="item.id">
+                  <div>
+                    <br>
+                    <el-card :body-style="{ padding: '0px' }" shadow="always">
+                      <br>
+                      <div align="center">
+                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                      </div>
+                      <div style="padding: 14px;">
+                        <span>{{item.name}}</span><br>
+                        <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                          <i class="el-icon-more"></i>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-edit"
+                                    command="edit"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >编辑</el-dropdown-item>
+                            <el-dropdown-item
+                                    icon="el-icon-delete-solid"
+                                    command="del"
+                                    v-if="isMyDoc(item.creator_id)"
+                            >删除</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                        <div class="bottom clearfix">
+                          <i class="el-icon-view"></i> {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                        </div>
+                      </div>
+                    </el-card>
                   </div>
-                  <div style="padding: 14px;">
-                    <span>{{item.name}}</span>
-                    <span class="right">{{item.username}}</span>
-                    <div class="bottom clearfix">
-                      <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                      <!-- <el-button type="text" class="button">操作按钮</el-button> -->
-                      <el-dropdown class="right" @command="handleCommand($event,item.id)">
-                        <i class="el-icon-more"></i>
-                        <el-dropdown-menu slot="dropdown">
-                          <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-edit"
-                              command="edit"
-                              v-if="isMyDoc(item.creator_id)"
-                          >编辑</el-dropdown-item>
-                          <el-dropdown-item
-                              icon="el-icon-delete-solid"
-                              command="del"
-                              v-if="isMyDoc(item.creator_id)"
-                          >删除</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
-                          <el-dropdown-item icon="el-icon-star-on" command="collect">取消收藏</el-dropdown-item>
-                        </el-dropdown-menu>
-                      </el-dropdown>
-                    </div>
-                  </div>
-                </el-card>
-              </div>
+                </el-col>
+              </el-row>
             </el-col>
           </el-row>
         </el-tab-pane>
@@ -572,5 +582,10 @@ export default {
 .right {
   padding: 0;
   float: right;
+}
+.el-col-5{
+
+  width: 20%;
+
 }
 </style>
