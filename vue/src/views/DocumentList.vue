@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     isCollect: function (id) {
-      return true;
+      return false;
       // //return !this.iscollect;
       // let inf = {doc_id:id,user_id:this.id};
       // var that = this;

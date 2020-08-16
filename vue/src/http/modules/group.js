@@ -31,3 +31,10 @@ export const document = params => {
         params,
     })
 }
+export const create = data => {
+    return axios({
+        url:'/group/create',
+        method:'post',
+        data
+    })
+}

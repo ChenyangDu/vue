@@ -1,13 +1,14 @@
 <template>
   <div>
     <br>
+    <el-row ><el-col :span="10" :push="8"><h1>{{ group_info.name }}</h1></el-col></el-row>
     <el-row >
       <el-col :span="22" :offset="1">
         <el-row :gutter="20">
             <el-col :span="18"><div >
               <h1>团队文档</h1>
                 <el-row :gutter="20">
-                  <div v-for="(item,i) in groupdocuments">
+                  <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
                       <el-card shadow="always" @click.native="detail(item.id)" style="cursor:pointer">
                         <div class="block">
@@ -45,8 +46,8 @@
 
               <el-row>
                 <el-col :span="24" align="center">
-                  <div class="block">
-                    <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer"></el-avatar>
+                  <div class="block"  @click="memberDetail(creator.id)">
+                    <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer" ></el-avatar>
                     <p>{{creator.name}}</p>
                   </div>
                 </el-col>
@@ -54,7 +55,7 @@
               </el-row>
               <br>
               <el-row>
-                <div v-for="(item,i) in group_member" >
+                <div v-for="(item) in group_member" :key="item.id" @click="memberDetail(item.id)">
                   <el-col :span="8" align="center" v-if="item.id != group_info.creator_id">
                     <el-avatar :size="50" :src="avatarUrl+item.id" style="cursor:pointer"></el-avatar>
                     <p>{{item.name}}</p>
@@ -62,7 +63,7 @@
                 </div>
                 <el-col :span="8" align="center">
                   <div align="center">
-                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline"></i>
+                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline" @click="invite"></i>
                   </div>
                   <p>添加人</p>
                 </el-col>
@@ -152,6 +153,12 @@
                     },
                 });
             },
+            memberDetail:function(id){
+              console.log('点击了用户详情'+id);
+            },
+            invite:function(){
+              console.log('邀请别人');
+            },
             handleNewDoc() {
                 let _this = this;
                 this.$prompt('请输入标题','提示',{
@@ -200,6 +207,9 @@
 </style>
 
 <style>
+.title {
+  align-content: center;
+}
   .el-row {
     margin-bottom: 20px;
 
