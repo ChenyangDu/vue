@@ -5,21 +5,21 @@
 
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我创建的文档" name="first">
-          <el-row :gutter="40">
+<!--          <el-row :gutter="40">-->
 <!--            <el-col :span="8">-->
 <!--              <h1>我创建的文档</h1>-->
 <!--            </el-col>-->
-            <el-col :span="8">
-              <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>
-              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>
-            </el-col>
-          </el-row>
+<!--            <el-col :span="8">-->
+<!--              <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>-->
+<!--              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>-->
+<!--            </el-col>-->
+<!--          </el-row>-->
           <el-row :gutter="20">
 
             <el-col :span="4">
               <div>
                 <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always">
+                <el-card :body-style="{ padding: '0px' }" shadow="always" @click.native="handleNewDoc(-1)">
                   <div align="center">
                     <i style="font-size: 100px;" class="el-icon-document-add"></i>
                   </div>
@@ -260,30 +260,37 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({value}) => {
-        _this.$api.document
-            .create({
-              user_id: this.id,
-              group_id: -1,
-              name: value,
-              type: typeNum,
-              // type: 1
-            })
-            .then((res) => {
-              if (res.code === 200) {
-                _this.$router.push({
-                  path: "/doceditor",
-                  query: {
-                    doc_id: res.data.id,
-                  },
-                });
-              } else {
-                _this.$message({
-                  message: res.msg,
-                  type: "error",
-                });
-              }
-            })
-            .catch((failResponse) => {});
+        if (value === null) {
+          _this.$message({
+            type: 'error',
+            message: '请输入标题'
+          })
+        } else {
+          _this.$api.document
+              .create({
+                user_id: this.id,
+                group_id: -1,
+                name: value,
+                type: typeNum,
+                // type: 1
+              })
+              .then((res) => {
+                if (res.code === 200) {
+                  _this.$router.push({
+                    path: "/doceditor",
+                    query: {
+                      doc_id: res.data.id,
+                    },
+                  });
+                } else {
+                  _this.$message({
+                    message: res.msg,
+                    type: "error",
+                  });
+                }
+              })
+              .catch((failResponse) => {});
+        }
       }).catch(()=>{
         _this.$message({
           type: 'info',
