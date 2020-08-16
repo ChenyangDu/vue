@@ -41,8 +41,10 @@
           <el-table-column prop="email" label="邮箱" width="auto"></el-table-column>
           <el-table-column prop="operation" label="操作" width="200">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.authority_type" placeholder="管理者" disabled>
-                <el-option  label="管理者" value="1"></el-option>
+              <el-select v-model="scope.row.authority_type" placeholder="请选择" disabled>
+                <el-option  label="查看" :value='1'></el-option>
+                <el-option  label="查看/评论" :value='2'></el-option>
+                <el-option  label="管理者" :value='3'></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -66,7 +68,18 @@ export default {
       searchForm: {
         key: ''
       },
-      searchResults: [],
+      searchResults: [
+        {
+          id: '',
+          name: '',
+          password: '',
+          phone: '',
+          email: '',
+          wechat: '',
+          qq: '',
+          authority_type:''
+        }
+      ],
       selfData:[
         {
           id: '',
@@ -83,7 +96,7 @@ export default {
   },
   created() {
     this.selfData[0] = this.$store.state.user.username
-    this.selfData[0]["authority_type"] = '管理员'
+    this.selfData[0]["authority_type"] = parseInt('3')
   },
   methods: {
     // 通过手机/邮箱搜索
@@ -134,17 +147,19 @@ export default {
       console.log(_this.searchResults)
       for (var i=0;i<_this.searchResults.length;i++){
         _this.$api.authority.authority({
-          user_id: _this.user_id,
+          user_id: _this.searchResults[i].id,
           doc_id: _this.doc_id
         }).then(res=>{
           if(res.code === 200) {
             if(res.data.can_edit){
-              _this.searchResults[i]["authority_type"] = 3
+              // _this.searchResults[i]["authority_type"] = parseInt('3')
+              _this.searchResults[i].authority_type = parseInt('3')
             } else if (res.data.can_comment){
-              _this.searchResults[i]["authority_type"] = 2
+              _this.searchResults[i].authority_type = parseInt('2')
             } else if (res.data.can_read) {
-              _this.searchResults[i]["authority_type"] = 1
+              _this.searchResults[i].authority_type = parseInt('1')
             }
+            console.log(_this.searchResults[i])
           } else {
             _this.$message({
               message: res.msg,
@@ -153,7 +168,6 @@ export default {
           }
         }).catch(failResponse => {})
       }
-      console.log(_this.searchResults)
     },
     // 修改权限
     handleEdit(user,index) {
