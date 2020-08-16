@@ -321,7 +321,7 @@ export default {
       var _this = this
       this.doc_id = id
       // todo 需要在加载列表时获取收藏信息
-      if(this.isCollect()) {
+      if(this.isCollect(id)) {
         _this.$api.document.favorite({
           doc_id: _this.doc.id,
           user_id: _this.id,

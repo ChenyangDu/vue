@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-list
-        v-if="comments.length"
+        v-if="comments.length>-1"
         :data-source="comments"
         :header="`共 ${comments.length} 条回复`"
         item-layout="horizontal">
@@ -10,7 +10,7 @@
         <a-comment
           :author="item.username"
           :content="item.content"
-          :datetime="item.time"/>
+          :datetime="item.time.substring(0,10)+' '+item.time.substring(11,19)"/>
 <!--        :avatar="item.avatar"-->
       </a-list-item>
     </a-list>
@@ -56,11 +56,11 @@ export default {
       user_id: ''
     };
   },
+  created() {
+    this.user_id = this.$store.state.user.username.id
+    this.loadComments()
+  },
   methods: {
-    created() {
-      this.loadComments()
-      this.user_id = this.$store.state.user.username.id
-    },
     // 请求评论列表
     loadComments() {
       console.log('评论加载')

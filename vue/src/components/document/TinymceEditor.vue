@@ -38,7 +38,7 @@ export default {
   props: {
     edit_bar_show: {
       type: Boolean,
-      default: true
+      default: false
     },
     doc_id: {
       type: Number,
@@ -100,32 +100,40 @@ export default {
       this.init.toolbar = ''
       this.init.menubar = ''
     }
+    console.log('bar值')
+    console.log(this.edit_bar_show)
     tinymce.init({})
   },
   methods: {
 
     //添加相关的事件，可用的事件参照文档=> https://github.com/tinymce/tinymce-vue => All available events
     //需要什么事件可以自己增加
-    // onClick(e) {
-    //   this.$emit('onClick', e, tinymce)
-    // },
+    onClick(e) {
+      this.$emit('onClick', e, tinymce)
+    },
     //可以添加一些自己的自定义事件
-    // handleSubmit() {
-    //   var _this = this
-    //   console.log(this.myValue)
-    //   this.$api.document.end({
-    //     doc_id: this.doc_id
-    //   }, this.myValue).then(res => {
-    //     if (res.code === 200 ){
-    //       alert("成功!")
-    //     } else {
-    //       _this.$message({
-    //         message: res.msg,
-    //         type: 'error'
-    //       })
-    //     }
-    //   })
-    // }
+    handleSubmit() {
+      var _this = this
+      console.log('提交内容')
+      console.log(this.myValue)
+      console.log('提交内容-完毕')
+      this.$api.document.end({
+        doc_id: _this.doc_id
+      }, _this.myValue).then(res => {
+        if (res.code === 200 ){
+          _this.$message({
+            message: '文章上传成功',
+            type: 'success'
+          })
+          _this.$emit('submitSuccess')
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: 'error'
+          })
+        }
+      })
+    },
     // to_data() {
     //   console.log(this.tinymceHtml)
     //   let Base64 = {
