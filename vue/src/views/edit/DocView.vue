@@ -1,34 +1,27 @@
 <!-- 仅查看文章内容 + 评论 -->
 <template>
-  <div>
+  <div id="fullscreen" class="view-page">
     <!-- 文章标题-->
     <el-row :gutter="0">
       <el-col :span="20" :push="2">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-input class="title-input" type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
-<!--          <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>-->
-<!--          <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>-->
-<!--          <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>-->
-<!--          &lt;!&ndash;分享弹窗&ndash;&gt;-->
-<!--          <el-dialog title="分享" :visible.sync="dialogFormVisible">-->
-<!--            <el-form :model="shareForm">-->
-<!--              <el-form-item label="权限给予：" :label-width="formLabelWidth">-->
-<!--                <el-select v-model="shareForm.type" placeholder="请选择分享的权限">-->
-<!--                  <el-option label="可查看" value="1"></el-option>-->
-<!--                  <el-option label="可查看与评论" value="2"></el-option>-->
-<!--                  <el-option label="可查看与评论与编辑" value="3"></el-option>-->
-<!--                  <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
-<!--                </el-select>-->
-<!--              </el-form-item>-->
-<!--            </el-form>-->
-<!--            <div slot="footer" class="dialog-footer">-->
-<!--              <el-button @click="dialogFormVisible = false">取 消</el-button>-->
-<!--              <el-button type="primary" @click="handleShare">确 定</el-button>-->
-<!--            </div>-->
-<!--          </el-dialog>-->
 
-<!--          <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>-->
-<!--          <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>-->
+          <el-row :gutter="1" class="title-row">
+            <el-col :span="8" :push="0">
+              <el-input class="title-input" type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
+            </el-col>
+
+            <el-col :span="1" :push="8">
+              <div class="btn-fullscreen" @click="handleFullScreen">
+                <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
+                <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
+                <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+                  <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
+                </el-tooltip>
+              </div>
+
+            </el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>
@@ -102,6 +95,7 @@ export default {
       dialogFormVisible: false,
       formLabelWidth:'100px',
       edit_bar_show: false,
+      fullscreen:false,
       shareForm: {
         type: ''
       },
@@ -124,6 +118,33 @@ export default {
     this.getInfo()
   },
   methods: {
+    // 全屏事件
+    handleFullScreen(){
+      let element = document.getElementById("fullscreen");
+      if (this.fullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen();
+        }
+      }
+      this.fullscreen = !this.fullscreen;
+    },
     getInfo() {
       var _this = this
       this.$api.document.info({
@@ -239,12 +260,17 @@ export default {
   position: relative;
   margin-left: 100px;
 }
-.icon-submit,.icon-favorite, .icon-share, .icon-rename{
-  float: right;
+.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen{
   font-size: 24px;
-  position: relative;
-  margin-left: 10px;
   border: white;
 }
-
+.btn-fullscreen {
+  /*height: 30px;*/
+  /*width: 30px;*/
+  /*text-align: center;*/
+  /*border-radius: 15px;*/
+  /*cursor: pointer;*/
+  /*position: relative;*/
+  transform: rotate(45deg);
+}
 </style>

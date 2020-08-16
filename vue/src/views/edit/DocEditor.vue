@@ -1,11 +1,10 @@
 <template>
-  <div class="doc-editor-page">
-    <!--todo 编辑页面关闭 保存 修改is_editing-->
+  <div class="doc-editor-page" id="fullscreen">
     <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>
 
     <!-- 文章标题-->
     <el-row :gutter="0">
-      <el-col :span="20" :push="2">
+      <el-col :span="22" :push="1">
         <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
 
           <el-row :gutter="1" class="title-row">
@@ -38,7 +37,7 @@
               <el-col :span="1" :push="6">
                 <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
               </el-col>
-              <el-col :span="1" :push="9">
+              <el-col :span="1" :push="7">
                 <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
               </el-col>
 
@@ -51,8 +50,17 @@
               <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
                 <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
               </el-dialog>
-
             </div>
+
+            <el-col :span="1" :push="8">
+              <div class="btn-fullscreen" @click="handleFullScreen">
+                <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
+                <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
+                <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+                  <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
+                </el-tooltip>
+              </div>
+            </el-col>
 
           </el-row>
 
@@ -61,7 +69,7 @@
     </el-row>
     <!-- 编辑区 -->
     <el-row :gutter="0">
-      <el-col :span="20" :push="2">
+      <el-col :span="22" :push="1">
         <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">
           <el-form class="edit-container" >
             <el-form-item>
@@ -80,7 +88,7 @@
     </el-row>
     <!-- 评论区   -->
     <el-row :gutter="0">
-      <el-col :span="20" :push="2">
+      <el-col :span="22" :push="1">
         <el-card class="comment-card">
           <comment-panel :doc_id=this.doc_id :can_comment="this.authority.can_comment"></comment-panel>
         </el-card>
@@ -136,6 +144,7 @@ export default {
       dialogFormVisible: false,
       authorityFormVisible: false,
       formLabelWidth:'100px',
+      fullscreen:false,
       //存获取的信息
       authority: {
         authority_userKey: {
@@ -162,6 +171,33 @@ export default {
     this.getAuthority()
   },
   methods: {
+    // 全屏事件
+    handleFullScreen(){
+      let element = document.getElementById("fullscreen");
+      if (this.fullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+          document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } else {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.webkitRequestFullScreen) {
+          element.webkitRequestFullScreen();
+        } else if (element.mozRequestFullScreen) {
+          element.mozRequestFullScreen();
+        } else if (element.msRequestFullscreen) {
+          // IE11
+          element.msRequestFullscreen();
+        }
+      }
+      this.fullscreen = !this.fullscreen;
+    },
     // 请求文章-用户权限信息
     getAuthority() {
       var _this = this
@@ -545,27 +581,17 @@ export default {
 .comment-card{
   margin-top: 30px;
 }
-.icon-delete{
-  /*float: right;*/
+.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen{
   font-size: 24px;
-  /*position: relative;*/
-  /*margin-left: 100px;*/
   border: white;
 }
-.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority{
-  /*float: right;*/
-  font-size: 24px;
+.btn-fullscreen {
+  /*height: 30px;*/
+  /*width: 30px;*/
+  /*text-align: center;*/
+  /*border-radius: 15px;*/
+  /*cursor: pointer;*/
   /*position: relative;*/
-  border: white;
-  /*margin-left: 10px;*/
-}
-.icons{
-  /*display: inline;*/
-  /*position: relative;*/
-  /*bottom: 40px;*/
-}
-.title-input{
-  /*width: 10px;*/
-  /*display: inline;*/
+  transform: rotate(45deg);
 }
 </style>
