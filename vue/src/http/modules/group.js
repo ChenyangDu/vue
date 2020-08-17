@@ -54,3 +54,11 @@ export const drop = params => {
     params
   })
 }
+
+export const dismiss = params => {
+  return axios({
+    url: '/group/dismiss',
+    method: 'post',
+    params
+  })
+}

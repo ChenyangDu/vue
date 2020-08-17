@@ -111,11 +111,17 @@
                   </div>
                   <p>添 加</p>
                 </el-col>
-                <el-col :span="8" align="center">
+                <el-col :span="8" align="center" v-if="!(isMyGroup)">
                   <div align="center">
                     <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="drop"></i>
                   </div>
                   <p>退 出</p>
+                </el-col>
+                <el-col :span="8" align="center" v-if="isMyGroup">
+                  <div align="center">
+                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="drop"></i>
+                  </div>
+                  <p>解 散</p>
                 </el-col>
               </el-row>
             </div></el-col>
@@ -229,6 +235,9 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
         methods:{
             isMyDoc: function (id) {
                 return id === this.id;
+            },
+            isMyGroup() {
+              return this.id === this.group_info.creator_id
             },
             memberCtrl:function(){
                 this.$router.push({
@@ -430,6 +439,31 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
                 }
               });
 
+            },
+            dismiss() {
+              var _this = this
+              this.$alert('确定要解散团队？', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$api.group.dismiss({
+                    user_id : _this.id,
+                    group_id: _this.group_id
+                  }).then(res=>{
+                    if( res.code === 200) {
+                      _this.$message({
+                        message: '已成功解散团队',
+                        type: 'success'
+                      })
+                      _this.$router.replace('/grouplist')
+                    } else {
+                      _this.$message({
+                        message: res.msg,
+                        type: 'error'
+                      })
+                    }
+                  })
+                }
+              });
             },
             handleNewDoc() {
                 let _this = this;
