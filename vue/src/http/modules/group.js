@@ -80,9 +80,9 @@ export const reply_invite = params => {
     })
 }
 
-export const reply = params => {
+export const reply_apply = params => {
     return axios({
-        url : '/group/reply',
+        url : '/group/reply/apply',
         method: 'post',
         params
     })

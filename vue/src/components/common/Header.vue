@@ -42,10 +42,10 @@
                   placement="bottom"
                 >
                   <span class="btn-bell-badge" v-if="notread"></span>
-                  <el-popover class="bell" placement="bottom" width="500" trigger="click">
+                  <el-popover class="bell" placement="bottom" width="600" trigger="click">
                     <el-tabs type="border-card">
                       <el-tab-pane label="已读">
-                        <el-table :data="tableData" stripe>
+                        <el-table :data="tableData" height="250" stripe>
                           <el-table-column prop="time" label="时间" width="180"></el-table-column>
                           <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
                           <el-table-column prop="operate" label="操作" width="180">
@@ -57,7 +57,7 @@
                         </el-table>
                       </el-tab-pane>
                       <el-tab-pane label="未读">
-                        <el-table :data="de_tableData" stripe>
+                        <el-table :data="de_tableData" height="250" stripe>
                           <el-table-column prop="time" label="时间" width="180"></el-table-column>
                           <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
                           <el-table-column prop="operate" label="操作" width="180">
@@ -236,7 +236,7 @@ export default {
       }
       if (flag.message_type === 2) {
         this.$api.group
-          .reply({
+          .reply_apply({
             user_id: flag.sender_id,
             group_id: flag.group_id,
             msg_id: flag.id,
@@ -287,7 +287,7 @@ export default {
       }
       if (flag.message_type === 2) {
         this.$api.group
-          .reply({
+          .reply_apply({
             user_id: flag.sender_id,
             group_id: flag.group_id,
             msg_id: flag.id,
@@ -332,97 +332,100 @@ export default {
         .catch((failResponse) => {});
     },
 
-    f5: function () {
-      var _this = this;
-      this.$api.message
-        .user({ user_id: _this.$store.state.user.username.id })
-        .then((res) => {
-          //console.log("消息通知已上线");
-          if (res.code === 200) {
-            if (res.have_read === true) {
-              this.tableData = res.data;
-              for (let flag of this.de_tableData) {
-                switch (flag.message_type) {
-                  case 0:
-                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
-                    break;
-                  case 1:
-                    flag.message_a = `${flag.group_name}向你发出邀请`;
-                    break;
-                  case 2:
-                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
-                    break;
-                  case 3:
-                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
-                    break;
-                  case 4:
-                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
-                    break;
-                  case 5:
-                    flag.message_a = `${flag.group_name}同意了你的申请`;
-                    break;
-                  case 6:
-                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
-                    break;
-                  case 7:
-                    flag.message_a = `你已被踢出${flag.group_name}`;
-                    break;
-                  case 8:
-                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
-                    break;
-                  case 9:
-                    flag.message_a = `${flag.group_name}已解散`;
-                    break;
+    f5: function (){
+        var _this = this;
+        this.$api.message
+            .user({ user_id: _this.$store.state.user.username.id })
+            .then((res) => {
+                //console.log("消息通知已上线");
+                if (res.code === 200) {
+                    this.tableData = [];
+                    this.de_tableData = [];
+                    console.log("所有",res.data)
+                    for (let flag of res.data) {
+                        console.log(flag)
+                        if(flag.have_read === true){
+                            switch (flag.message_type) {
+                                case 0:
+                                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                                    break;
+                                case 1:
+                                    flag.message_a = `${flag.group_name}向你发出邀请`;
+                                    break;
+                                case 2:
+                                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                                    break;
+                                case 3:
+                                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                                    break;
+                                case 4:
+                                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                                    break;
+                                case 5:
+                                    flag.message_a = `${flag.group_name}同意了你的申请`;
+                                    break;
+                                case 6:
+                                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                                    break;
+                                case 7:
+                                    flag.message_a = `你已被踢出${flag.group_name}`;
+                                    break;
+                                case 8:
+                                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                                    break;
+                                case 9:
+                                    flag.message_a = `${flag.group_name}已解散`;
+                                    break;
+                            }
+                            this.tableData.push(flag);
+                        }else {
+                            switch (flag.message_type) {
+                                case 0:
+                                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                                    break;
+                                case 1:
+                                    flag.message_a = `${flag.group_name}向你发出邀请`;
+                                    break;
+                                case 2:
+                                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                                    break;
+                                case 3:
+                                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                                    break;
+                                case 4:
+                                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                                    break;
+                                case 5:
+                                    flag.message_a = `${flag.group_name}同意了你的申请`;
+                                    break;
+                                case 6:
+                                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                                    break;
+                                case 7:
+                                    flag.message_a = `你已被踢出${flag.group_name}`;
+                                    break;
+                                case 8:
+                                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                                    break;
+                                case 9:
+                                    flag.message_a = `${flag.group_name}已解散`;
+                                    break;
+                            }
+                            this.de_tableData.push(flag)
+                        }
+                    }
+                    console.log("已读",this.tableData)
+                    console.log("未读",this.de_tableData)
+
+                } else {
+                    _this.$message({
+                        message: res.msg,
+                        type: "error",
+                    });
                 }
-              }
-            } else {
-              this.de_tableData = res.data;
-              //console.log(this.de_tableData)
-              for (let flag of this.de_tableData) {
-                //notread+=1
-                switch (flag.message_type) {
-                  case 0:
-                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
-                    break;
-                  case 1:
-                    flag.message_a = `${flag.group_name}向你发出邀请`;
-                    break;
-                  case 2:
-                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
-                    break;
-                  case 3:
-                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
-                    break;
-                  case 4:
-                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
-                    break;
-                  case 5:
-                    flag.message_a = `${flag.group_name}同意了你的申请`;
-                    break;
-                  case 6:
-                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
-                    break;
-                  case 7:
-                    flag.message_a = `你已被踢出${flag.group_name}`;
-                    break;
-                  case 8:
-                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
-                    break;
-                  case 9:
-                    flag.message_a = `${flag.group_name}已解散`;
-                    break;
-                }
-              }
-            }
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: "error",
-            });
-          }
-        })
-        .catch((failResponse) => {});
-    },
+            })
+            .catch((failResponse) => {});
+    }
   },
 
   // 初始化页面完成后，对页面可见区域宽度进行判定，如果页面宽度小于1500，则触发 collapseChage 方法。
@@ -443,99 +446,11 @@ export default {
       this.userid = this.$store.state.user.username.id;
       this.userAvator =
         this.global.baseUrl +
-        "image/avator/show?user_id=" +
+        "/image/avatar/show?user_id=" +
         this.$store.state.user.username.id;
     }
 
-    var _this = this;
-    this.$api.message
-      .user({ user_id: _this.$store.state.user.username.id })
-      .then((res) => {
-        //console.log("消息通知已上线");
-        if (res.code === 200) {
-          if (res.have_read === true) {
-            this.tableData = res.data;
-            for (let flag of this.tableData) {
-              switch (flag.message_type) {
-                case 0:
-                  flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
-                  break;
-                case 1:
-                  flag.message_a = `${flag.group_name}向你发出邀请`;
-                  break;
-                case 2:
-                  flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
-                  break;
-                case 3:
-                  flag.message_a = `${flag.sender_name}同意了你的邀请`;
-                  break;
-                case 4:
-                  flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
-                  break;
-                case 5:
-                  flag.message_a = `${flag.group_name}同意了你的申请`;
-                  break;
-                case 6:
-                  flag.message_a = `${flag.group_name}拒绝了你的申请`;
-                  break;
-                case 7:
-                  flag.message_a = `你已被踢出${flag.group_name}`;
-                  break;
-                case 8:
-                  flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
-                  break;
-                case 9:
-                  flag.message_a = `${flag.group_name}已解散`;
-                  break;
-              }
-            }
-          } else {
-            this.de_tableData = res.data;
-            //console.log(this.de_tableData)
-            for (let flag of this.de_tableData) {
-              //notread+=1
-              switch (flag.message_type) {
-                case 0:
-                  flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
-                  break;
-                case 1:
-                  flag.message_a = `${flag.group_name}向你发出邀请`;
-                  break;
-                case 2:
-                  flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
-                  break;
-                case 3:
-                  flag.message_a = `${flag.sender_name}同意了你的邀请`;
-                  break;
-                case 4:
-                  flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
-                  break;
-                case 5:
-                  flag.message_a = `${flag.group_name}同意了你的申请`;
-                  break;
-                case 6:
-                  flag.message_a = `${flag.group_name}拒绝了你的申请`;
-                  break;
-                case 7:
-                  flag.message_a = `你已被踢出${flag.group_name}`;
-                  break;
-                case 8:
-                  flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
-                  break;
-                case 9:
-                  flag.message_a = `${flag.group_name}已解散`;
-                  break;
-              }
-            }
-          }
-        } else {
-          _this.$message({
-            message: res.msg,
-            type: "error",
-          });
-        }
-      })
-      .catch((failResponse) => {});
+    this.f5();
     // bus.$on("login-event", () => {
     //   console.log("home接受到了消息");
     //   this.isLogin = true;
