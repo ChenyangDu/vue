@@ -46,7 +46,7 @@
         data() {
             return {
                 user_id:this.$store.state.user.username.id,
-                group_id:this.$route.params.group_id,
+                group_id:'',
                 groupmember:[],
                 avatarPath : this.global.baseUrl + '/image/avatar/show'
             }
@@ -60,12 +60,14 @@
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
-                this.$api.group.kick({user_id:user_id,group_id:this.group_id}).then(res => {
+                _this.$api.group.kick({user_id:user_id,group_id:this.group_id}).then(res => {
                   if (res.code === 200) {
                     _this.$message({
                       message: '已成功移除该成员',
                       type: 'success'
                     })
+                    console.log('已移除')
+                    _this.reload()
                   }else {
                     _this.$message({
                       message: res.msg,
@@ -81,11 +83,28 @@
               });
 
             }
+          ,
+          reload(){
+            var _this = this
+            console.log('重新加载')
+            this.$api.group.member({group_id:this.group_id})
+                .then(response =>{
+                  if(response.code === 200){
+                    _this.groupmember = response.data
+                    console.log(_this.groupmember)
+                  } else {
+                    _this.$message({
+                      message: response.msg,
+                      type: 'error'
+                    })
+                  }
+                })
+          }
         },
         created() {
           var _this = this
           if((Object.keys(this.$route.params).length === 0)){
-            this.group_id = this.$store.state.groupNumber
+            _this.group_id = this.$store.state.groupNumber
           } else {
             _this.group_id = this.$route.params.group_id
             _this.$store.commit('toDetail',_this.group_id)
