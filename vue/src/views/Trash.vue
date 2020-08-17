@@ -1,10 +1,16 @@
 <template>
   <div>
     <br/>
+    <div style="height: 55px">
+      <el-col offset="20">
+
+        <el-button type="danger" @click="clearTrash" class="clearButton">清空回收站</el-button>
+      </el-col>
+    </div>
     <el-col :span="22" offset="1">
-      <el-tabs value="first">
-        <el-tab-pane label="回收站" name="first">
-          <el-button type="primary" round @click="clearTrash" class="clearButton">清空回收站</el-button>
+<!--      <el-tabs value="first">-->
+<!--        <el-tab-pane label="回收站" name="first">-->
+
           <el-row>
             <el-col :span="22" offset="1">
               <el-row :gutter="40">
@@ -40,8 +46,8 @@
               </el-row>
             </el-col>
           </el-row>
-        </el-tab-pane>
-      </el-tabs>
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
 
     </el-col>
   </div>
@@ -227,6 +233,7 @@ export default {
 .clearButton{
   /*position: relative;*/
   /*float: right;*/
+  /*right: 100px;*/
   /*bottom: 40px;*/
 }
 .el-row {
