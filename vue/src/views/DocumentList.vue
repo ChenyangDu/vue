@@ -258,29 +258,29 @@ export default {
           })
         } else {
           _this.$api.document
-              .create({
-                user_id: this.id,
-                group_id: -1,
-                name: value,
-                type: typeNum,
-                // type: 1
-              })
-              .then((res) => {
-                if (res.code === 200) {
-                  _this.$router.push({
-                    path: "/doceditor",
-                    query: {
-                      doc_id: res.data.id,
-                    },
-                  });
-                } else {
-                  _this.$message({
-                    message: res.msg,
-                    type: "error",
-                  });
-                }
-              })
-              .catch((failResponse) => {});
+            .create({
+              user_id: this.id,
+              group_id: -1,
+              name: value,
+              type: typeNum,
+              // type: 1
+            })
+            .then((res) => {
+              if (res.code === 200) {
+                _this.$router.push({
+                  path: "/doceditor",
+                  query: {
+                    doc_id: res.data.id,
+                  },
+                });
+              } else {
+                _this.$message({
+                  message: res.msg,
+                  type: "error",
+                });
+              }
+            })
+            .catch((failResponse) => {});
         }
       }).catch(()=>{
         _this.$message({
@@ -288,8 +288,6 @@ export default {
           message: '取消输入'
         })
       })
-
-
     },
     handleCommand: function (command, id) {
       //console.log(command,id);
