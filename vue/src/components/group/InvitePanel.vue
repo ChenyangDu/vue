@@ -2,20 +2,17 @@
   <div>
     <el-row>
       <div style="margin-top: 15px;">
-        <el-input placeholder="请输入内容" v-model="keyword" class="input-with-select">
+        <el-input placeholder="输入 手机号/邮箱号 搜索用户" v-model="keyword" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </div>
     </el-row>
     <el-row>
       <el-table :data="users" stripe style="width: 100%">
-<!--        <el-table-column fixed prop="create_date" label="注册日期" width="150"></el-table-column>-->
         <el-table-column prop="name" label="昵称" width="150"></el-table-column>
-        <el-table-column prop="email" label="邮箱" width="150"></el-table-column>
-        <el-table-column prop="phone" label="电话" width="150"></el-table-column>
-<!--        <el-table-column prop="wechat" label="微信" width="300"></el-table-column>-->
-<!--        <el-table-column prop="qq" label="qq" width="120"></el-table-column>-->
-        <el-table-column >
+        <el-table-column prop="email" label="邮箱" width=auto></el-table-column>
+        <el-table-column prop="phone" label="电话" width=auto></el-table-column>
+        <el-table-column label="操作" width="150">
           <template slot-scope="scope">
             <el-button @click="invite(scope.row.id)" type="text" size="small">邀请</el-button>
           </template>

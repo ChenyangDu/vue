@@ -21,3 +21,12 @@ export const searchDoc = params => {
     params
   })
 }
+
+// 根据关键字搜索团队
+export const searchGroup = params => {
+  return axios({
+    url: '/search/group',
+    method: 'get',
+    params
+  })
+}

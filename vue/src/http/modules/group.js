@@ -47,6 +47,14 @@ export const invite = params => {
     })
 }
 
+export const applyGroup = params => {
+  return axios({
+    url: '/group/apply',
+    method: 'post',
+    params
+  })
+}
+
 export const drop = params => {
   return axios({
     url: '/group/drop',

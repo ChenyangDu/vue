@@ -22,7 +22,7 @@
             </div>
 
             <el-col :span="8">
-              <el-card shadow="always" @click.native="test" style="cursor:pointer">
+              <el-card shadow="always" @click.native="applyGroup" style="cursor:pointer">
                 <!--              <div align="center">-->
                 <i style="font-size: 15px;" class="el-icon-circle-plus"></i>
                 加入团队
@@ -63,12 +63,18 @@
         </el-tab-pane>
       </el-tabs>
     </el-col>
+    <el-dialog  title="申请加入团队" :visible.sync="applyDialogVisible">
+      <apply-panel></apply-panel>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
+import ApplyPanel from "@/components/group/ApplyPanel";
 export default {
   name: "GroupList",
+  components: { ApplyPanel },
   methods: {
     detail: function (id) {
       this.$router.push("/groupdocumentlist");
@@ -124,11 +130,16 @@ export default {
           });
         });
     },
+    applyGroup() {
+      console.log('申请加入团队')
+      this.applyDialogVisible = true
+    }
   },
   data: function () {
     return {
       joined_groups: [],
       created_groups: [],
+      applyDialogVisible: false
     };
   },
   created() {
