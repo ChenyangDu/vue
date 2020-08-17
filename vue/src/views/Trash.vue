@@ -127,51 +127,69 @@ export default {
     clearTrash: function () {
       var that = this;
       console.log("清空回收站");
-      this.$alert('确定要清空回收站吗？', '提示', {
+      this.$confirm('此操作将永久删除回收站内的文件，是否继续?', '提示', {
         confirmButtonText: '确定',
-        callback: action => {
-          that.documents.forEach(function (value, key, arr) {
-            that.del(value.id);
-          });
-          that.documents = [];
-          that.$message({
-            message: '回收站已清空',
-            type: 'success'
-          })
-        }
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        that.documents.forEach(function (value, key, arr) {
+          that.del(value.id);
+        });
+        that.documents = [];
+        that.$message({
+          message: '已成功清空回收站',
+          type: 'success'
+        })
+      }).catch(() => {
+        that.$message({
+          message: '已取消清空回收站',
+          type: 'info',
+        });
       });
-
     },
     del: function (id) {
       //console.log(id);
       let inf = { doc_id: id, user_id: this.id };
       var that = this;
-      this.$api.document
-        .remove(inf)
-        .then((response) => {
-          if (response.code === 400) {
-            that.$message({
-              // message: response.msg,
-              message: "列表为空",
-              type: "error",
-            });
-            console.log("返回了400");
-          } else {
-            that.$message({
-              message: '彻底删除成功',
-              type: 'success'
+
+      this.$confirm('此操作将永久删除该文件，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$api.document
+            .remove(inf)
+            .then((response) => {
+              if (response.code === 400) {
+                that.$message({
+                  // message: response.msg,
+                  message: "列表为空",
+                  type: "error",
+                });
+                console.log("返回了400");
+              } else {
+                that.$message({
+                  message: '已彻底删除该文件',
+                  type: 'success'
+                })
+                console.log("彻底删除成功");
+                that.getTrashList();
+              }
             })
-            console.log("彻底删除成功");
-            that.getTrashList();
-          }
-        })
-        .catch((err) => {
-          console.log("捕获到了异常");
-          that.$message({
-            message: err.msg,
-            type: "error",
-          });
+            .catch((err) => {
+              console.log("捕获到了异常");
+              that.$message({
+                message: err.msg,
+                type: "error",
+              });
+            });
+      }).catch(() => {
+        that.$message({
+          message: '已取消彻底删除该文件',
+          type: 'info',
         });
+      });
+
     },
   },
   created: function () {

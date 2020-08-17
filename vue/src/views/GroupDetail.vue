@@ -119,7 +119,7 @@
                 </el-col>
                 <el-col :span="8" align="center" v-if="isMyGroup">
                   <div align="center">
-                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="drop"></i>
+                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="dismiss"></i>
                   </div>
                   <p>解 散</p>
                 </el-col>
@@ -416,53 +416,65 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             },
             drop() {
               var _this = this
-              this.$alert('确定要退出团队？', '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$api.group.drop({
-                    user_id : _this.id,
-                    group_id: _this.group_id
-                  }).then(res=>{
-                    if( res.code === 200) {
-                      _this.$message({
-                        message: '已成功退出团队',
-                        type: 'success'
-                      })
-                      _this.$router.replace('/grouplist')
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                }
-              });
 
+              this.$confirm('此操作将退出团队，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$api.group.drop({
+                  user_id : _this.id,
+                  group_id: _this.group_id
+                }).then(res=>{
+                  if( res.code === 200) {
+                    _this.$message({
+                      message: '已成功退出团队',
+                      type: 'success'
+                    })
+                    _this.$router.replace('/grouplist')
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                })
+              }).catch(() => {
+                _this.$message({
+                  type: 'info',
+                  message: '已取消退出团队'
+                });
+              });
             },
             dismiss() {
               var _this = this
-              this.$alert('确定要解散团队？', '提示', {
+              this.$confirm('此操作将解散团队，是否继续?', '提示', {
                 confirmButtonText: '确定',
-                callback: action => {
-                  this.$api.group.dismiss({
-                    user_id : _this.id,
-                    group_id: _this.group_id
-                  }).then(res=>{
-                    if( res.code === 200) {
-                      _this.$message({
-                        message: '已成功解散团队',
-                        type: 'success'
-                      })
-                      _this.$router.replace('/grouplist')
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                }
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                _this.$api.group.dismiss({
+                  user_id : _this.id,
+                  group_id: _this.group_id
+                }).then(res=>{
+                  if( res.code === 200) {
+                    _this.$message({
+                      message: '已成功解散团队',
+                      type: 'success'
+                    })
+                    _this.$router.replace('/grouplist')
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                })
+              }).catch(() => {
+                _this.$message({
+                  type: 'info',
+                  message: '已取消解散团队'
+                });
               });
             },
             handleNewDoc() {
