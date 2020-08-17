@@ -32,34 +32,73 @@
 
         <!--从这里开始是登录后才能看到的消息提示和用户头像-->
         <div v-if="isLogin">
-          <!--这里是消息提示-->
-          <div class="btn-bell">
-            <el-tooltip
-              effect="light"
-              :content="message?`有${message}条未读消息`:`消息中心`"
-              placement="bottom"
-            >
-              <router-link to="/tabs">
-                <i class="el-icon-message-solid"></i>
-              </router-link>
-            </el-tooltip>
-            <!-- 通过对message的判定，来决定是否显示小红点 -->
-            <span class="btn-bell-badge" v-if="message"></span>
-          </div>
-          <!--消息提示到此结束-->
-
-          <!--这里是用户头像-->
-          <div class="avator">
-            <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
-              <div class="block"><el-avatar :size="50" :src="userAvator"></el-avatar></div>
-              <!-- slot设置下拉列表 -->
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item  command="myinfo">你好,{{username}}</el-dropdown-item>
-                <el-dropdown-item  command="loginout">退出登录</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-          <!--用户头像到此结束-->
+          <el-row>
+            <el-col :span="1">
+              <!--这里是消息提示-->
+              <div class="btn-bell">
+                <el-tooltip
+                  effect="light"
+                  :content="notread?`有${notread}条未读消息`:`消息中心`"
+                  placement="bottom"
+                >
+                  <span class="btn-bell-badge" v-if="notread"></span>
+                  <el-popover class="bell" placement="bottom" width="500" trigger="click">
+                    <el-tabs type="border-card">
+                      <el-tab-pane label="已读">
+                        <el-table :data="tableData" stripe>
+                          <el-table-column prop="time" label="时间" width="180"></el-table-column>
+                          <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
+                          <el-table-column prop="operate" label="操作" width="180">
+                            <template slot-scope="scope">
+                              <p v-if="scope.row.operate=='2'">已同意</p>
+                              <p v-if="scope.row.operate=='3'">已拒绝</p>
+                            </template>
+                          </el-table-column>
+                        </el-table>
+                      </el-tab-pane>
+                      <el-tab-pane label="未读">
+                        <el-table :data="de_tableData" stripe>
+                          <el-table-column prop="time" label="时间" width="180"></el-table-column>
+                          <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
+                          <el-table-column prop="operate" label="操作" width="180">
+                            <template slot-scope="scope">
+                              <p v-if="scope.row.operate=='1'">
+                                <el-button @click="agree(scope.row)" type="text" size="small">同意</el-button>
+                                <el-button @click="disagree(scope.row)" type="text" size="small">拒绝</el-button>
+                              </p>
+                              <p v-if="scope.row.operate=='0'">
+                                <el-button @click="read(scope.row)" type="text" size="small">标记已读</el-button>
+                              </p>
+                            </template>
+                          </el-table-column>
+                        </el-table>
+                      </el-tab-pane>
+                    </el-tabs>
+                    <el-button slot="reference" class="el-icon-message-solid"></el-button>
+                  </el-popover>
+                </el-tooltip>
+                <!-- 通过对message的判定，来决定是否显示小红点 -->
+                <span class="btn-bell-badge" v-if="message"></span>
+              </div>
+              <!--消息提示到此结束-->
+            </el-col>
+            <el-col :span="12" offset="10">
+              <!--这里是用户头像-->
+              <div class="avator">
+                <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
+                  <div class="block">
+                    <el-avatar :size="50" :src="userAvator"></el-avatar>
+                  </div>
+                  <!-- slot设置下拉列表 -->
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item command="myinfo">你好,{{username}}</el-dropdown-item>
+                    <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </div>
+              <!--用户头像到此结束-->
+            </el-col>
+          </el-row>
         </div>
         <!--右边功能区到此结束-->
       </div>
@@ -70,6 +109,7 @@
 <script>
 // 加载bus实现组件通信
 import bus from "../../utils/bus";
+// import axios from ""
 
 export default {
   data() {
@@ -79,9 +119,15 @@ export default {
       userid: 0,
       username: "还没有用户登录",
       userAvator:
-        this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id,
+        this.global.baseUrl +
+        "/image/avatar/show?user_id=" +
+        this.$store.state.user.username.id,
       message: 2,
       isLogin: false,
+
+      tableData: null,
+      de_tableData: null,
+      notread: 0,
     };
   },
 
@@ -113,7 +159,7 @@ export default {
         this.$router.push("/login");
       } else if (command == "myinfo") {
         //this.$router.push({path:"/personalinformation",params:{user_id:this.$store.state.user.username.id}});
-        this.$router.push('/personalinformation');
+        this.$router.push("/personalinformation");
       }
     },
 
@@ -162,6 +208,221 @@ export default {
     checkLogin: function () {
       return localStorage.getItem("username") !== null;
     },
+
+    agree: function (flag) {
+      if (flag.message_type === 1) {
+        this.$api.group
+          .reply_invite({
+            user_id: flag.receiver_id,
+            group_id: flag.group_id,
+            msg_id: flag.id,
+            yesno: true,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              this.f5();
+              _this.$message({
+                message: "已同意",
+                type: "success",
+              });
+            } else {
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
+      }
+      if (flag.message_type === 2) {
+        this.$api.group
+          .reply({
+            user_id: flag.sender_id,
+            group_id: flag.group_id,
+            msg_id: flag.id,
+            yesno: true,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              this.f5();
+              _this.$message({
+                message: "已同意",
+                type: "success",
+              });
+            } else {
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
+      }      
+    },
+
+    disagree: function (flag) {
+      if (flag.message_type === 1) {
+        this.$api.group
+          .reply_invite({
+            user_id: flag.receiver_id,
+            group_id: flag.group_id,
+            msg_id: flag.id,
+            yesno: false,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              this.f5();
+              _this.$message({
+                message: "已拒绝",
+                type: "success",
+              });
+            } else {
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
+      }
+      if (flag.message_type === 2) {
+        this.$api.group
+          .reply({
+            user_id: flag.sender_id,
+            group_id: flag.group_id,
+            msg_id: flag.id,
+            yesno: false,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              this.f5();
+              _this.$message({
+                message: "已拒绝",
+                type: "success",
+              });
+            } else {
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
+      }
+    },
+
+    read: function (flag) {
+      this.$api.message
+        .confirm({ msg_id: flag.id })
+        .then((res) => {
+          if (res.code === 200) {
+            flag.have_read=true
+            this.f5();
+            _this.$message({
+              message: "已读",
+              type: "success",
+            });
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: "error",
+            });
+          }
+        })
+        .catch((failResponse) => {});
+    },
+
+    f5: function () {
+      var _this = this;
+      this.$api.message
+        .user({ user_id: _this.$store.state.user.username.id })
+        .then((res) => {
+          //console.log("消息通知已上线");
+          if (res.code === 200) {
+            if (res.have_read === true) {
+              this.tableData = res.data;
+              for (let flag of this.de_tableData) {
+                switch (flag.message_type) {
+                  case 0:
+                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                    break;
+                  case 1:
+                    flag.message_a = `${flag.group_name}向你发出邀请`;
+                    break;
+                  case 2:
+                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                    break;
+                  case 3:
+                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                    break;
+                  case 4:
+                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                    break;
+                  case 5:
+                    flag.message_a = `${flag.group_name}同意了你的申请`;
+                    break;
+                  case 6:
+                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                    break;
+                  case 7:
+                    flag.message_a = `你已被踢出${flag.group_name}`;
+                    break;
+                  case 8:
+                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                    break;
+                  case 9:
+                    flag.message_a = `${flag.group_name}已解散`;
+                    break;
+                }
+              }
+            } else {
+              this.de_tableData = res.data;
+              //console.log(this.de_tableData)
+              for (let flag of this.de_tableData) {
+                //notread+=1
+                switch (flag.message_type) {
+                  case 0:
+                    flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                    break;
+                  case 1:
+                    flag.message_a = `${flag.group_name}向你发出邀请`;
+                    break;
+                  case 2:
+                    flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                    break;
+                  case 3:
+                    flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                    break;
+                  case 4:
+                    flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                    break;
+                  case 5:
+                    flag.message_a = `${flag.group_name}同意了你的申请`;
+                    break;
+                  case 6:
+                    flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                    break;
+                  case 7:
+                    flag.message_a = `你已被踢出${flag.group_name}`;
+                    break;
+                  case 8:
+                    flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                    break;
+                  case 9:
+                    flag.message_a = `${flag.group_name}已解散`;
+                    break;
+                }
+              }
+            }
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: "error",
+            });
+          }
+        })
+        .catch((failResponse) => {});
+    },
   },
 
   // 初始化页面完成后，对页面可见区域宽度进行判定，如果页面宽度小于1500，则触发 collapseChage 方法。
@@ -184,13 +445,97 @@ export default {
         this.global.baseUrl +
         "image/avator/show?user_id=" +
         this.$store.state.user.username.id;
-      
-      this.userAvator = this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id;
-
-
-      // this.userAvator =
-      //   "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
     }
+
+    var _this = this;
+    this.$api.message
+      .user({ user_id: _this.$store.state.user.username.id })
+      .then((res) => {
+        //console.log("消息通知已上线");
+        if (res.code === 200) {
+          if (res.have_read === true) {
+            this.tableData = res.data;
+            for (let flag of this.tableData) {
+              switch (flag.message_type) {
+                case 0:
+                  flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                  break;
+                case 1:
+                  flag.message_a = `${flag.group_name}向你发出邀请`;
+                  break;
+                case 2:
+                  flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                  break;
+                case 3:
+                  flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                  break;
+                case 4:
+                  flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                  break;
+                case 5:
+                  flag.message_a = `${flag.group_name}同意了你的申请`;
+                  break;
+                case 6:
+                  flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                  break;
+                case 7:
+                  flag.message_a = `你已被踢出${flag.group_name}`;
+                  break;
+                case 8:
+                  flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                  break;
+                case 9:
+                  flag.message_a = `${flag.group_name}已解散`;
+                  break;
+              }
+            }
+          } else {
+            this.de_tableData = res.data;
+            //console.log(this.de_tableData)
+            for (let flag of this.de_tableData) {
+              //notread+=1
+              switch (flag.message_type) {
+                case 0:
+                  flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
+                  break;
+                case 1:
+                  flag.message_a = `${flag.group_name}向你发出邀请`;
+                  break;
+                case 2:
+                  flag.message_a = `${flag.sender_name}申请加入${flag.group_name}`;
+                  break;
+                case 3:
+                  flag.message_a = `${flag.sender_name}同意了你的邀请`;
+                  break;
+                case 4:
+                  flag.message_a = `${flag.sender_name}拒绝了你的邀请`;
+                  break;
+                case 5:
+                  flag.message_a = `${flag.group_name}同意了你的申请`;
+                  break;
+                case 6:
+                  flag.message_a = `${flag.group_name}拒绝了你的申请`;
+                  break;
+                case 7:
+                  flag.message_a = `你已被踢出${flag.group_name}`;
+                  break;
+                case 8:
+                  flag.message_a = `${flag.sender_name}已退出${flag.group_name}`;
+                  break;
+                case 9:
+                  flag.message_a = `${flag.group_name}已解散`;
+                  break;
+              }
+            }
+          }
+        } else {
+          _this.$message({
+            message: res.msg,
+            type: "error",
+          });
+        }
+      })
+      .catch((failResponse) => {});
     // bus.$on("login-event", () => {
     //   console.log("home接受到了消息");
     //   this.isLogin = true;
@@ -250,7 +595,7 @@ export default {
   position: absolute;
   /* top: 50%;
   left: 90%;*/
-  transform: translate(0, 50%); 
+  transform: translate(0, 50%);
 }
 .btn-fullscreen {
   height: 30px;
