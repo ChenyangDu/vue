@@ -57,7 +57,13 @@
             }
         },
         created() {
-            this.group_id = this.$route.params.group_id
+          var _this = this
+          if((Object.keys(this.$route.params).length === 0)){
+            this.group_id = this.$store.state.groupNumber
+          } else {
+            _this.group_id = this.$route.params.group_id
+            _this.$store.commit('toDetail',_this.group_id)
+          }
             console.log("group_id member",this.group_id)
             this.$api.group.member({group_id:this.group_id}).then(response =>{
                 if(response.code == 200){
