@@ -497,7 +497,7 @@ export default {
   padding-right: 50px;
   align-items: center;
   display: flex;
-  transform: translate(0,25%);
+  transform: translate(0,15%);
 }
 .header-user-con {
   display: flex;
