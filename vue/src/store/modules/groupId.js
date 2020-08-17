@@ -1,11 +1,11 @@
 export default {
   state: {
-    groupnumber: null
+    // groupnumber: null
   },
   getter: {},
   mutations: {
-    toDetail(state, data){
-      state.groupnumber = data
-    }
+    // toDetail(state, data){
+    //   state.groupnumber = data
+    // }
   }
 }
