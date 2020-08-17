@@ -113,7 +113,7 @@
                 </el-col>
                 <el-col :span="8" align="center">
                   <div align="center">
-                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="invite"></i>
+                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="drop"></i>
                   </div>
                   <p>退 出</p>
                 </el-col>
@@ -404,6 +404,32 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             invite:function(){
               console.log('邀请别人');
               this.inviteDialogVisible = true;
+            },
+            drop() {
+              var _this = this
+              this.$alert('确定要退出团队？', '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$api.group.drop({
+                    user_id : _this.id,
+                    group_id: _this.group_id
+                  }).then(res=>{
+                    if( res.code === 200) {
+                      _this.$message({
+                        message: '已成功退出团队',
+                        type: 'success'
+                      })
+                      _this.$router.replace('/grouplist')
+                    } else {
+                      _this.$message({
+                        message: res.msg,
+                        type: 'error'
+                      })
+                    }
+                  })
+                }
+              });
+
             },
             handleNewDoc() {
                 let _this = this;

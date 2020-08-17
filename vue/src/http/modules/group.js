@@ -46,3 +46,11 @@ export const invite = params => {
         params
     })
 }
+
+export const drop = params => {
+  return axios({
+    url: '/group/drop',
+    method: 'post',
+    params
+  })
+}
