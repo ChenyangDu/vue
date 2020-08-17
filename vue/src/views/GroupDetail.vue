@@ -20,7 +20,10 @@
                         <el-card :body-style="{ padding: '0px' }" shadow="always">
                           <br>
                           <div align="center">
-                            <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                            <el-avatar @click.native="detail(item.id)"
+                                       shape="square" :size="100" fit="fill"
+                                       :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                                       style="cursor:pointer" ></el-avatar>
                           </div>
                           <div style="padding: 14px;">
                             <span>{{item.name}}</span><br>
@@ -166,8 +169,23 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
         },
         created() {
             let _this = this;
-            //将团队的id设置为传入的值
+          //将团队的id设置为传入的值
+          //   console.log('router的参数',this.$route.params.group_id)
+          //   console.log(this.$route.params)
+            // console.log(typeof this.$route.params)
+            // console.log(Object.keys(this.$route.params).length===0)
+          // let groupitem = {
+          //   group_id: this.group_id
+          // }
+          //   if((Object.keys(this.$route.params).length === 0)){
+          //     // this.group_id = this.$store.state.groupId.groupnumber
+          //   } else {
+          //     _this.group_id = this.$route.params.group_id
+          //     _this.$store.commit('toDetail',groupitem)
+          //   //   // console.log(this.$store.state.groupId.groupid)
+          //   }
             this.group_id = this.$route.params.group_id
+            console.log('group id:',this.group_id)
             //团队基本信息
             this.$api.group.info({
                 group_id:_this.group_id
