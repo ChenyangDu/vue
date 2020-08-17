@@ -81,7 +81,7 @@ export const recover =  params => {
     params
   })
 }
-
+// 彻底删除
 export const remove = params => {
   return axios({
     url: 'document/remove',

@@ -119,7 +119,7 @@
                 </el-col>
                 <el-col :span="8" align="center" v-if="isMyGroup">
                   <div align="center">
-                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="drop"></i>
+                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="dismiss"></i>
                   </div>
                   <p>解 散</p>
                 </el-col>
@@ -175,23 +175,17 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
         },
         created() {
             let _this = this;
-          //将团队的id设置为传入的值
-          //   console.log('router的参数',this.$route.params.group_id)
-          //   console.log(this.$route.params)
-            // console.log(typeof this.$route.params)
-            // console.log(Object.keys(this.$route.params).length===0)
-          // let groupitem = {
-          //   group_id: this.group_id
-          // }
-          //   if((Object.keys(this.$route.params).length === 0)){
-          //     // this.group_id = this.$store.state.groupId.groupnumber
-          //   } else {
-          //     _this.group_id = this.$route.params.group_id
-          //     _this.$store.commit('toDetail',groupitem)
-          //   //   // console.log(this.$store.state.groupId.groupid)
-          //   }
-            this.group_id = this.$route.params.group_id
+            //将团队的id设置为传入的值
+            console.log(Object.keys(this.$route.params).length===0)
+
+            if((Object.keys(this.$route.params).length === 0)){
+              this.group_id = this.$store.state.groupNumber
+            } else {
+              _this.group_id = this.$route.params.group_id
+              _this.$store.commit('toDetail',_this.group_id)
+            }
             console.log('group id:',this.group_id)
+
             //团队基本信息
             this.$api.group.info({
                 group_id:_this.group_id
@@ -212,10 +206,10 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             })
             //团队文档
             this.$api.group.document({
-                "group_id":_this.group_id,
+                group_id:_this.group_id,
                 user_id:_this.id
             }).then(res=>{
-                if(res.code == 200){
+                if(res.code === 200){
                     _this.groupdocuments = res.data;
                     console.log('groupdocument');
                     console.log(_this.groupdocuments);
@@ -233,6 +227,24 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
           AuthorityPanel
         },
         methods:{
+            handleClick() {
+              var _this = this
+              this.$api.group.document({
+                group_id:_this.group_id,
+                user_id:_this.id
+              }).then(res=>{
+                if(res.code === 200){
+                  _this.groupdocuments = res.data;
+                  console.log('groupdocument');
+                  console.log(_this.groupdocuments);
+                } else {
+                  _this.$message({
+                    message: res.msg,
+                    type: 'error'
+                  })
+                }
+              })
+            },
             isMyDoc: function (id) {
                 return id === this.id;
             },
@@ -259,7 +271,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
                 for(let member of this.group_member){
-                    if(member.id == this.group_info.creator_id){
+                    if(member.id === this.group_info.creator_id){
                         this.creator = member
                         // console.log("creator!!!",this.creator.id)
                         console.log('creator获取到了');
@@ -324,85 +336,85 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
               this.shareDialogVisible = false
             },
             collect: function (doc) {
-            console.log("collect");
-            var _this = this
-            this.doc_id = doc.id
-            // todo 需要在加载列表时获取收藏信息
-            if(doc.star) {
-              _this.$api.document.favorite({
-                doc_id: doc.id,
-                user_id: _this.id,
-                favorite: false
-              }).then(res => {
-                if (res.code === 200) {
-                  _this.$message({
-                    message: '文档已取消收藏',
-                    type: 'success'
-                  })
-                  //重新加载团队文档
-                  _this.$api.group.document({
-                    "group_id":_this.group_id,
-                    user_id:_this.id
-                  }).then(res=>{
-                    if(res.code == 200){
-                      _this.groupdocuments = res.data;
-                      console.log('groupdocument');
-                      console.log(_this.groupdocuments);
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                } else {
-                  _this.$message({
-                    message: res.msg,
-                    type: 'error'
-                  })
-                }
-              }).catch(failResponse => {})
-            } else {
-              _this.$api.document.favorite({
-                doc_id: doc.id,
-                user_id: _this.id,
-                favorite: true
-              }).then(res => {
-                if (res.code === 200) {
-                  _this.$message({
-                    message: '文档收藏成功',
-                    type: 'success'
-                  })
-                  //重新加载团队文档
-                  _this.$api.group.document({
-                    "group_id":_this.group_id,
-                    user_id:_this.id
-                  }).then(res=>{
-                    if(res.code == 200){
-                      _this.groupdocuments = res.data;
-                      console.log('groupdocument');
-                      console.log(_this.groupdocuments);
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                } else {
-                  _this.$message({
-                    message: '收藏失败',
-                    type: 'error'
-                  })
-                  _this.$message({
-                    message: res.msg,
-                    type: 'error'
-                  })
-                }
-              }).catch(failResponse => {})
+              console.log("collect");
+              var _this = this
+              this.doc_id = doc.id
+              // todo 需要在加载列表时获取收藏信息
+              if(doc.star) {
+                _this.$api.document.favorite({
+                  doc_id: doc.id,
+                  user_id: _this.id,
+                  favorite: false
+                }).then(res => {
+                  if (res.code === 200) {
+                    _this.$message({
+                      message: '文档已取消收藏',
+                      type: 'success'
+                    })
+                    //重新加载团队文档
+                    _this.$api.group.document({
+                      "group_id":_this.group_id,
+                      user_id:_this.id
+                    }).then(res=>{
+                      if(res.code === 200){
+                        _this.groupdocuments = res.data;
+                        console.log('groupdocument');
+                        console.log(_this.groupdocuments);
+                      } else {
+                        _this.$message({
+                          message: res.msg,
+                          type: 'error'
+                        })
+                      }
+                    })
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                }).catch(failResponse => {})
+              } else {
+                _this.$api.document.favorite({
+                  doc_id: doc.id,
+                  user_id: _this.id,
+                  favorite: true
+                }).then(res => {
+                  if (res.code === 200) {
+                    _this.$message({
+                      message: '文档收藏成功',
+                      type: 'success'
+                    })
+                    //重新加载团队文档
+                    _this.$api.group.document({
+                      "group_id":_this.group_id,
+                      user_id:_this.id
+                    }).then(res=>{
+                      if(res.code === 200){
+                        _this.groupdocuments = res.data;
+                        console.log('groupdocument');
+                        console.log(_this.groupdocuments);
+                      } else {
+                        _this.$message({
+                          message: res.msg,
+                          type: 'error'
+                        })
+                      }
+                    })
+                  } else {
+                    _this.$message({
+                      message: '收藏失败',
+                      type: 'error'
+                    })
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                }).catch(failResponse => {})
 
-            }
-          },
+              }
+            },
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
             },
@@ -416,93 +428,110 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             },
             drop() {
               var _this = this
-              this.$alert('确定要退出团队？', '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$api.group.drop({
-                    user_id : _this.id,
-                    group_id: _this.group_id
-                  }).then(res=>{
-                    if( res.code === 200) {
-                      _this.$message({
-                        message: '已成功退出团队',
-                        type: 'success'
-                      })
-                      _this.$router.replace('/grouplist')
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                }
-              });
 
+              this.$confirm('此操作将退出团队，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$api.group.drop({
+                  user_id : _this.id,
+                  group_id: _this.group_id
+                }).then(res=>{
+                  if( res.code === 200) {
+                    _this.$message({
+                      message: '已成功退出团队',
+                      type: 'success'
+                    })
+                    _this.$router.replace('/grouplist')
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                })
+              }).catch(() => {
+                _this.$message({
+                  type: 'info',
+                  message: '已取消退出团队'
+                });
+              });
             },
             dismiss() {
               var _this = this
-              this.$alert('确定要解散团队？', '提示', {
+              this.$confirm('此操作将解散团队，是否继续?', '提示', {
                 confirmButtonText: '确定',
-                callback: action => {
-                  this.$api.group.dismiss({
-                    user_id : _this.id,
-                    group_id: _this.group_id
-                  }).then(res=>{
-                    if( res.code === 200) {
-                      _this.$message({
-                        message: '已成功解散团队',
-                        type: 'success'
-                      })
-                      _this.$router.replace('/grouplist')
-                    } else {
-                      _this.$message({
-                        message: res.msg,
-                        type: 'error'
-                      })
-                    }
-                  })
-                }
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                _this.$api.group.dismiss({
+                  user_id : _this.id,
+                  group_id: _this.group_id
+                }).then(res=>{
+                  if( res.code === 200) {
+                    _this.$message({
+                      message: '已成功解散团队',
+                      type: 'success'
+                    })
+                    _this.$router.replace('/grouplist')
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                })
+              }).catch(() => {
+                _this.$message({
+                  type: 'info',
+                  message: '已取消解散团队'
+                });
               });
             },
             handleNewDoc() {
-                let _this = this;
-                this.$prompt('请输入标题','提示',{
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({value}) => {
-                    _this.$api.document
-                        .create({
-                            user_id: _this.id,
-                            group_id: _this.group_id,
-                            name: value,
-                            type: -1,
-                            // type: 1
-                        })
-                        .then((res) => {
-                            if (res.code === 200) {
-                                _this.$router.push({
-                                    path: "/doceditor",
-                                    query: {
-                                      doc_id: res.data.id,
-                                    },
-                                });
-                            } else {
-                                _this.$message({
-                                    message: res.msg,
-                                    type: "error",
-                                });
-                            }
-                        })
-                        .catch((failResponse) => {});
-                }).catch(()=>{
-                    _this.$message({
-                        type: 'info',
-                        message: '取消输入'
+              let _this = this;
+              this.$prompt('请输入标题','提示',{
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+              }).then(({value}) => {
+                if (value === null) {
+                  _this.$message({
+                    type: 'error',
+                    message: '请输入标题'
+                  })
+                } else {
+                  _this.$api.document
+                    .create({
+                      user_id: _this.id,
+                      group_id: _this.group_id,
+                      name: value,
+                      type: -1,
+                      // type: 1
                     })
+                    .then((res) => {
+                      if (res.code === 200) {
+                        _this.$router.push({
+                          path: "/doceditor",
+                          query: {
+                            doc_id: res.data.id,
+                          },
+                        });
+                      } else {
+                        _this.$message({
+                          message: res.msg,
+                          type: "error",
+                        });
+                      }
+                    })
+                    .catch((failResponse) => {});
+                }
+              }).catch(()=>{
+                _this.$message({
+                    type: 'info',
+                    message: '取消输入'
                 })
-
-
+              })
             },
         }
     }

@@ -16,29 +16,21 @@ export const info = params => {
         params
     })
 }
-
-export const kick = params => {
-    return axios({
-        url:'/group/kickass',
-        method:'post',
-        params,
-    })
-}
 export const document = params => {
-    return axios({
-        url:'/group/document',
-        method:'get',
-        params,
-    })
+  return axios({
+    url:'/group/document',
+    method:'get',
+    params,
+  })
 }
 export const create = data => {
-    return axios({
-        url:'/group/create',
-        method:'post',
-        data
-    })
+  return axios({
+    url:'/group/create',
+    method:'post',
+    data
+  })
 }
-
+// 邀请加入
 export const invite = params => {
     return axios({
         url : '/group/invite',
@@ -46,7 +38,7 @@ export const invite = params => {
         params
     })
 }
-
+// 申请加入
 export const applyGroup = params => {
   return axios({
     url: '/group/apply',
@@ -54,7 +46,15 @@ export const applyGroup = params => {
     params
   })
 }
-
+// 移除成员
+export const kick = params => {
+  return axios({
+    url:'/group/kickass',
+    method:'post',
+    params,
+  })
+}
+// 退出
 export const drop = params => {
   return axios({
     url: '/group/drop',
@@ -62,7 +62,7 @@ export const drop = params => {
     params
   })
 }
-
+// 解散
 export const dismiss = params => {
   return axios({
     url: '/group/dismiss',

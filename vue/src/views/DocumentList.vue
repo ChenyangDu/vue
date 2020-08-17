@@ -1,19 +1,9 @@
 <template>
   <div>
     <br/>
-    <el-col :span="22" :offset="1">
-
+    <el-col :span="22" offset="1">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我创建的文档" name="first">
-<!--          <el-row :gutter="40">-->
-<!--            <el-col :span="8">-->
-<!--              <h1>我创建的文档</h1>-->
-<!--            </el-col>-->
-<!--            <el-col :span="8">-->
-<!--              <el-button type="primary" round @click="handleNewDoc(-1)">创建新文档</el-button>-->
-<!--              <el-button type="primary" round @click="typePanelVisible = true">使用模板</el-button>-->
-<!--            </el-col>-->
-<!--          </el-row>-->
           <el-row>
             <el-col :span="22" offset="1">
               <el-row :gutter="40">
@@ -223,21 +213,7 @@ export default {
   components: {TypePanel, SharePanel, AuthorityPanel},
   data: function () {
     return {
-      owndocuments: [
-        {
-          id: 1586462705,
-          name: "12",
-          creator_id: 1304451137,
-          username: "drhhh",
-          create_time: "2020-08-16T22:01:11.000+00:00",
-          edit_times: 4,
-          group_id: null,
-          is_deleted: false,
-          is_editting: false,
-          last_edit_time: "2020-08-16T14:01:58.000+00:00",
-          star: true,
-        },
-      ],
+      owndocuments: [],
       favoritedocuments:[],
       recentdocuments:[],
       id: this.$store.state.user.username.id,
@@ -282,29 +258,29 @@ export default {
           })
         } else {
           _this.$api.document
-              .create({
-                user_id: this.id,
-                group_id: -1,
-                name: value,
-                type: typeNum,
-                // type: 1
-              })
-              .then((res) => {
-                if (res.code === 200) {
-                  _this.$router.push({
-                    path: "/doceditor",
-                    query: {
-                      doc_id: res.data.id,
-                    },
-                  });
-                } else {
-                  _this.$message({
-                    message: res.msg,
-                    type: "error",
-                  });
-                }
-              })
-              .catch((failResponse) => {});
+            .create({
+              user_id: this.id,
+              group_id: -1,
+              name: value,
+              type: typeNum,
+              // type: 1
+            })
+            .then((res) => {
+              if (res.code === 200) {
+                _this.$router.push({
+                  path: "/doceditor",
+                  query: {
+                    doc_id: res.data.id,
+                  },
+                });
+              } else {
+                _this.$message({
+                  message: res.msg,
+                  type: "error",
+                });
+              }
+            })
+            .catch((failResponse) => {});
         }
       }).catch(()=>{
         _this.$message({
@@ -312,8 +288,6 @@ export default {
           message: '取消输入'
         })
       })
-
-
     },
     handleCommand: function (command, id) {
       //console.log(command,id);
