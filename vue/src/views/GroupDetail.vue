@@ -58,12 +58,13 @@
                     </el-col>
                   </div>
                   <el-col :span=4 :offset="1">
+                    <br>
                     <el-card shadow="always" @click.native="handleNewDoc" style="cursor:pointer">
                       <div class="block">
                         <div align="center">
                           <i style="font-size: 100px;" class="el-icon-document-add"></i>
                         </div>
-                        <br><br><br><br>
+                        <br><br><br>
 
                       </div>
                     </el-card>
@@ -97,19 +98,23 @@
 
                 <el-col :span="8" align="center" v-if="id==creator.id">
                   <div align="center">
-                    <i @click="memberCtrl" style="font-size: 50px;cursor:pointer" class="el-icon-setting"></i>
+                    <i @click="memberCtrl" style="font-size: 55px;cursor:pointer" class="el-icon-setting"></i>
                   </div>
                   <p>管 理</p>
                 </el-col>
                 <el-col :span="8" align="center">
                   <div align="center">
-                    <i style="font-size: 50px;" class="el-icon-circle-plus-outline" @click="invite"></i>
+                    <i style="font-size: 55px;" class="el-icon-circle-plus-outline" @click="invite"></i>
                   </div>
                   <p>添 加</p>
                 </el-col>
+                <el-col :span="8" align="center">
+                  <div align="center">
+                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="invite"></i>
+                  </div>
+                  <p>退 出</p>
+                </el-col>
               </el-row>
-
-
             </div></el-col>
         </el-row>
       </el-col>
