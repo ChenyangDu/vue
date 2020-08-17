@@ -70,3 +70,21 @@ export const dismiss = params => {
     params
   })
 }
+
+
+export const reply_invite = params => {
+    return axios({
+        url : '/group/reply/invite',
+        method: 'post',
+        params
+    })
+}
+
+export const reply = params => {
+    return axios({
+        url : '/group/reply',
+        method: 'post',
+        params
+    })
+}
+
