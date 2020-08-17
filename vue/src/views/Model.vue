@@ -4,7 +4,7 @@
       <el-col :span="10" :offset="1">
         <el-carousel :interval="4000" type="card" height="300px">
           <el-carousel-item v-for="item in 6" :key="item">
-            <img align="center" :src="srcUrl" fit="fill" height="100%"></img>
+            <img align="center" :src="srcUrl" fit="fill" height="100%" />
           </el-carousel-item>
         </el-carousel>
       </el-col>

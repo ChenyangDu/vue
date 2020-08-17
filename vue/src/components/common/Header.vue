@@ -13,16 +13,16 @@
 
     <!-- 头部组件右边功能区 -->
     <div class="header-right">
-      <div class="header-user-con">
         <!--从这里开始写右边功能区-->
 
-        <div class="btn-fullscreen" @click="handleFullScreen">
           <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
           <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
+        <div class="btn-fullscreen" @click="handleFullScreen">
           <el-tooltip effect="light" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
             <i class="el-icon-sort"></i>
           </el-tooltip>
         </div>
+
         <!--这里是未登录看到的登录/注册链接-->
         <div v-if="!isLogin">
           <el-link :underline="false" href="./#/login">登录</el-link>/
@@ -32,15 +32,14 @@
 
         <!--从这里开始是登录后才能看到的消息提示和用户头像-->
         <div v-if="isLogin">
-          <el-row>
-            <el-col :span="1">
               <!--这里是消息提示-->
-              <div class="btn-bell">
+              
                 <el-tooltip
                   effect="light"
                   :content="notread?`有${notread}条未读消息`:`消息中心`"
                   placement="bottom"
                 >
+                <div class="btn-bell">
                   <span class="btn-bell-badge" v-if="notread"></span>
                   <el-popover class="bell" placement="bottom" width="600" trigger="click">
                     <el-tabs type="border-card">
@@ -76,13 +75,14 @@
                     </el-tabs>
                     <el-button slot="reference" class="el-icon-message-solid"></el-button>
                   </el-popover>
+                </div>  
                 </el-tooltip>
                 <!-- 通过对message的判定，来决定是否显示小红点 -->
-                <span class="btn-bell-badge" v-if="message"></span>
-              </div>
+                <!-- <span class="btn-bell-badge" v-if="message"></span> -->
+              
               <!--消息提示到此结束-->
-            </el-col>
-            <el-col :span="12" offset="10">
+            <!-- </el-col>
+            <el-col :span="12" offset="10"> -->
               <!--这里是用户头像-->
               <div class="avator">
                 <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
@@ -97,13 +97,12 @@
                 </el-dropdown>
               </div>
               <!--用户头像到此结束-->
-            </el-col>
-          </el-row>
+            <!-- </el-col>
+          </el-row> -->
         </div>
         <!--右边功能区到此结束-->
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -312,6 +311,7 @@ export default {
     },
 
     read: function (flag) {
+      var _this = this;
       this.$api.message
         .confirm({ msg_id: flag.id })
         .then((res) => {
@@ -322,6 +322,7 @@ export default {
               message: "已读",
               type: "success",
             });
+            _this.notread--;
           } else {
             _this.$message({
               message: res.msg,
@@ -379,6 +380,7 @@ export default {
                             }
                             this.tableData.push(flag);
                         }else {
+                            _this.notread++;
                             switch (flag.message_type) {
                                 case 0:
                                     flag.message_a = `${flag.sender_name}在${flag.docu_name}发表评论`;
@@ -493,6 +495,9 @@ export default {
 .header-right {
   float: right;
   padding-right: 50px;
+  align-items: center;
+  display: flex;
+  transform: translate(0,25%);
 }
 .header-user-con {
   display: flex;
@@ -500,7 +505,13 @@ export default {
   align-items: center;
 }
 .btn-fullscreen {
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  cursor: pointer;
+  position: absolute;
   transform: rotate(45deg);
+  left:-50%;
   margin-right: 5px;
   font-size: 24px;
 }
@@ -510,17 +521,11 @@ export default {
   position: absolute;
   /* top: 50%;
   left: 90%;*/
-  transform: translate(0, 50%);
+  transform: translate(-150%, 30%);
 }
-.btn-fullscreen {
-  height: 30px;
-  width: 30px;
+/* .btn-fullscreen {
   text-align: center;
-  border-radius: 15px;
-  cursor: pointer;
-  position: relative;
-  transform: rotate(45deg);
-}
+} */
 .btn-bell-badge {
   position: absolute;
   right: 0;
@@ -553,5 +558,9 @@ export default {
 }
 .el-dropdown-menu__item {
   text-align: center;
+}
+.bell{
+ background-color: transparent;
+ border-color: transparent;
 }
 </style>
