@@ -1,60 +1,79 @@
 <!-- 仅查看文章内容 + 评论 -->
 <template>
-  <div id="fullscreen" class="view-page">
-    <!-- 文章标题-->
-    <el-row :gutter="0">
-      <el-col :span="20" :push="2">
-        <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
+  <div class="view-page">
 
-          <el-row :gutter="1" class="title-row">
-            <el-col :span="8" :push="0">
-              <el-input class="title-input" type="text" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
-            </el-col>
+    <div class="wrapper">
 
-            <el-col :span="1" :push="8">
-              <div class="btn-fullscreen" @click="handleFullScreen">
-                <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
-                <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
-                <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                  <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
-                </el-tooltip>
+      <div class="left" id="fullscreen" >
+
+        <!-- 文章标题-->
+        <el-row :gutter="0">
+          <el-col :span="24" :push="0">
+            <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
+
+              <el-row :gutter="1" class="title-row">
+                <el-col :span="8" :push="0">
+                  <h1 v-if="name_disabled">{{ doc.name }}</h1>
+                  <el-input class="title-input" type="text"  v-if="!(name_disabled)" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
+                </el-col>
+
+                <el-col :span="1" :push="8">
+                  <div class="btn-fullscreen" @click="handleFullScreen">
+                    <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
+                    <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
+                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+                      <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
+                    </el-tooltip>
+                  </div>
+
+                </el-col>
+              </el-row>
+<!--            </el-card>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        &lt;!&ndash; 文章内容&ndash;&gt;-->
+<!--        <el-row :gutter="0">-->
+<!--          <el-col :span="20" :push="2">-->
+<!--            <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">-->
+              <el-form>
+                <el-form-item>
+                  <!--              不能编辑：禁用-->
+                  <tinymce-editor v-model="msg"
+                                  :disabled=true
+                                  :edit_bar_show="this.edit_bar_show"
+                                  :doc_id="this.doc_id"
+                                  @onClick="onClick"
+                                  ref="editor">
+                  </tinymce-editor>
+                </el-form-item>
+              </el-form>
+            </el-card>
+          </el-col>
+        </el-row>
+
+      </div>
+
+      <div class="right">
+
+        <!-- 文章评论-->
+        <el-row :gutter="0">
+          <el-col :span="23" :push="1">
+            <el-card class="comment-card">
+              <div class="comment-container">
+                <!--            不能评论：禁用‘发表评论’-->
+                <comment-panel :doc_id="this.doc_id" :can_comment="false"></comment-panel>
               </div>
+            </el-card>
+          </el-col>
+        </el-row>
 
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
-    <!-- 文章内容-->
-    <el-row :gutter="0">
-      <el-col :span="20" :push="2">
-        <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-form>
-            <el-form-item>
-<!--              不能编辑：禁用-->
-              <tinymce-editor v-model="msg"
-                              :disabled=true
-                              :edit_bar_show="this.edit_bar_show"
-                              :doc_id="this.doc_id"
-                              @onClick="onClick"
-                              ref="editor">
-              </tinymce-editor>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
-    <!-- 文章评论-->
-    <el-row :gutter="0">
-      <el-col :span="20" :push="2">
-        <el-card class="comment-card">
-          <div class="comment-container">
-<!--            不能评论：禁用‘发表评论’-->
-            <comment-panel :doc_id="this.doc_id" :can_comment="false"></comment-panel>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+      </div>
+
+
+    </div>
+
+
+
   </div>
 </template>
 
@@ -245,14 +264,34 @@ export default {
 </script>
 
 <style scoped>
+
+.wrapper{
+  width: 100%;
+  height: 100%;
+  /*border: 1px solid;*/
+  display: flex;
+  /*background-color: blue;*/
+}
+.left{
+  /*background-color: green;*/
+  height: 100%;
+  flex: 1;
+}
+.right{
+  float: right;
+  /*background-color: yellow;*/
+  width: 350px;
+  height: 100%;
+}
+
 .title-card{
-  margin-top: 30px;
+  margin-top: 5px;
 }
 .content-card{
   margin-top: 30px ;
 }
 .comment-card{
-  margin-top: 30px;
+  margin-top: 5px;
 }
 .icon-delete{
   float: right;

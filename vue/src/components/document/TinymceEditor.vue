@@ -68,7 +68,7 @@ export default {
       init: {
         language_url: '/tinymce/zh_CN.js',
         language: 'zh_CN',
-        height: 500,
+        height: 900,
         skin_url: '/tinymce/skins/ui/oxide',
         plugins: this.plugins,
         toolbar: this.toolbar,

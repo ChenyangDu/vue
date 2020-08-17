@@ -1,99 +1,120 @@
 <template>
-  <div class="doc-editor-page" id="fullscreen">
-    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>
+  <div class="doc-editor-page">
+<!--    页头-->
+<!--    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>-->
+<!--    页头-->
 
-    <!-- 文章标题-->
-    <el-row :gutter="0">
-      <el-col :span="22" :push="1">
-        <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
+  <div class="wrapper">
+    <div class="left"  id="fullscreen">
 
-          <el-row :gutter="1" class="title-row">
-            <el-col :span="8" :push="0">
-              <el-input type="text" v-model="doc.name" :disabled="name_disabled" class="title-input"></el-input>
-            </el-col>
+      <!-- 文章标题-->
+      <el-row :gutter="0">
+        <el-col :span="24" :push="0">
+          <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
 
-            <div class="edit-au" v-if="edit_au_show">
-              <el-col :span="1" :push="1">
-                <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
-              </el-col>
-              <el-col :span="1" :push="2">
-                <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
-              </el-col>
-              <el-col :span="1" :push="3">
-                <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
-              </el-col>
-            </div>
-
-            <div class="favo-au" v-if="favo_au_show">
-              <el-col :span="1" :push="4">
-                <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
-              </el-col>
-            </div>
-
-            <div class="creator-au" v-if="create_au_show">
-              <el-col :span="1" :push="5">
-                <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
-              </el-col>
-              <el-col :span="1" :push="6">
-                <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
-              </el-col>
-              <el-col :span="1" :push="7">
-                <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
+            <el-row :gutter="1" class="title-row">
+              <el-col :span="8" :push="0">
+                <h1 v-if="name_disabled">{{ doc.name }}</h1>
+                <el-input type="text" v-model="doc.name" v-if="!(name_disabled)" :disabled="name_disabled" class="title-input"></el-input>
               </el-col>
 
-              <!--分享弹窗-->
-              <el-dialog title="分享" :visible.sync="dialogFormVisible">
-                <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
-              </el-dialog>
-
-              <!--权限设置-->
-              <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
-                <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
-              </el-dialog>
-            </div>
-
-            <el-col :span="1" :push="8">
-              <div class="btn-fullscreen" @click="handleFullScreen">
-                <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
-                <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
-                <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                  <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
-                </el-tooltip>
+              <div class="edit-au" v-if="edit_au_show">
+                <el-col :span="1" :push="1">
+                  <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
+                </el-col>
+                <el-col :span="1" :push="2">
+                  <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
+                </el-col>
+                <el-col :span="1" :push="3">
+                  <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
+                </el-col>
               </div>
-            </el-col>
 
-          </el-row>
+              <div class="favo-au" v-if="favo_au_show">
+                <el-col :span="1" :push="4">
+                  <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
+                </el-col>
+              </div>
 
-        </el-card>
-      </el-col>
-    </el-row>
-    <!-- 编辑区 -->
-    <el-row :gutter="0">
-      <el-col :span="22" :push="1">
-        <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">
-          <el-form class="edit-container" >
-            <el-form-item>
-              <tinymce-editor v-model="msg"
-                              v-on:submitSuccess="submitSuccess"
-                              :disabled="this.disabled"
-                              :edit_bar_show="this.edit_bar_show"
-                              :doc_id="this.doc_id"
-                              @onClick="onClick"
-                              ref="editor">
-              </tinymce-editor>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
-    </el-row>
-    <!-- 评论区   -->
-    <el-row :gutter="0">
-      <el-col :span="22" :push="1">
-        <el-card class="comment-card">
-          <comment-panel :doc_id=this.doc_id :can_comment="this.authority.can_comment"></comment-panel>
-        </el-card>
-      </el-col>
-    </el-row>
+              <div class="creator-au" v-if="create_au_show">
+                <el-col :span="1" :push="5">
+                  <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
+                </el-col>
+                <el-col :span="1" :push="6">
+                  <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
+                </el-col>
+                <el-col :span="1" :push="7">
+                  <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
+                </el-col>
+
+                <!--分享弹窗-->
+                <el-dialog title="分享" :visible.sync="dialogFormVisible">
+                  <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
+                </el-dialog>
+
+                <!--权限设置-->
+                <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+                  <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
+                </el-dialog>
+              </div>
+
+              <el-col :span="1" :push="8">
+                <div class="btn-fullscreen" @click="handleFullScreen">
+                  <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
+                  <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
+                  <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
+                    <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
+                  </el-tooltip>
+                </div>
+              </el-col>
+
+            </el-row>
+
+<!--          </el-card>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--      &lt;!&ndash; 编辑区 &ndash;&gt;-->
+<!--      <el-row :gutter="0">-->
+<!--        <el-col :span="24" :push="0">-->
+<!--          <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">-->
+            <el-form class="edit-container" >
+              <el-form-item>
+                <tinymce-editor v-model="msg"
+                                v-on:submitSuccess="submitSuccess"
+                                :disabled="this.disabled"
+                                :edit_bar_show="this.edit_bar_show"
+                                :doc_id="this.doc_id"
+                                @onClick="onClick"
+                                ref="editor">
+                </tinymce-editor>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </el-col>
+      </el-row>
+
+    </div>
+    <div class="right">
+
+      <!-- 评论区   -->
+      <el-row :gutter="0">
+        <el-col :span="23" :push="1">
+          <el-card class="comment-card">
+            <comment-panel :doc_id=this.doc_id :can_comment="this.authority.can_comment"></comment-panel>
+          </el-card>
+        </el-col>
+      </el-row>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
   </div>
 </template>
 
@@ -562,6 +583,24 @@ export default {
 </script>
 
 <style scoped>
+.wrapper{
+  width: 100%;
+  height: 100%;
+  /*border: 1px solid;*/
+  display: flex;
+  /*background-color: blue;*/
+}
+.left{
+  /*background-color: green;*/
+  height: 100%;
+  flex: 1;
+}
+.right{
+  float: right;
+  /*background-color: yellow;*/
+  width: 350px;
+  height: 100%;
+}
 .header{
   background: #fff;
   border: 1px solid #eaeaea;
@@ -570,16 +609,16 @@ export default {
   padding: 20px 20px 20px 20px;
 }
 .title-card{
-  margin-top: 30px;
+  margin-top: 5px;
 }
 .title-row{
   margin-bottom: 0;
 }
 .content-card{
-  margin-top: 30px;
+  margin-top: 0px;
 }
 .comment-card{
-  margin-top: 30px;
+  margin-top: 5px;
 }
 .icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen{
   font-size: 24px;
