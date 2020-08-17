@@ -21,6 +21,7 @@
           <el-table-column prop="operation" label="操作" width="200">
             <template slot-scope="scope">
               <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
+                <el-option  label="默认可查看" :value="0"></el-option>
                 <el-option  label="查看" :value='1'></el-option>
                 <el-option  label="查看/评论" :value='2'></el-option>
                 <el-option  label="查看/评论/编辑" :value='3'></el-option>
@@ -44,6 +45,7 @@
             <el-table-column prop="operation" label="操作" width="200">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.authority_type" placeholder="请选择" @change="handleEdit(scope.row,scope.$index)">
+                  <el-option  label="默认可查看" :value="0"></el-option>
                   <el-option  label="查看" :value='1'></el-option>
                   <el-option  label="查看/评论" :value='2'></el-option>
                   <el-option  label="查看/评论/编辑" :value='3'></el-option>

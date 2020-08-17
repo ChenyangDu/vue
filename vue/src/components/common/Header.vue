@@ -41,7 +41,7 @@
                 >
                 <div class="btn-bell">
                   <span class="btn-bell-badge" v-if="notread"></span>
-                  <el-popover class="bell" placement="bottom" width="600" trigger="click">
+                  <el-popover style="outline:0!important" class="bell" placement="bottom" width="600" trigger="click">
                     <el-tabs type="border-card">
                       <el-tab-pane label="已读">
                         <el-table :data="tableData" height="250" stripe>
@@ -87,7 +87,7 @@
               <div class="avator">
                 <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
                   <div class="block">
-                    <el-avatar :size="50" :src="userAvator"></el-avatar>
+                    <el-avatar :size="40" :src="userAvator"></el-avatar>
                   </div>
                   <!-- slot设置下拉列表 -->
                   <el-dropdown-menu slot="dropdown">
@@ -540,8 +540,8 @@ export default {
   color: #fff;
 }
 .user-name {
+  margin-top: 10px;
   margin-left: 10px;
-  color: #000000;
 }
 .avator {
   margin-left: 20px;
