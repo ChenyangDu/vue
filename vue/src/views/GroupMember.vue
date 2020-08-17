@@ -54,7 +54,32 @@
         methods:{
             remove:function (user_id) {
                 console.log(user_id)
-                this.$api.group.kick({user_id:user_id,group_id:this.group_id});
+              var _this = this
+              this.$confirm('此操作将移除该成员，是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$api.group.kick({user_id:user_id,group_id:this.group_id}).then(res => {
+                  if (res.code === 200) {
+                    _this.$message({
+                      message: '已成功移除该成员',
+                      type: 'success'
+                    })
+                  }else {
+                    _this.$message({
+                      message: res.msg,
+                      type: 'error'
+                    })
+                  }
+                });
+              }).catch(() => {
+                _this.$message({
+                  type: 'info',
+                  message: '已取消移除成员'
+                });
+              });
+
             }
         },
         created() {
