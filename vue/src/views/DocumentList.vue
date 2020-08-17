@@ -48,21 +48,26 @@
                       <div style="padding: 14px;">
                         <span>{{item.name}}</span><br>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                        <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-edit"
-                                    command="edit"
-                                    v-if="isMyDoc(item.creator_id)"
-                            >编辑</el-dropdown-item>
+                                icon="el-icon-share"
+                                command="share"
+                                v-if="isMyDoc(item.creator_id)"
+                            >分享</el-dropdown-item>
+                            <el-dropdown-item
+                                icon="el-icon-s-tools"
+                                command="authority"
+                                v-if="isMyDoc(item.creator_id)"
+                            >权限</el-dropdown-item>
                             <el-dropdown-item
                                     icon="el-icon-delete-solid"
                                     command="del"
                                     v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
@@ -98,17 +103,22 @@
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-edit"
-                                    command="edit"
-                                    v-if="isMyDoc(item.creator_id)"
-                            >编辑</el-dropdown-item>
+                                icon="el-icon-share"
+                                command="share"
+                                v-if="isMyDoc(item.creator_id)"
+                            >分享</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-delete-solid"
-                                    command="del"
-                                    v-if="isMyDoc(item.creator_id)"
+                                icon="el-icon-s-tools"
+                                command="authority"
+                                v-if="isMyDoc(item.creator_id)"
+                            >权限</el-dropdown-item>
+                            <el-dropdown-item
+                                icon="el-icon-delete-solid"
+                                command="del"
+                                v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
@@ -146,17 +156,22 @@
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-edit"
-                                    command="edit"
-                                    v-if="isMyDoc(item.creator_id)"
-                            >编辑</el-dropdown-item>
+                                icon="el-icon-share"
+                                command="share"
+                                v-if="isMyDoc(item.creator_id)"
+                            >分享</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-delete-solid"
-                                    command="del"
-                                    v-if="isMyDoc(item.creator_id)"
+                                icon="el-icon-s-tools"
+                                command="authority"
+                                v-if="isMyDoc(item.creator_id)"
+                            >权限</el-dropdown-item>
+                            <el-dropdown-item
+                                icon="el-icon-delete-solid"
+                                command="del"
+                                v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
-                            <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
@@ -174,11 +189,12 @@
         </el-tab-pane>
       </el-tabs>
 
-      <!--分享弹窗-->
-      <el-dialog title="分享" :visible.sync="dialogFormVisible">
+      <el-dialog title="分享" :visible.sync="shareDialogVisible">
         <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
       </el-dialog>
-
+      <el-dialog title="权限管理" :visible.sync="authorityDialogVisible">
+        <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
+      </el-dialog>
       <!-- 模板弹窗-->
       <el-dialog title="使用模板" :visible.sync="typePanelVisible">
         <type-panel v-on:cancelCreate="cancelCreate" v-on:confirmCreate="confirmCreate"></type-panel>
@@ -192,9 +208,10 @@
 <script>
 import SharePanel from "@/components/document/SharePanel";
 import TypePanel from "@/components/document/TypePanel";
+import AuthorityPanel from "@/components/document/AuthorityPanel";
 export default {
   name: "DocumentList",
-  components: {TypePanel, SharePanel },
+  components: {TypePanel, SharePanel, AuthorityPanel},
   data: function () {
     return {
       owndocuments: [
@@ -216,8 +233,10 @@ export default {
       recentdocuments:[],
       id: this.$store.state.user.username.id,
       doc_id: '',
+      group_id: '',
       activeName: "first",
-      dialogFormVisible: false,
+      shareDialogVisible: false,
+      authorityDialogVisible: false,
       iscollect:false,
       typePanelVisible: false
     };
@@ -289,11 +308,12 @@ export default {
     },
     handleCommand: function (command, id) {
       //console.log(command,id);
-      if (command === "view") this.detail(id);
-      else if (command === "edit") this.edit(id);
-      else if (command === "del") this.del(id);
-      else if (command === "share") this.share(id);
-      else if (command === "collect") this.collect(id);
+      if (command === "view") this.detail(id.id);
+      else if (command === "edit") this.edit(id.id);
+      else if (command === "del") this.del(id.id);
+      else if (command === "share") this.share(id.id);
+      else if (command === "collect") this.collect(id.id);
+      else if (command === "authority") this.authority(id);
     },
     detail: function (id) {
       console.log("点击detail");
@@ -346,10 +366,15 @@ export default {
     share: function (id) {
       console.log("share");
       this.doc_id = id
-      this.dialogFormVisible = true
+      this.shareDialogVisible = true
     },
     cancelShare() {
-      this.dialogFormVisible = false
+      this.shareDialogVisible = false
+    },
+    authority(id) {
+      this.doc_id = id.id
+      this.group_id = id.group_id
+      this.authorityDialogVisible = true
     },
     collect: function (doc) {
       console.log("collect");

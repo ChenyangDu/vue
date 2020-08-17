@@ -122,10 +122,10 @@
     <el-dialog title='邀请新成员' :visible.sync="inviteDialogVisible">
       <invite-panel :group_id="group_id"></invite-panel>
     </el-dialog>
-    <el-dialog title="分享" :visible.sync="dialogFormVisible">
+    <el-dialog title="分享" :visible.sync="shareDialogVisible">
       <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
     </el-dialog>
-    <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+    <el-dialog title="权限管理" :visible.sync="authorityDialogVisible">
       <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
     </el-dialog>
   </div>
@@ -227,7 +227,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
                 else if (command === "del") this.del(id);
                 else if (command === "share") this.share(id);
                 else if (command === "collect") this.collect(id);
-                else if (command === "authority") this.authority()
+                else if (command === "authority") this.authority(id);
             },
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
@@ -291,7 +291,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             share: function (id) {
               console.log("share");
               this.doc_id = id
-              this.dialogFormVisible = true
+              this.shareDialogVisible = true
             },
             cancelShare() {
               this.shareDialogVisible = false
@@ -379,7 +379,8 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
             },
-            authority() {
+            authority(id) {
+              this.doc_id = id
               this.authorityDialogVisible = true
             },
             invite:function(){
