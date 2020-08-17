@@ -206,10 +206,10 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             })
             //团队文档
             this.$api.group.document({
-                "group_id":_this.group_id,
+                group_id:_this.group_id,
                 user_id:_this.id
             }).then(res=>{
-                if(res.code == 200){
+                if(res.code === 200){
                     _this.groupdocuments = res.data;
                     console.log('groupdocument');
                     console.log(_this.groupdocuments);
@@ -227,6 +227,24 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
           AuthorityPanel
         },
         methods:{
+            handleClick() {
+              var _this = this
+              this.$api.group.document({
+                group_id:_this.group_id,
+                user_id:_this.id
+              }).then(res=>{
+                if(res.code === 200){
+                  _this.groupdocuments = res.data;
+                  console.log('groupdocument');
+                  console.log(_this.groupdocuments);
+                } else {
+                  _this.$message({
+                    message: res.msg,
+                    type: 'error'
+                  })
+                }
+              })
+            },
             isMyDoc: function (id) {
                 return id === this.id;
             },
@@ -253,7 +271,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
                 for(let member of this.group_member){
-                    if(member.id == this.group_info.creator_id){
+                    if(member.id === this.group_info.creator_id){
                         this.creator = member
                         // console.log("creator!!!",this.creator.id)
                         console.log('creator获取到了');
