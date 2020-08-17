@@ -32,7 +32,7 @@
             </el-table-column>
 
             <el-table-column label="">
-                <template slot-scope="scope" >
+                <template slot-scope="scope" v-if="scope.row.id != user_id">
                     <el-button @click="remove(scope.row.id)" type="danger" round size="small" >移出</el-button>
                 </template>
             </el-table-column>
@@ -45,6 +45,7 @@
         name: "GroupMember",
         data() {
             return {
+                user_id:this.$store.state.user.username.id,
                 group_id:this.$route.params.group_id,
                 groupmember:[],
                 avatarPath : this.global.baseUrl + '/image/avatar/show'
