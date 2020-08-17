@@ -13,7 +13,7 @@
         <el-table-column prop="creator_name" label="创建者" width="150"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button @click="apply(scope.row.id)" type="text" size="small">申请加入</el-button>
+            <el-button @click.once="apply(scope.row.id)" type="text" size="small">申请加入</el-button>
           </template>
         </el-table-column>
       </el-table>
