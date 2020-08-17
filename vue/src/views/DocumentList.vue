@@ -43,7 +43,10 @@
                     <el-card :body-style="{ padding: '0px' }" shadow="always" >
                       <br>
                       <div align="center">
-                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                        <el-avatar @click.native="detail(item.id)"
+                                   shape="square" :size="100" fit="fill"
+                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                                   style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <span>{{item.name}}</span><br>
@@ -94,7 +97,10 @@
                     <el-card :body-style="{ padding: '0px' }" shadow="always">
                       <br>
                       <div align="center">
-                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                        <el-avatar @click.native="detail(item.id)"
+                                   shape="square" :size="100" fit="fill"
+                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                                   style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <span>{{item.name}}</span><br>
@@ -147,7 +153,10 @@
                     <el-card :body-style="{ padding: '0px' }" shadow="always">
                       <br>
                       <div align="center">
-                        <i @click="detail(item.id)" style="font-size: 100px;cursor:pointer" class="el-icon-tickets"></i>
+                        <el-avatar @click.native="detail(item.id)"
+                                   shape="square" :size="100" fit="fill"
+                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                                   style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <span>{{item.name}}</span><br>
