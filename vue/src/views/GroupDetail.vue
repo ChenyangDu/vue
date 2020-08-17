@@ -99,7 +99,7 @@
                   </el-col>
                 </div>
 
-                <el-col :span="8" align="center" v-if="id==creator.id">
+                <el-col :span="8" align="center" v-if="id===creator.id">
                   <div align="center">
                     <i @click="memberCtrl" style="font-size: 55px;cursor:pointer" class="el-icon-setting"></i>
                   </div>
@@ -111,13 +111,13 @@
                   </div>
                   <p>添 加</p>
                 </el-col>
-                <el-col :span="8" align="center" v-if="!(isMyGroup)">
+                <el-col :span="8" align="center" v-if="!(id===creator.id)">
                   <div align="center">
                     <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="drop"></i>
                   </div>
                   <p>退 出</p>
                 </el-col>
-                <el-col :span="8" align="center" v-if="isMyGroup">
+                <el-col :span="8" align="center" v-if="id===creator.id">
                   <div align="center">
                     <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="dismiss"></i>
                   </div>
@@ -247,9 +247,6 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             },
             isMyDoc: function (id) {
                 return id === this.id;
-            },
-            isMyGroup() {
-              return this.id === this.group_info.creator_id
             },
             memberCtrl:function(){
                 this.$router.push({

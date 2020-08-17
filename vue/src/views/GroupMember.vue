@@ -32,8 +32,8 @@
             </el-table-column>
 
             <el-table-column label="">
-                <template slot-scope="scope">
-                    <el-button @click="remove(scope.row.id)" type="danger" round size="small">移出</el-button>
+                <template slot-scope="scope" >
+                    <el-button @click="remove(scope.row.id)" type="danger" round size="small" >移出</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -67,7 +67,11 @@
             console.log("group_id member",this.group_id)
             this.$api.group.member({group_id:this.group_id}).then(response =>{
                 if(response.code == 200){
-                    this.groupmember = response.data;
+                    this.groupmember = response.data
+                    //     .filter(
+                    //     (g) => g.id !== _this.$store.state.user.username.id
+                    // );
+
                     console.log(this.groupmember)
                 }
             })
