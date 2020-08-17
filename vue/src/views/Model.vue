@@ -43,13 +43,59 @@
             return {
                 // srcUrl:"http://39.101.200.9:8081/image/system?id=document"
                 srcUrl:"http://39.101.200.9:8081/image/model?id=",
-                carouselShow:[1,3,5]
+                carouselShow:[1,3,5],
+                id: this.$store.state.user.username.id,
             }
         },
         methods:{
             click:function (id) {
                 console.log(id)
-            }
+                this.handleNewDoc(id)
+            },
+            handleNewDoc(typeNum) {
+                var _this = this;
+                this.$prompt('请输入标题','提示',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                }).then(({value}) => {
+                    if (value === null) {
+                        _this.$message({
+                            type: 'error',
+                            message: '请输入标题'
+                        })
+                    } else {
+                        _this.$api.document
+                            .create({
+                                user_id: this.id,
+                                group_id: -1,
+                                name: value,
+                                type: typeNum,
+                                // type: 1
+                            })
+                            .then((res) => {
+                                if (res.code === 200) {
+                                    _this.$router.push({
+                                        path: "/doceditor",
+                                        query: {
+                                            doc_id: res.data.id,
+                                        },
+                                    });
+                                } else {
+                                    _this.$message({
+                                        message: res.msg,
+                                        type: "error",
+                                    });
+                                }
+                            })
+                            .catch((failResponse) => {});
+                    }
+                }).catch(()=>{
+                    _this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    })
+                })
+            },
         }
     }
 </script>
