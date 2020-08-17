@@ -11,7 +11,9 @@
       <el-col :span="22" :offset="1">
         <el-row :gutter="20">
             <el-col :span="18"><div >
-              <h1>团队文档</h1>
+
+<!--              <h1>团队文档</h1>-->
+              <p class="Nav-sc-VyK8c-1 iirLju active">团队文档</p>
                 <el-row :gutter="20">
                   <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
@@ -77,53 +79,66 @@
 
 
             </div></el-col>
+<!--          <el-col :span="1">-->
+<!--          </el-col>-->
             <el-col :span="6"><div >
-              <h1>团队成员</h1>
-              <br>
-
               <el-row>
-                <el-col :span="24" align="center">
-                  <div class="block"  @click="memberDetail(creator.id)">
-                    <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer" ></el-avatar>
-                    <p>{{creator.name}}</p>
-                  </div>
+                <el-col :span="1">
+                  <div style="height:300px; width:1px; border-left:1px solid blue"></div>
                 </el-col>
+                <el-col :span="23">
+                  <p class="Nav-sc-VyK8c-1 iirLju active">团队成员</p>
+                  <!--              <h1>团队成员</h1>-->
+                  <br>
 
-              </el-row>
-              <br>
-              <el-row>
-                <div v-for="(item) in group_member" :key="item.id" @click="memberDetail(item.id)">
-                  <el-col :span="8" align="center" v-if="item.id != group_info.creator_id">
-                    <el-avatar :size="50" :src="avatarUrl+item.id" style="cursor:pointer"></el-avatar>
-                    <p>{{item.name}}</p>
-                  </el-col>
-                </div>
+                  <el-row>
+                    <el-col :span="24" align="center">
+                      <div class="block"  @click="memberDetail(creator.id)">
+                        <el-avatar :size="50" fit="fill" :src="avatarUrl+creator.id" style="cursor:pointer" ></el-avatar>
+                        <p>{{creator.name}}</p>
+                      </div>
+                    </el-col>
 
-                <el-col :span="8" align="center" v-if="id===creator.id">
-                  <div align="center">
-                    <i @click="memberCtrl" style="font-size: 55px;cursor:pointer" class="el-icon-setting"></i>
-                  </div>
-                  <p>管 理</p>
-                </el-col>
-                <el-col :span="8" align="center">
-                  <div align="center">
-                    <i style="font-size: 55px;" class="el-icon-circle-plus-outline" @click="invite"></i>
-                  </div>
-                  <p>添 加</p>
-                </el-col>
-                <el-col :span="8" align="center" v-if="!(id===creator.id)">
-                  <div align="center">
-                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="drop"></i>
-                  </div>
-                  <p>退 出</p>
-                </el-col>
-                <el-col :span="8" align="center" v-if="id===creator.id">
-                  <div align="center">
-                    <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="dismiss"></i>
-                  </div>
-                  <p>解 散</p>
+                  </el-row>
+                  <br>
+                  <el-row>
+                    <div v-for="(item) in group_member" :key="item.id" @click="memberDetail(item.id)">
+                      <el-col :span="8" align="center" v-if="item.id != group_info.creator_id">
+                        <el-avatar :size="50" :src="avatarUrl+item.id" style="cursor:pointer"></el-avatar>
+                        <p>{{item.name}}</p>
+                      </el-col>
+                    </div>
+
+                    <el-col :span="8" align="center" v-if="id===creator.id">
+                      <div align="center">
+                        <i @click="memberCtrl" style="font-size: 55px;cursor:pointer" class="el-icon-setting"></i>
+                      </div>
+                      <p>管 理</p>
+                    </el-col>
+                    <el-col :span="8" align="center">
+                      <div align="center">
+                        <i style="font-size: 55px;" class="el-icon-circle-plus-outline" @click="invite"></i>
+                      </div>
+                      <p>添 加</p>
+                    </el-col>
+                    <el-col :span="8" align="center" v-if="!(id===creator.id)">
+                      <div align="center">
+                        <i style="font-size: 55px; color: 0xFF0000" class="el-icon-remove-outline" @click="drop"></i>
+                      </div>
+                      <p>退 出</p>
+                    </el-col>
+                    <el-col :span="8" align="center" v-if="id===creator.id">
+                      <div align="center">
+                        <i style="font-size: 55px; color: 0xFF0000" class="el-icon-circle-close" @click="dismiss"></i>
+                      </div>
+                      <p>解 散</p>
+                    </el-col>
+                  </el-row>
                 </el-col>
               </el-row>
+
+
+
             </div></el-col>
         </el-row>
       </el-col>
@@ -582,4 +597,15 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
     padding: 0;
     float: right;
   }
+
+
+  /* sc-component-id: Nav-sc-VyK8c-1 */
+
+  .iirLju{margin-right:25px;font-size:22px;-webkit-text-decoration:none;text-decoration:none;color:#a5a5a5;-webkit-transition:color 0.3s linear;transition:color 0.3s linear;}.iirLju.active,.iirLju:hover{font-weight:500;color:#555;}
+  .gTqgy{margin-right:25px;font-size:16px;-webkit-text-decoration:none;text-decoration:none;color:#a5a5a5;-webkit-transition:color 0.3s linear;transition:color 0.3s linear;color:#ccc;}.gTqgy.active,.gTqgy:hover{font-weight:500;color:#555;}.gTqgy.active,.gTqgy:hover{color:#ccc;font-weight:normal;}
+  /*#div1{*/
+  /*  width: 1px;*/
+  /*  height: 10px;*/
+  /*  border-bottom: 1px solid red;*/
+  /*}*/
 </style>
