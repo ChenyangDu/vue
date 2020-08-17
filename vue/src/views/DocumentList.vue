@@ -226,35 +226,6 @@ export default {
     this.getOwnList();
   },
   methods: {
-    isCollect: function (id) {
-      return false;
-      // //return !this.iscollect;
-      // let inf = {doc_id:id,user_id:this.id};
-      // var that = this;
-      // this.$api.document.favoriteinfo(inf).then(response => {
-      //   if(response.code === 200)
-      //   {
-      //     // console.log(id+":"+response.data);
-      //     //return response.data;
-      //     that.iscollect = response.data;
-      //   }
-      //   // else {
-      //   //   that.$message({
-      //   //       // message: response.msg,
-      //   //       message: "列表为空",
-      //   //       type: "error",
-      //   //   })
-      //   // }
-      // }).catch(err => {
-      //   console.log("判断收藏时捕获到了异常");
-      //     that.$message({
-      //       message: err.msg,
-      //       type: "error",
-      //     });
-      // });
-      // console.log(this.iscollect);
-      // return this.iscollect;
-    },
     isMyDoc: function (id) {
       return id === this.id;
     },
