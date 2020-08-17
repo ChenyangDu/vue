@@ -1,12 +1,9 @@
 <template>
-  <div class="doc-editor-page">
 <!--    页头-->
 <!--    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>-->
 <!--    页头-->
-
   <div class="wrapper">
     <div class="left"  id="fullscreen">
-
       <!-- 文章标题-->
       <el-row :gutter="0">
         <el-col :span="24" :push="0">
@@ -67,9 +64,7 @@
                   </el-tooltip>
                 </div>
               </el-col>
-
             </el-row>
-
 <!--          </el-card>-->
 <!--        </el-col>-->
 <!--      </el-row>-->
@@ -95,7 +90,6 @@
 
     </div>
     <div class="right">
-
       <!-- 评论区   -->
       <el-row :gutter="0">
         <el-col :span="23" :push="1">
@@ -104,17 +98,7 @@
           </el-card>
         </el-col>
       </el-row>
-
     </div>
-  </div>
-
-
-
-
-
-
-
-
   </div>
 </template>
 

@@ -68,7 +68,7 @@ export default {
       init: {
         language_url: '/tinymce/zh_CN.js',
         language: 'zh_CN',
-        height: 900,
+        height: 600,
         skin_url: '/tinymce/skins/ui/oxide',
         plugins: this.plugins,
         toolbar: this.toolbar,
@@ -117,6 +117,9 @@ export default {
       console.log('提交内容')
       console.log(this.myValue)
       console.log('提交内容-完毕')
+      if (this.myValue === '') {
+        this.myValue = ' '
+      }
       this.$api.document.end({
         doc_id: _this.doc_id
       }, _this.myValue).then(res => {
