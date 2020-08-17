@@ -29,17 +29,22 @@
                               <i class="el-icon-more"></i>
                               <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
+                                <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                                 <el-dropdown-item
-                                        icon="el-icon-edit"
-                                        command="edit"
-                                        v-if="isMyDoc(item.creator_id)"
-                                >编辑</el-dropdown-item>
+                                    icon="el-icon-share"
+                                    command="share"
+                                    v-if="isMyDoc(item.creator_id)"
+                                >分享</el-dropdown-item>
                                 <el-dropdown-item
-                                        icon="el-icon-delete-solid"
-                                        command="del"
-                                        v-if="isMyDoc(item.creator_id)"
+                                    icon="el-icon-s-tools"
+                                    command="authority"
+                                    v-if="isMyDoc(item.creator_id)"
+                                >权限</el-dropdown-item>
+                                <el-dropdown-item
+                                    icon="el-icon-delete-solid"
+                                    command="del"
+                                    v-if="isMyDoc(item.creator_id)"
                                 >删除</el-dropdown-item>
-                                <el-dropdown-item icon="el-icon-share" command="share">分享</el-dropdown-item>
                               </el-dropdown-menu>
                             </el-dropdown>
                             <div class="bottom clearfix">
@@ -112,11 +117,19 @@
     <el-dialog title='邀请新成员' :visible.sync="inviteDialogVisible">
       <invite-panel :group_id="group_id"></invite-panel>
     </el-dialog>
+    <el-dialog title="分享" :visible.sync="dialogFormVisible">
+      <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
+    </el-dialog>
+    <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
+      <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import InvitePanel from '../components/group/InvitePanel.vue';
+import SharePanel from "@/components/document/SharePanel";
+import AuthorityPanel from "@/components/document/AuthorityPanel";
     export default {
         name: "GroupDetail",
         data(){
@@ -125,7 +138,11 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 fits: ['fill', 'contain', 'cover', 'none', 'scale-down'],
                 //用户id
                 id: this.$store.state.user.username.id,
-                inviteDialogVisible:false,
+                doc_id:'',
+                //用于传递当前点击的文档的id
+                inviteDialogVisible: false,
+                shareDialogVisible: false,
+                authorityDialogVisible: false,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
                 showdocuments:[],
@@ -182,7 +199,9 @@ import InvitePanel from '../components/group/InvitePanel.vue';
             })
         },
         components:{
-          InvitePanel
+          InvitePanel,
+          SharePanel,
+          AuthorityPanel
         },
         methods:{
             isMyDoc: function (id) {
@@ -203,86 +222,7 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 else if (command === "del") this.del(id);
                 else if (command === "share") this.share(id);
                 else if (command === "collect") this.collect(id);
-            },
-            collect: function (doc) {
-                console.log("collect");
-                var _this = this
-                this.doc_id = doc.id
-                // todo 需要在加载列表时获取收藏信息
-                if(doc.star) {
-                    _this.$api.document.favorite({
-                        doc_id: doc.id,
-                        user_id: _this.id,
-                        favorite: false
-                    }).then(res => {
-                        if (res.code === 200) {
-                            _this.$message({
-                                message: '文档已取消收藏',
-                                type: 'success'
-                            })
-                            //重新加载团队文档
-                            _this.$api.group.document({
-                              "group_id":_this.group_id,
-                              user_id:_this.id
-                            }).then(res=>{
-                              if(res.code == 200){
-                                _this.groupdocuments = res.data;
-                                console.log('groupdocument');
-                                console.log(_this.groupdocuments);
-                              } else {
-                                _this.$message({
-                                  message: res.msg,
-                                  type: 'error'
-                                })
-                              }
-                            })
-                        } else {
-                            _this.$message({
-                                message: res.msg,
-                                type: 'error'
-                            })
-                        }
-                    }).catch(failResponse => {})
-                } else {
-                    _this.$api.document.favorite({
-                        doc_id: doc.id,
-                        user_id: _this.id,
-                        favorite: true
-                    }).then(res => {
-                        if (res.code === 200) {
-                            _this.$message({
-                                message: '文档收藏成功',
-                                type: 'success'
-                            })
-                          //重新加载团队文档
-                          _this.$api.group.document({
-                            "group_id":_this.group_id,
-                            user_id:_this.id
-                          }).then(res=>{
-                            if(res.code == 200){
-                              _this.groupdocuments = res.data;
-                              console.log('groupdocument');
-                              console.log(_this.groupdocuments);
-                            } else {
-                              _this.$message({
-                                message: res.msg,
-                                type: 'error'
-                              })
-                            }
-                          })
-                        } else {
-                            _this.$message({
-                                message: '收藏失败',
-                                type: 'error'
-                            })
-                            _this.$message({
-                                message: res.msg,
-                                type: 'error'
-                            })
-                        }
-                    }).catch(failResponse => {})
-
-                }
+                else if (command === "authority") this.authority()
             },
             getCreator:function(){
                 console.log("getCreator",this.group_member,this.group_info.creator_id)
@@ -308,8 +248,134 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                     },
                 });
             },
+            edit: function (id) {
+                console.log(id);
+                var _this = this;
+                // 通过user_id直接跳转
+                _this.$router.push({
+                    path: "/doceditor",
+                    query: {
+                        doc_id: id,
+                    },
+                });
+            },
+            del: function (id) {
+            console.log(id);
+            var _this = this;
+            this.$api.document
+                .deleteDoc({
+                  doc_id: id,
+                  user_id: _this.id,
+                })
+                .then((res) => {
+                  if (res.code === 200) {
+                    _this.$message({
+                      message: "文章已被成功删除",
+                      type: "success",
+                    });
+                    _this.handleClick();
+                  } else {
+                    _this.$message({
+                      message: res.msg,
+                      type: "error",
+                    });
+                  }
+                })
+                .catch((failResponse) => {});
+          },
+            share: function (id) {
+              console.log("share");
+              this.doc_id = id
+              this.dialogFormVisible = true
+            },
+            cancelShare() {
+              this.shareDialogVisible = false
+            },
+            collect: function (doc) {
+            console.log("collect");
+            var _this = this
+            this.doc_id = doc.id
+            // todo 需要在加载列表时获取收藏信息
+            if(doc.star) {
+              _this.$api.document.favorite({
+                doc_id: doc.id,
+                user_id: _this.id,
+                favorite: false
+              }).then(res => {
+                if (res.code === 200) {
+                  _this.$message({
+                    message: '文档已取消收藏',
+                    type: 'success'
+                  })
+                  //重新加载团队文档
+                  _this.$api.group.document({
+                    "group_id":_this.group_id,
+                    user_id:_this.id
+                  }).then(res=>{
+                    if(res.code == 200){
+                      _this.groupdocuments = res.data;
+                      console.log('groupdocument');
+                      console.log(_this.groupdocuments);
+                    } else {
+                      _this.$message({
+                        message: res.msg,
+                        type: 'error'
+                      })
+                    }
+                  })
+                } else {
+                  _this.$message({
+                    message: res.msg,
+                    type: 'error'
+                  })
+                }
+              }).catch(failResponse => {})
+            } else {
+              _this.$api.document.favorite({
+                doc_id: doc.id,
+                user_id: _this.id,
+                favorite: true
+              }).then(res => {
+                if (res.code === 200) {
+                  _this.$message({
+                    message: '文档收藏成功',
+                    type: 'success'
+                  })
+                  //重新加载团队文档
+                  _this.$api.group.document({
+                    "group_id":_this.group_id,
+                    user_id:_this.id
+                  }).then(res=>{
+                    if(res.code == 200){
+                      _this.groupdocuments = res.data;
+                      console.log('groupdocument');
+                      console.log(_this.groupdocuments);
+                    } else {
+                      _this.$message({
+                        message: res.msg,
+                        type: 'error'
+                      })
+                    }
+                  })
+                } else {
+                  _this.$message({
+                    message: '收藏失败',
+                    type: 'error'
+                  })
+                  _this.$message({
+                    message: res.msg,
+                    type: 'error'
+                  })
+                }
+              }).catch(failResponse => {})
+
+            }
+          },
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
+            },
+            authority() {
+              this.authorityDialogVisible = true
             },
             invite:function(){
               console.log('邀请别人');
@@ -332,9 +398,9 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                         .then((res) => {
                             if (res.code === 200) {
                                 _this.$router.push({
-                                    name: "DocEditor",
-                                    params: {
-                                        doc: res.data, // 返回一个新的文档信息document
+                                    path: "/doceditor",
+                                    query: {
+                                      doc_id: res.data.id,
                                     },
                                 });
                             } else {
