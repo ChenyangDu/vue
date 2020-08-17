@@ -5,7 +5,8 @@
                 style="width: 100%">
             <el-table-column>
                 <template slot-scope="scope">
-                    <img :src="avatarPath +'?user_id='+scope.row.id" style="height: 50px"/>
+                    <!-- <img :src="avatarPath +'?user_id='+scope.row.id" style="height: 50px"/> -->
+                    <el-avatar :size="50" :src="avatarPath +'?user_id='+scope.row.id" style="height: 50px"></el-avatar>
                 </template>
             </el-table-column>
             <el-table-column

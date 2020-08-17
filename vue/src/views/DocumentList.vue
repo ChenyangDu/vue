@@ -81,7 +81,7 @@
           <el-row>
             <el-col :span="22" offset="1">
               <el-row :gutter="40">
-                <el-col :span="4" v-for="(item,index) in recentdocuments" :key="item.id">
+                <el-col :span="4" v-for="(item) in recentdocuments" :key="item.id">
                   <div>
                     <br>
                     <el-card :body-style="{ padding: '0px' }" shadow="always">

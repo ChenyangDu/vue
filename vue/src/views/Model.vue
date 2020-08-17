@@ -3,9 +3,6 @@
     <el-row :gutter="20">
       <el-col :span="22" :offset="1">
         <el-carousel :interval="4000" type="card" height="300px">
-          <el-carousel-item v-for="item in carouselShow" :key="item">
-            <img align="center" :src="srcUrl+item" fit="fill" height="100%" width="100%"></img>
-          </el-carousel-item>
         </el-carousel>
       </el-col>
 <!--      <el-col :span="8" :offset="1">-->
