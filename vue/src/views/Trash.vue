@@ -133,7 +133,7 @@ export default {
         type: 'warning'
       }).then(() => {
         that.documents.forEach(function (value, key, arr) {
-          that.del(value.id);
+          that.delForClear(value.id);
         });
         that.documents = [];
         that.$message({
@@ -147,9 +147,33 @@ export default {
         });
       });
     },
+    delForClear(id) {
+      let inf = { doc_id: id, user_id: this.id };
+      var that = this;
+      this.$api.document
+          .remove(inf)
+          .then((response) => {
+            if (response.code === 400) {
+              that.$message({
+                // message: response.msg,
+                message: "列表为空",
+                type: "error",
+              });
+              console.log("返回了400");
+            } else {
+              that.getTrashList();
+            }
+          })
+          .catch((err) => {
+            console.log("捕获到了异常");
+            that.$message({
+              message: err.msg,
+              type: "error",
+            });
+          });
+    },
     del: function (id) {
       //console.log(id);
-      let inf = { doc_id: id, user_id: this.id };
       var that = this;
 
       this.$confirm('此操作将永久删除该文件，是否继续?', '提示', {
@@ -157,6 +181,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        let inf = { doc_id: id, user_id: this.id };
         this.$api.document
             .remove(inf)
             .then((response) => {
