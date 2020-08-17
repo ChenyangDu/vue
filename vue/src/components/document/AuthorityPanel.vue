@@ -3,7 +3,8 @@
     <el-row :gutter="0">
       <el-col :span="24" :push="0">
         <el-input type="text" v-model="searchForm.key" placeholder="输入 手机号/邮箱 添加协作权限">
-          <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>
+<!--          <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>-->
+          <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
         </el-input>
       </el-col>
     </el-row>

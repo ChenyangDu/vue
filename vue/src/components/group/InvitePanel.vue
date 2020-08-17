@@ -9,12 +9,12 @@
     </el-row>
     <el-row>
       <el-table :data="users" stripe style="width: 100%">
-        <el-table-column fixed prop="create_date" label="注册日期" width="150"></el-table-column>
-        <el-table-column prop="name" label="昵称" width="120"></el-table-column>
-        <el-table-column prop="email" label="邮箱" width="120"></el-table-column>
-        <!-- <el-table-column prop="phone" label="电话" width="120"></el-table-column>
-        <el-table-column prop="wechat" label="微信" width="300"></el-table-column>
-        <el-table-column prop="qq" label="qq" width="120"></el-table-column> -->
+<!--        <el-table-column fixed prop="create_date" label="注册日期" width="150"></el-table-column>-->
+        <el-table-column prop="name" label="昵称" width="150"></el-table-column>
+        <el-table-column prop="email" label="邮箱" width="150"></el-table-column>
+        <el-table-column prop="phone" label="电话" width="150"></el-table-column>
+<!--        <el-table-column prop="wechat" label="微信" width="300"></el-table-column>-->
+<!--        <el-table-column prop="qq" label="qq" width="120"></el-table-column>-->
         <el-table-column >
           <template slot-scope="scope">
             <el-button @click="invite(scope.row.id)" type="text" size="small">邀请</el-button>
@@ -57,9 +57,19 @@ export default {
       let inviteInf = { user_id: id,group_id:this.group_id};
       var that = this;
       this.$api.group.invite(inviteInf).then(response => {
-          if(response.code === 200)
+          if(response.code === 200){
             console.log('成功发送邀请');
-          else console.log('发送邀请出错');
+            that.$message({
+              message: '已成功发送邀请',
+              type: 'success'
+            })
+          }else {
+            console.log('发送邀请出错');
+            that.$message({
+              message: response.msg,
+              type: 'error'
+            })
+          }
       }).catch(err => {
           console.log('邀请出现异常');
       })
