@@ -68,7 +68,7 @@
                         <div class="bottom clearfix">
                           <i class="el-icon-view"></i> {{item.views}}
                           <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
                         </div>
                       </div>
                     </el-card>
@@ -114,7 +114,7 @@
                         <div class="bottom clearfix">
                           <i class="el-icon-view"></i> {{item.views}}
                           <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
                         </div>
                       </div>
                     </el-card>
@@ -162,7 +162,7 @@
                         <div class="bottom clearfix">
                           <i class="el-icon-view"></i> {{item.views}}
                           <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
                         </div>
                       </div>
                     </el-card>
@@ -199,11 +199,17 @@ export default {
     return {
       owndocuments: [
         {
-          id: 0,
-          creator_id: this.$store.state.user.username.id,
-          name: "鸡你太美",
-          username: "蔡徐坤",
-          last_edit_time: "2020-8-15"
+          id: 1586462705,
+          name: "12",
+          creator_id: 1304451137,
+          username: "drhhh",
+          create_time: "2020-08-16T22:01:11.000+00:00",
+          edit_times: 4,
+          group_id: null,
+          is_deleted: false,
+          is_editting: false,
+          last_edit_time: "2020-08-16T14:01:58.000+00:00",
+          star: true,
         },
       ],
       favoritedocuments:[],
@@ -374,14 +380,13 @@ export default {
     cancelShare() {
       this.dialogFormVisible = false
     },
-    collect: function (id) {
+    collect: function (doc) {
       console.log("collect");
       var _this = this
-      this.doc_id = id
-      // todo 需要在加载列表时获取收藏信息
-      if(this.isCollect(id)) {
+      this.doc_id = doc.id
+      if(doc.star) { // 已收藏
         _this.$api.document.favorite({
-          doc_id: _this.doc.id,
+          doc_id: doc.id,
           user_id: _this.id,
           favorite: false
         }).then(res => {
@@ -390,6 +395,9 @@ export default {
               message: '文档已取消收藏',
               type: 'success'
             })
+            _this.getOwnList()
+            _this.getFavoriteList()
+            _this.getRecentList()
           } else {
             _this.$message({
               message: res.msg,
@@ -397,9 +405,9 @@ export default {
             })
           }
         }).catch(failResponse => {})
-      } else {
+      } else { // 目前未收藏
         _this.$api.document.favorite({
-          doc_id: _this.doc_id,
+          doc_id: doc.id,
           user_id: _this.id,
           favorite: true
         }).then(res => {
@@ -408,6 +416,9 @@ export default {
               message: '文档收藏成功',
               type: 'success'
             })
+            _this.getOwnList()
+            _this.getFavoriteList()
+            _this.getRecentList()
           } else {
             _this.$message({
               message: '收藏失败',

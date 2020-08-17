@@ -45,7 +45,7 @@
                             <div class="bottom clearfix">
                               <i class="el-icon-view"></i> {{item.views}}
                               <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                              <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item.id)"></i> {{item.stars}}
+                              <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
                             </div>
                           </div>
                         </el-card>
@@ -233,14 +233,14 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                 else if (command === "share") this.share(id);
                 else if (command === "collect") this.collect(id);
             },
-            collect: function (id) {
+            collect: function (doc) {
                 console.log("collect");
                 var _this = this
-                this.doc_id = id
+                this.doc_id = doc.id
                 // todo 需要在加载列表时获取收藏信息
-                if(this.isCollect(id)) {
+                if(doc.star) {
                     _this.$api.document.favorite({
-                        doc_id: _this.doc.id,
+                        doc_id: doc.id,
                         user_id: _this.id,
                         favorite: false
                     }).then(res => {
@@ -248,6 +248,22 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                             _this.$message({
                                 message: '文档已取消收藏',
                                 type: 'success'
+                            })
+                            //重新加载团队文档
+                            _this.$api.group.document({
+                              "group_id":_this.group_id,
+                              user_id:_this.id
+                            }).then(res=>{
+                              if(res.code == 200){
+                                _this.groupdocuments = res.data;
+                                console.log('groupdocument');
+                                console.log(_this.groupdocuments);
+                              } else {
+                                _this.$message({
+                                  message: res.msg,
+                                  type: 'error'
+                                })
+                              }
                             })
                         } else {
                             _this.$message({
@@ -258,7 +274,7 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                     }).catch(failResponse => {})
                 } else {
                     _this.$api.document.favorite({
-                        doc_id: _this.doc_id,
+                        doc_id: doc.id,
                         user_id: _this.id,
                         favorite: true
                     }).then(res => {
@@ -267,6 +283,22 @@ import InvitePanel from '../components/group/InvitePanel.vue';
                                 message: '文档收藏成功',
                                 type: 'success'
                             })
+                          //重新加载团队文档
+                          _this.$api.group.document({
+                            "group_id":_this.group_id,
+                            user_id:_this.id
+                          }).then(res=>{
+                            if(res.code == 200){
+                              _this.groupdocuments = res.data;
+                              console.log('groupdocument');
+                              console.log(_this.groupdocuments);
+                            } else {
+                              _this.$message({
+                                message: res.msg,
+                                type: 'error'
+                              })
+                            }
+                          })
                         } else {
                             _this.$message({
                                 message: '收藏失败',
