@@ -1,9 +1,9 @@
 <template>
   <div>
+    <!--搜索框-->
     <el-row :gutter="0">
       <el-col :span="24" :push="0">
         <el-input type="text" v-model="searchForm.key" placeholder="输入 手机号/邮箱 添加协作权限">
-<!--          <i slot="suffix" class="el-input__icon el-icon-search" @click="handleSearch"></i>-->
           <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
         </el-input>
       </el-col>
@@ -57,7 +57,6 @@
       </el-row>
       <br/>
     </div>
-
     <!--展示个人信息-->
     <el-row :gutter="0">
       <el-col :span="24" :push="0">
@@ -83,7 +82,6 @@
 </template>
 
 <script>
-
 export default {
   name: "AuthorityPanel",
   props: {
@@ -103,24 +101,14 @@ export default {
       },
       searchResults: [],
       memberList:[],
-      selfData:[
-        {
-          id: '',
-          name: ' ',
-          password: '',
-          phone: ' ',
-          email: '',
-          wechat: '',
-          qq: '',
-        }
-      ],
+      selfData:[],
       user_id: this.$store.state.user.username.id
     }
   },
   created() {
     console.log('权限panel',this.group_id)
     this.selfData[0] = this.$store.state.user.username
-    this.selfData[0]["authority_type"] = parseInt('3')
+    this.selfData[0].authority_type = parseInt('3')
     if (this.group_id > 0) {
       this.loadMember()
     }
@@ -172,13 +160,11 @@ export default {
           this.memberList.splice(index,1)
         }
       }
-      console.log('fasong')
       console.log(this.memberList)
       let userstring = ''
       for (var user of this.memberList){
         userstring = userstring+user.id
         userstring +=','
-        console.log('final',userstring)
       }
       console.log('final',userstring)
       userstring = userstring.substring(0,userstring.length-1)

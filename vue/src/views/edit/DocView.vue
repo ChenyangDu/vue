@@ -1,40 +1,34 @@
-<!-- 仅查看文章内容 + 评论 -->
+<!-- 仅查看文章内容 + 查看评论 + 收藏文章 + 前往编辑页 -->
 <template>
   <div class="view-page">
-
     <div class="wrapper">
-
+      <!-- 文章标题 + 文章内容-->
       <div class="left" id="fullscreen" >
-
-        <!-- 文章标题-->
-        <el-row :gutter="0">
-          <el-col :span="24" :push="0">
-            <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-
-              <el-row :gutter="1" class="title-row">
+            <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always">
+              <el-row :gutter="50" class="title-row">
                 <el-col :span="8" :push="0">
-                  <h1 v-if="name_disabled">{{ doc.name }}</h1>
-                  <el-input class="title-input" type="text"  v-if="!(name_disabled)" v-model="doc.name" :disabled="name_disabled" style="width: 400px" ref="title_input"></el-input>
+                  <h1 class="doc-info">{{ doc.name }}</h1>
                 </el-col>
-
-                <el-col :span="1" :push="8">
-                  <div class="btn-fullscreen" @click="handleFullScreen">
-                    <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
-                    <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
-                    <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                      <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
+                <div class="icon-group">
+                  <el-col :span="1" :push="0">
+                    <el-tooltip effect="dark" content="收藏" placement="top">
+                      <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
                     </el-tooltip>
-                  </div>
-
-                </el-col>
+                  </el-col>
+                  <el-col :span="1" :push="0">
+                    <el-tooltip effect="dark" content="去编辑" placement="top">
+                      <el-button icon="el-icon-edit-outline" class="icon-toEdit" circle @click="toDocEditor"></el-button>
+                    </el-tooltip>
+                  </el-col>
+                  <el-col :span="1" :push="0">
+                    <div class="btn-fullscreen" @click="handleFullScreen">
+                      <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="top">
+                        <el-button icon="el-icon-rank" class="icon-screen" circle></el-button>
+                      </el-tooltip>
+                    </div>
+                  </el-col>
+                </div>
               </el-row>
-<!--            </el-card>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
-<!--        &lt;!&ndash; 文章内容&ndash;&gt;-->
-<!--        <el-row :gutter="0">-->
-<!--          <el-col :span="20" :push="2">-->
-<!--            <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">-->
               <el-form>
                 <el-form-item>
                   <!--              不能编辑：禁用-->
@@ -48,14 +42,24 @@
                 </el-form-item>
               </el-form>
             </el-card>
+      </div>
+      <!-- 文章评论-->
+      <div class="right">
+        <el-row>
+          <el-col :span="23" :push="1">
+            <el-card class="info-card">
+              <div align="center">
+                <el-avatar size="large" :src=this.doc_avatar></el-avatar><br/>
+                <span class="doc-info">{{ this.doc.username}}</span><br/>
+              </div>
+              <span class="doc-info">创建时间：{{ this.doc.create_time.substring(0,10)+' '+this.doc.create_time.substring(11,19) }}</span><br/>
+              <span class="doc-info">最近修改时间：{{ this.doc.last_edit_time.substring(0,10) + ' ' + this.doc.last_edit_time.substring(11,19) }}</span><br/>
+              <span class="doc-info">修改次数：{{ this.doc.edit_times }}</span>
+
+            </el-card>
+
           </el-col>
         </el-row>
-
-      </div>
-
-      <div class="right">
-
-        <!-- 文章评论-->
         <el-row :gutter="0">
           <el-col :span="23" :push="1">
             <el-card class="comment-card">
@@ -66,14 +70,8 @@
             </el-card>
           </el-col>
         </el-row>
-
       </div>
-
-
     </div>
-
-
-
   </div>
 </template>
 
@@ -105,27 +103,10 @@ export default {
       },
       doc_id: '',
       user_id: this.$store.state.user.username.id,
-      name_disabled: true,
-      rename_icon_data: 'el-icon-edit',
       favorite_icon_data: 'el-icon-star-off',
-      delete_icon_data: 'el-icon-delete-solid',
-      submit_icon_data: 'el-icon-upload2',
-      share_icon_data: 'el-icon-s-promotion',
-      dialogFormVisible: false,
-      formLabelWidth:'100px',
       edit_bar_show: false,
       fullscreen:false,
-      shareForm: {
-        type: ''
-      },
-      shareAuthority: {
-        document_id: '',
-        user_id: '',
-        can_read: false,
-        can_comment: false,
-        can_edit: false,
-        can_delete: false
-      }
+      doc_avatar:''
     }
 
   },
@@ -171,6 +152,7 @@ export default {
       }).then(res =>{
         if(res.code === 200){
           _this.doc = res.data
+          _this.doc_avatar = _this.global.baseUrl + "/image/avatar/show?user_id="+ _this.doc.creator_id
           _this.viewDoc()
         } else {
           _this.$message({
@@ -202,55 +184,51 @@ export default {
       }).catch(failResponse => {})
       console.log('viewDoc-获取文章内容完成')
     },
-    handleRename() {
-      var _this = this
-      if (this.name_disabled === true) { // 当前为禁止修改的状态，故点击允许修改标题
-        console.log('修改前')
-        console.log(this.doc.name)
-        _this.rename_icon_data = 'el-icon-check'
-        this.name_disabled = false
-        // _this.$refs.title_input.focus()
-      } else { // 当前为正在修改的状态,故再次点击进行保存
-        console.log('修改后')
-        console.log(this.doc.name)
-        _this.rename_icon_data = 'el-icon-edit'
-        this.name_disabled = true
-        // 发送name修改后的请求
-        // _this.$api.document.rename({
-        //  doc_id: this.doc.id,
-        //  不确定user_id
-        //  user_id: this.$store.state.user.username.id
-        // })
-        _this.$message({
-          message: '标题修改成功！',
-          type: 'success'
-        })
-      }
-    },
-    // 分享
-    handleShare() {
-      var _this = this
-      this.dialogFormVisible = false
-      console.log(this.shareForm.type)
-      if (this.shareForm.type === '') {
-        _this.$message({
-          message: '分享失败！',
-          type: 'error'
-        })
-      } else {
-        _this.$message({
-          message: '分享成功！',
-          type: 'success'
-        })
-      }
-
-    },
     // 收藏
     handleFavo() {
-      if (this.favorite_icon_data === 'el-icon-star-on') {
-        this.favorite_icon_data = 'el-icon-star-off'
+      var _this = this
+      if (this.favorite_icon_data === 'el-icon-star-off') {
+        _this.$api.document.favorite({
+          doc_id: _this.doc_id,
+          user_id: _this.user_id,
+          favorite: true
+        }).then(res => {
+          if (res.code === 200) {
+            this.favorite_icon_data = 'el-icon-star-on'
+            _this.$message({
+              message: '文档收藏成功',
+              type: 'success'
+            })
+          } else {
+            _this.$message({
+              message: '收藏失败',
+              type: 'error'
+            })
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       } else {
-        this.favorite_icon_data = 'el-icon-star-on'
+        _this.$api.document.favorite({
+          doc_id: _this.doc.id,
+          user_id: _this.user_id,
+          favorite: false
+        }).then(res => {
+          if (res.code === 200) {
+            _this.$message({
+              message: '文档已取消收藏',
+              type: 'success'
+            })
+            this.favorite_icon_data = 'el-icon-star-off'
+          } else {
+            _this.$message({
+              message: res.msg,
+              type: 'error'
+            })
+          }
+        }).catch(failResponse => {})
       }
     },
     //鼠标单击的事件
@@ -259,6 +237,16 @@ export default {
       console.log(e)
       console.log(editor)
     },
+    // 前往编辑页
+    toDocEditor() {
+      var _this = this
+      this.$router.push({
+        path: '/doceditor',
+        query: {
+          doc_id: _this.doc_id
+        }
+      })
+    }
   }
 }
 </script>
@@ -268,48 +256,29 @@ export default {
 .wrapper{
   width: 100%;
   height: 100%;
-  /*border: 1px solid;*/
   display: flex;
-  /*background-color: blue;*/
 }
 .left{
-  /*background-color: green;*/
   height: 100%;
   flex: 1;
 }
 .right{
   float: right;
-  /*background-color: yellow;*/
   width: 350px;
   height: 100%;
 }
-
-.title-card{
+.doc-card, .comment-card,.info-card{
   margin-top: 5px;
 }
-.content-card{
-  margin-top: 30px ;
-}
-.comment-card{
-  margin-top: 5px;
-}
-.icon-delete{
-  float: right;
-  font-size: 24px;
-  position: relative;
-  margin-left: 100px;
-}
-.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen{
+.icon-favorite, .icon-toEdit, .icon-screen{
   font-size: 24px;
   border: white;
 }
-.btn-fullscreen {
-  /*height: 30px;*/
-  /*width: 30px;*/
-  /*text-align: center;*/
-  /*border-radius: 15px;*/
-  /*cursor: pointer;*/
-  /*position: relative;*/
-  transform: rotate(45deg);
+.icon-group{
+  float: right;
+}
+.doc-info{
+  color: #606266;
+  font-weight: bold;
 }
 </style>

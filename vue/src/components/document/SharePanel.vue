@@ -6,16 +6,13 @@
           <el-option label="可查看" value="1"></el-option>
           <el-option label="可查看与评论" value="2"></el-option>
           <el-option label="可查看与评论与编辑" value="3"></el-option>
-          <!--                    <el-option label="可查看与评论与编辑与删除" value="4"></el-option>-->
         </el-select>
       </el-form-item>
     </el-form>
     <el-row :gutter="0">
       <el-col :span="24" :push="16">
-<!--        <div slot="footer" class="dialog-footer">-->
           <el-button @click="cancel">取 消</el-button>
           <el-button type="primary" @click="handleShare">确 定</el-button>
-<!--        </div>-->
       </el-col>
     </el-row>
 
@@ -78,7 +75,7 @@ export default {
             _this.shareAuthorityForm
         ).then(res=> {
           if(res.code === 200 ){
-            _this.$alert('http://39.101.200.9:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+            _this.$alert('http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
               confirmButtonText: '确定',
               callback: action => {
                 _this.$message({

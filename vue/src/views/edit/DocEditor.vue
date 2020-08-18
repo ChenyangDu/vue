@@ -1,95 +1,100 @@
 <template>
-<!--    页头-->
-<!--    <el-page-header @back="goBack" content="编辑页面" class="header" ></el-page-header>-->
-<!--    页头-->
   <div class="wrapper">
     <div class="left"  id="fullscreen">
       <!-- 文章标题-->
-      <el-row :gutter="0">
-        <el-col :span="24" :push="0">
-          <el-card  class="title-card" :body-style="{ margin: '0px'}" shadow="always">
-
-            <el-row :gutter="1" class="title-row">
-              <el-col :span="8" :push="0">
-                <h1 v-if="name_disabled">{{ doc.name }}</h1>
-                <el-input type="text" v-model="doc.name" v-if="!(name_disabled)" :disabled="name_disabled" class="title-input"></el-input>
-              </el-col>
-
-              <div class="edit-au" v-if="edit_au_show">
-                <el-col :span="1" :push="1">
+      <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always">
+        <el-row :gutter="50" class="title-row">
+          <el-col :span="8" :push="0">
+            <h1  class="doc-info" v-if="name_disabled">{{ doc.name }}</h1>
+            <el-input type="text" v-model="doc.name" v-if="!(name_disabled)" :disabled="name_disabled" class="title-input"></el-input>
+          </el-col>
+          <div class="icon-group">
+            <div class="edit-au" v-if="edit_au_show">
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" :content="name_disabled?`修改标题`:`保存标题`" placement="top">
                   <el-button v-bind:icon="rename_icon_data" class="icon-rename" circle @click="handleRename"></el-button>
-                </el-col>
-                <el-col :span="1" :push="2">
-                  <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart"></el-button>
-                </el-col>
-                <el-col :span="1" :push="3">
-                  <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit"></el-button>
-                </el-col>
-              </div>
-
-              <div class="favo-au" v-if="favo_au_show">
-                <el-col :span="1" :push="4">
-                  <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
-                </el-col>
-              </div>
-
-              <div class="creator-au" v-if="create_au_show">
-                <el-col :span="1" :push="5">
-                  <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="dialogFormVisible = true"></el-button>
-                </el-col>
-                <el-col :span="1" :push="6">
-                  <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityFormVisible = true"></el-button>
-                </el-col>
-                <el-col :span="1" :push="7">
-                  <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
-                </el-col>
-
-                <!--分享弹窗-->
-                <el-dialog title="分享" :visible.sync="dialogFormVisible">
-                  <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
-                </el-dialog>
-
-                <!--权限设置-->
-                <el-dialog title="权限管理" :visible.sync="authorityFormVisible">
-                  <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
-                </el-dialog>
-              </div>
-
-              <el-col :span="1" :push="8">
-                <div class="btn-fullscreen" @click="handleFullScreen">
-                  <!--tooltip提供了两个主题：dark和light，通过 effect 设置主题 -->
-                  <!-- 通过三元表达式来设置不同的文字提示，placement属性控制文字提示出现的位置 -->
-                  <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
-                    <el-button icon="el-icon-sort" class="icon-screen" circle></el-button>
-                  </el-tooltip>
-                </div>
+                </el-tooltip>
               </el-col>
-            </el-row>
-<!--          </el-card>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-<!--      &lt;!&ndash; 编辑区 &ndash;&gt;-->
-<!--      <el-row :gutter="0">-->
-<!--        <el-col :span="24" :push="0">-->
-<!--          <el-card class="content-card" :body-style="{ margin: '0px'}" shadow="always">-->
-            <el-form class="edit-container" >
-              <el-form-item>
-                <tinymce-editor v-model="msg"
-                                v-on:submitSuccess="submitSuccess"
-                                :disabled="this.disabled"
-                                :edit_bar_show="this.edit_bar_show"
-                                :doc_id="this.doc_id"
-                                @onClick="onClick"
-                                ref="editor">
-                </tinymce-editor>
-              </el-form-item>
-            </el-form>
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="开始编辑" placement="top">
+                  <el-button v-bind:icon="edit_icon_data" class="icon-edit" circle @click="editStart" :disabled="edit_status"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="提交文章" placement="top">
+                  <el-button v-bind:icon="submit_icon_data" class="icon-submit" circle @click="handleSubmit" :disabled="!(edit_status)"></el-button>
+                </el-tooltip>
+              </el-col>
+            </div>
+
+            <div class="favo-au" v-if="favo_au_show">
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="收藏" placement="top">
+                  <el-button v-bind:icon="favorite_icon_data" class="icon-favorite" circle @click="handleFavo"></el-button>
+                </el-tooltip>
+              </el-col>
+            </div>
+
+            <div class="creator-au" v-if="create_au_show">
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="去查看" placement="top">
+                  <el-button icon="el-icon-view" class="icon-toView" circle @click="toDocView"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="分享" placement="top">
+                  <el-button v-bind:icon="share_icon_data" class="icon-share" circle @click="shareDialogVisible = true"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="权限设置" placement="top">
+                  <el-button v-bind:icon="authority_icon_data" class="icon_authority" circle @click="authorityDialogVisible = true"></el-button>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" content="删除文章" placement="top">
+                  <el-button v-bind:icon="delete_icon_data" class="icon-delete" circle @click="handleDelete"></el-button>
+                </el-tooltip>
+              </el-col>
+            </div>
+
+            <div class="btn-fullscreen" @click="handleFullScreen">
+              <el-col :span="1" :push="0">
+                <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="top">
+                  <el-button icon="el-icon-rank" class="icon-screen" circle></el-button>
+                </el-tooltip>
+              </el-col>
+            </div>
+          </div>
+        </el-row>
+        <el-form class="edit-container" >
+          <el-form-item>
+            <tinymce-editor v-model="msg"
+                            v-on:submitSuccess="submitSuccess"
+                            :disabled="this.disabled"
+                            :edit_bar_show="this.edit_bar_show"
+                            :doc_id="this.doc_id"
+                            @onClick="onClick"
+                            ref="editor">
+            </tinymce-editor>
+          </el-form-item>
+        </el-form>
+      </el-card>
+    </div>
+    <div class="right">
+      <el-row>
+        <el-col :span="23" :push="1">
+          <el-card class="info-card">
+            <div align="center">
+              <el-avatar size="large" :src=this.doc_avatar></el-avatar><br/>
+              <span class="doc-info">{{ this.doc.username}}</span><br/>
+            </div>
+            <span class="doc-info">创建时间：{{ this.doc.create_time.substring(0,10)+' '+this.doc.create_time.substring(11,19) }}</span><br/>
+            <span class="doc-info">最近修改时间：{{ this.doc.last_edit_time.substring(0,10) + ' ' + this.doc.last_edit_time.substring(11,19) }}</span><br/>
+            <span class="doc-info">修改次数：{{ this.doc.edit_times }}</span>
           </el-card>
         </el-col>
       </el-row>
-
-    </div>
-    <div class="right">
       <!-- 评论区   -->
       <el-row :gutter="0">
         <el-col :span="23" :push="1">
@@ -99,6 +104,17 @@
         </el-col>
       </el-row>
     </div>
+
+    <!--分享弹窗-->
+    <el-dialog title="分享" :visible.sync="shareDialogVisible">
+      <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
+    </el-dialog>
+
+    <!--权限设置-->
+    <el-dialog title="权限管理" :visible.sync="authorityDialogVisible">
+      <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -132,6 +148,7 @@ export default {
         edit_times: '',
         username: ''
       },
+      doc_acatar: '',
       disabled: true, // tinymce输入
       name_disabled: true, // 标题修改
       edit_status: false,
@@ -146,8 +163,8 @@ export default {
       submit_icon_data: 'el-icon-upload',
       edit_icon_data: 'el-icon-edit-outline',
       authority_icon_data: 'el-icon-s-tools',
-      dialogFormVisible: false,
-      authorityFormVisible: false,
+      shareDialogVisible: false,
+      authorityDialogVisible: false,
       formLabelWidth:'100px',
       fullscreen:false,
       //存获取的信息
@@ -240,6 +257,7 @@ export default {
       }).then(res => {
         if (res.code === 200) {
           _this.doc = res.data
+          _this.doc_avatar = _this.global.baseUrl + "/image/avatar/show?user_id="+ _this.doc.creator_id
           if (_this.doc.is_deleted){
             _this.$message({
               message: '该文档已删除',
@@ -357,8 +375,12 @@ export default {
       }).then(res => {
         if (res.code === 200) { //无人在编辑
           console.log('editStart code = 200')
-          this.edit_status = true
-          this.disabled=false
+          _this.edit_status = true
+          _this.disabled=false
+          _this.$message({
+            message: '开始编辑',
+            type: 'success'
+          })
         } else if (res.code === 401) { // 文章正在被编辑
           console.log('editStart code = 401')
           _this.$message({
@@ -454,50 +476,53 @@ export default {
       }
     },
     // 分享
-    handleShare() {
-      var _this = this
-      this.dialogFormVisible = false
-      console.log(this.shareForm.type)
-      if (this.shareForm.type === '') {
-        _this.$message({
-          message: '分享失败！',
-          type: 'error'
-        })
-      } else {
-        // todo 提交权限
-        if(this.shareForm.type === "1") {
-          this.shareAuthorityForm.can_comment = false
-          this.shareAuthorityForm.can_edit = false
-        } else if (this.shareForm.type === "2"){
-          this.shareAuthorityForm.can_edit = false
-        }
-        this.shareAuthorityForm.document_id = this.doc_id
-        this.$api.authority.shareAuthority(
-          _this.shareAuthorityForm
-        ).then(res=> {
-          if(res.code === 200 ){
-            _this.$alert('http://39.101.200.9:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
-              confirmButtonText: '确定',
-              callback: action => {
-                _this.$message({
-                  message: '文档分享成功',
-                  type: 'success'
-                })
-              }
-            })
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(failResponse => {})
-
-      }
-    },
+    // handleShare() {
+    //   var _this = this
+    //   this.shareDialogVisible = false
+    //   console.log(this.shareForm.type)
+    //   if (this.shareForm.type === '') {
+    //     _this.$message({
+    //       message: '分享失败！',
+    //       type: 'error'
+    //     })
+    //   } else {
+    //     // todo 提交权限
+    //     if(this.shareForm.type === "1") {
+    //       this.shareAuthorityForm.can_comment = false
+    //       this.shareAuthorityForm.can_edit = false
+    //     } else if (this.shareForm.type === "2"){
+    //       this.shareAuthorityForm.can_edit = false
+    //     }
+    //     this.shareAuthorityForm.document_id = this.doc_id
+    //     this.$api.authority.shareAuthority(
+    //       _this.shareAuthorityForm
+    //     ).then(res=> {
+    //       if(res.code === 200 ){
+    //         _this.$alert('http://39.101.200.9:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+    //           confirmButtonText: '确定',
+    //           callback: action => {
+    //             _this.$message({
+    //               message: '文档分享成功',
+    //               type: 'success'
+    //             })
+    //           }
+    //         })
+    //       } else {
+    //         _this.$message({
+    //           message: res.msg,
+    //           type: 'error'
+    //         })
+    //       }
+    //     }).catch(failResponse => {})
+    //
+    //   }
+    // },
     // 提交
     handleSubmit() {
       this.$refs.editor.handleSubmit()
+    },
+    cancelShare() {
+      this.shareDialogVisible = false
     },
     // 监听
     submitSuccess() {
@@ -543,13 +568,19 @@ export default {
       console.log(e)
       console.log(editor)
     },
-    cancelShare() {
-      this.dialogFormVisible = false
-    },
     handleSubmitCheck() {
       if (this.edit_status) {
         this.handleSubmit()
       }
+    },
+    toDocView () {
+      var _this = this
+      this.$router.push({
+        path: 'docview',
+        query: {
+          doc_id: _this.doc_id
+        }
+      })
     }
   },
   watch: {
@@ -570,51 +601,33 @@ export default {
 .wrapper{
   width: 100%;
   height: 100%;
-  /*border: 1px solid;*/
   display: flex;
-  /*background-color: blue;*/
 }
 .left{
-  /*background-color: green;*/
   height: 100%;
   flex: 1;
 }
 .right{
   float: right;
-  /*background-color: yellow;*/
   width: 350px;
   height: 100%;
 }
-.header{
-  background: #fff;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
-  border-radius: 5px;
-  padding: 20px 20px 20px 20px;
-}
-.title-card{
-  margin-top: 5px;
+.icon-group{
+  position: relative;
+  left: 130px;
 }
 .title-row{
   margin-bottom: 0;
 }
-.content-card{
-  margin-top: 0px;
-}
-.comment-card{
+.doc-card, .comment-card, .info-card{
   margin-top: 5px;
 }
-.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen{
+.icon-favorite, .icon-rename, .icon-share,.icon-submit, .icon-edit, .icon_authority, .icon-delete, .icon-screen, .icon-toView{
   font-size: 24px;
   border: white;
 }
-.btn-fullscreen {
-  /*height: 30px;*/
-  /*width: 30px;*/
-  /*text-align: center;*/
-  /*border-radius: 15px;*/
-  /*cursor: pointer;*/
-  /*position: relative;*/
-  transform: rotate(45deg);
+.doc-info{
+  color: #606266;
+  font-weight: bold;
 }
 </style>
