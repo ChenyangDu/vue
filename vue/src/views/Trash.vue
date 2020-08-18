@@ -2,7 +2,7 @@
   <div>
     <br/>
     <div style="height: 55px">
-      <el-col offset="20">
+      <el-col :span="4" offset="20">
 
         <el-button type="danger" @click="clearTrash" class="clearButton">清空回收站</el-button>
       </el-col>
