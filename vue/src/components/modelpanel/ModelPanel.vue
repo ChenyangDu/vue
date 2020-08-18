@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-card class="panel">
     <h1>热门素材</h1>
     <el-row :gutter="20">
       <el-col :span="22" :offset="1">
@@ -18,9 +18,9 @@
       <!--      </el-col>-->
     </el-row>
     <h1>推荐模板</h1>
-    <el-row :gutter="20">
+    <el-row :gutter="10">
       <div v-for="(item) in 9" :key="item.id">
-        <el-col :span=5 :offset="1">
+        <el-col :span=5 :push="1">
           <el-card shadow="always">
             <div class="block">
               <div align="center">
@@ -35,12 +35,12 @@
         </el-col>
       </div>
     </el-row>
-  </div>
+  </el-card>
 </template>
 
 <script>
   export default {
-    name: "Model",
+    name: "ModelPanel",
     data() {
       return {
         // srcUrl:"http://39.101.200.9:8081/image/system?id=document"
@@ -114,5 +114,11 @@
     opacity: 0.75;
     line-height: 200px;
     margin: 0;
+  }
+  .panel{
+      background-color:#e2e6eb;
+  }
+  .el-carousel-item{
+      border-width: 5%;
   }
 </style>
