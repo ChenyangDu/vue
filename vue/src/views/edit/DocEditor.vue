@@ -88,7 +88,7 @@
         <el-row>
           <el-col :span="23" :push="1">
             <el-card class="info-card">
-              <div align="center">
+              <div align="center" @click="memberDetail">
                 <el-avatar size="large" :src=this.doc_avatar></el-avatar><br/>
                 <span class="doc-info">{{ this.doc.username}}</span><br/>
               </div>
@@ -261,6 +261,7 @@ export default {
         if (res.code === 200) {
           _this.doc = res.data
           _this.doc_avatar = _this.global.baseUrl + "/image/avatar/show?user_id="+ _this.doc.creator_id
+          _this.doc.creator_id = _this.doc.creator_id
           if (_this.doc.is_deleted){
             _this.$message({
               message: '该文档已删除',
@@ -584,6 +585,11 @@ export default {
           doc_id: _this.doc_id
         }
       })
+    },
+    memberDetail(){
+      console.log('点击了用户详情');
+      var _this = this
+      this.$router.push({name:'DashBoard',params:{user_id: _this.doc.creator_id}});
     }
   },
   watch: {
