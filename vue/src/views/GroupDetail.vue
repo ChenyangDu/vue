@@ -17,6 +17,20 @@
                 <el-row :gutter="20">
 <!--                  分割线-->
                   <div class="line"></div>
+                  <el-col :span=4 :offset="1">
+                    <br>
+                    <el-card shadow="always" @click.native="handleNewDoc" style="cursor:pointer">
+                      <br>
+                      <div class="block">
+                        <div align="center">
+                          <i @click="handleNewDoc" style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
+                        </div>
+                        <div style="padding: 14px;">
+                          <br>
+                        </div>
+                      </div>
+                    </el-card>
+                  </el-col>
                   <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
 
@@ -67,18 +81,7 @@
                       </div>
                     </el-col>
                   </div>
-                  <el-col :span=4 :offset="1">
-                    <br>
-                    <el-card shadow="always" @click.native="handleNewDoc" style="cursor:pointer">
-                      <div class="block">
-                        <div align="center">
-                          <i style="font-size: 100px;" class="el-icon-document-add"></i>
-                        </div>
-                        <br><br><br>
 
-                      </div>
-                    </el-card>
-                  </el-col>
 
                 </el-row>
 
@@ -120,6 +123,9 @@
                       </el-col>
                     </div>
 
+
+                  </el-row>
+                  <el-row>
                     <el-col :span="8" align="center" v-if="id===creator.id">
                       <div align="center">
                         <i @click="memberCtrl" style="font-size: 55px;cursor:pointer" class="el-icon-setting"></i>

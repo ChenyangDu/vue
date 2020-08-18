@@ -141,17 +141,16 @@ export default {
       console.log('获取用户信息捕获到了异常');
     })
 
-    this.$api.introduction.info({user_id:this.login_id}).then(response => {
+    this.$api.introduction.view({user_id:this.login_id}).then(response => {
       if(response.code === 200){
         console.log('获取个人简介成功');
-        console.log(response.data);
         _this.introduce = response.data;
       }
       else {
-        console.log('获取个人简介出错');
+        console.log('获取个人简介失败');
       }
     }).catch(err => {
-      console.log('获取个人简介捕获到了异常');
+      console.log('获取个人简介异常');
     })
   },
   components:{
