@@ -41,22 +41,10 @@
                 >
                 <div class="btn-bell">
                   <span class="btn-bell-badge" v-if="notread"></span>
-                  <el-popover style="outline:0!important" class="bell" placement="bottom" width="600" trigger="click">
+                  <el-popover style="outline:0!important" class="bell" placement="bottom" width="500" trigger="click">
                     <el-tabs type="border-card">
-                      <el-tab-pane label="已读">
-                        <el-table :data="tableData" height="250" stripe>
-                          <el-table-column prop="time" label="时间" width="180"></el-table-column>
-                          <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
-                          <el-table-column prop="operate" label="操作" width="180">
-                            <template slot-scope="scope">
-                              <p v-if="scope.row.operate=='2'">已同意</p>
-                              <p v-if="scope.row.operate=='3'">已拒绝</p>
-                            </template>
-                          </el-table-column>
-                        </el-table>
-                      </el-tab-pane>
                       <el-tab-pane label="未读">
-                        <el-table :data="de_tableData" height="250" stripe>
+                        <el-table :data="de_tableData" height="500" stripe>
                           <el-table-column prop="time" label="时间" width="180"></el-table-column>
                           <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
                           <el-table-column prop="operate" label="操作" width="180">
@@ -68,6 +56,18 @@
                               <p v-if="scope.row.operate=='0'">
                                 <el-button @click="read(scope.row)" type="text" size="small">标记已读</el-button>
                               </p>
+                            </template>
+                          </el-table-column>
+                        </el-table>
+                      </el-tab-pane>
+                      <el-tab-pane label="已读">
+                        <el-table :data="tableData" height="500" stripe>
+                          <el-table-column prop="time" label="时间" width="100"></el-table-column>
+                          <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
+                          <el-table-column prop="operate" label="操作" width="100">
+                            <template slot-scope="scope">
+                              <p v-if="scope.row.operate=='2'">已同意</p>
+                              <p v-if="scope.row.operate=='3'">已拒绝</p>
                             </template>
                           </el-table-column>
                         </el-table>
@@ -126,6 +126,7 @@ export default {
       tableData: null,
       de_tableData: null,
       notread: 0,
+      now:new Date(),
     };
   },
 
@@ -333,6 +334,25 @@ export default {
         })
         .catch((failResponse) => {});
     },
+    solveTime:function(flag){
+      try {
+        let now = this.now
+        let string = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay();
+        console.log(flag)
+        console.log(string)
+        console.log(parseInt(flag.time.substr(0, 4)))
+        if (now.getFullYear() == parseInt(flag.time.substr(0, 4)) &&
+            now.getMonth() == parseInt(flag.time.substr(5, 2) - 1) &&
+            now.getDate() == parseInt(flag.time.substr(8, 2))
+        ) {
+          flag.time = flag.time.substr(11, 5)
+        } else {
+          flag.time = flag.time.substr(5, 5)
+        }
+      }catch (e) {
+        
+      }
+    },
 
     f5: function (){
         var _this = this;
@@ -344,6 +364,9 @@ export default {
                     this.tableData = [];
                     this.de_tableData = [];
                     console.log("所有",res.data)
+                  for(let flag of res.data){
+                    this.solveTime(flag)
+                  }
                     for (let flag of res.data) {
                         console.log(flag)
                         if(flag.have_read === true){
@@ -417,6 +440,8 @@ export default {
                             this.de_tableData.push(flag)
                         }
                     }
+                    this.tableData = this.tableData.reverse();
+                    this.de_tableData = this.de_tableData.reverse();
                     console.log("已读",this.tableData)
                     console.log("未读",this.de_tableData)
 
@@ -442,6 +467,7 @@ export default {
     });
   },
   created: function () {
+    this.now = new Date()
     if (this.checkLogin()) {
       console.log("在构造函数中检测到用户已经登录");
       this.isLogin = true;
