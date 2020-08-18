@@ -12,7 +12,7 @@
           </el-col>
           <!--信息-->
           <el-col :span="14" :offset="0">
-            <el-form class="person" label-position="right" label-width="60px">
+            <el-form class="person" label-position="right" label-width="80px">
               <el-form-item label="昵称" prop="name" class="descClass">
                 <el-input type="text" v-model="userinfoForm.name" readonly="readonly"></el-input>
               </el-form-item>
@@ -62,7 +62,7 @@
           </el-col>
           <!--信息-->
           <el-col :span="14" :offset="0">
-            <el-form class="revise" label-position="right" label-width="60px">
+            <el-form class="revise" label-position="right" label-width="80px">
               <el-form-item label="昵称">
                 <el-input type="text" v-model="formLabelAlign.name"></el-input>
               </el-form-item>
@@ -198,7 +198,7 @@ export default {
   border-radius: 5px;
   -moz-border-radius: 5px;
   background-clip: padding-box;
-  margin: 60px auto;
+  margin: 6px auto;
   width: 800px;
   padding: 35px 50px 15px 50px;
   background: #fff;
@@ -210,7 +210,7 @@ export default {
   top: 80px;
 }
 .button-item {
-    margin: 0 auto 30px auto;
+    margin: 0 auto 5px auto;
     text-align: center;
   }
 </style>

@@ -48,7 +48,7 @@
                   <el-table :data="de_tableData" height="500" stripe>
                     <el-table-column prop="time" label="时间" width="70"></el-table-column>
                     <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
-                    <el-table-column prop="operate" label="操作" width="100">
+                    <el-table-column prop="operate" label="操作" width=auto>
                       <template slot-scope="scope">
                         <p v-if="scope.row.operate=='1'">
                           <el-button @click="agree(scope.row)" type="text" size="small">同意</el-button>
@@ -65,7 +65,7 @@
                   <el-table :data="tableData" height="500" stripe>
                     <el-table-column prop="time" label="时间" width="70"></el-table-column>
                     <el-table-column prop="message_a" label="信息" width="180"></el-table-column>
-                    <el-table-column prop="operate" label="操作" width="100">
+                    <el-table-column prop="operate" label="操作" width=auto>
                       <template slot-scope="scope">
                         <p v-if="scope.row.operate=='2'">已同意</p>
                         <p v-if="scope.row.operate=='3'">已拒绝</p>

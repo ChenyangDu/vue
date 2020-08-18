@@ -99,7 +99,7 @@ export default {
             _this.shareAuthorityForm
         ).then(res=> {
           if(res.code === 200 ){
-            _this.shareLink = 'http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id
+            _this.shareLink = 'http://39.101.200.9:8080/#/doceditor?doc_id=' + _this.doc_id
             _this.first = false
             // _this.dialogVisible = true;
             // _this.$alert('http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
