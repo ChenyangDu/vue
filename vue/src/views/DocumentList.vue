@@ -15,7 +15,7 @@
                       <br/>
                       <br><br>
                       <div align="center">
-                        <i @click.native="handleNewDoc(-1)" style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
+                        <i  style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
                       </div>
 <!--                      <br>-->
                       <div style="padding: 14px;">

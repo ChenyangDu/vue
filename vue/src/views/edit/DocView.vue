@@ -4,7 +4,7 @@
     <div class="wrapper">
       <!-- 文章标题 + 文章内容-->
       <div class="left" id="fullscreen" >
-            <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always">
+            <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always" style="min-height: 660px">
               <el-row :gutter="50" class="title-row">
                 <el-col :span="8" :push="0">
                   <h1 class="doc-info">{{ doc.name }}</h1>
@@ -29,7 +29,8 @@
                   </el-col>
                 </div>
               </el-row>
-              <el-form>
+              <el-divider class="title-content-divider"></el-divider>
+              <el-form v-if="false">
                 <el-form-item>
                   <!--              不能编辑：禁用-->
                   <tinymce-editor v-model="msg"
@@ -41,6 +42,7 @@
                   </tinymce-editor>
                 </el-form-item>
               </el-form>
+              <div v-html="msg"></div>
             </el-card>
       </div>
       <!-- 文章评论-->
@@ -253,6 +255,9 @@ export default {
 
 <style scoped>
 
+.el-row{
+  margin-bottom: 0;
+}
 .wrapper{
   width: 100%;
   height: 100%;
@@ -267,8 +272,18 @@ export default {
   width: 350px;
   height: 100%;
 }
-.doc-card, .comment-card,.info-card{
+.title-row{
+  margin-bottom: 0;
+}
+.doc-card{
   margin-top: 5px;
+}
+.info-card{
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.comment-card{
+  margin-top: 15px;
 }
 .icon-favorite, .icon-toEdit, .icon-screen{
   font-size: 24px;
@@ -280,5 +295,8 @@ export default {
 .doc-info{
   color: #606266;
   font-weight: bold;
+}
+.title-content-divider{
+  margin-top: 0;
 }
 </style>
