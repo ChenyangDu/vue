@@ -159,7 +159,7 @@
           this.$router.push("/login");
         } else if (command == "myinfo") {
           //this.$router.push({path:"/personalinformation",params:{user_id:this.$store.state.user.username.id}});
-          this.$router.push("/personalinformation");
+          this.$router.push({name:'DashBoard',params:{user_id:this.$store.state.user.username.id}});
         }
       },
 

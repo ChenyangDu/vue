@@ -11,7 +11,8 @@
             <i class="el-icon-lx-people grid-con-icon"></i>
             <div class="grid-cont-right">
               <div class="grid-num">{{userinfo.own_documents}}</div>
-              <div>我的文档</div>
+              <div v-if="isMe()">我的文档</div>
+              <div v-if="!isMe()">TA的文档</div>
             </div>
           </div>
         </el-card>
@@ -23,7 +24,8 @@
             <i class="el-icon-lx-notice grid-con-icon"></i>
             <div class="grid-cont-right">
               <div class="grid-num">{{userinfo.stars}}</div>
-              <div>我被收藏</div>
+              <div v-if="isMe()">我被收藏</div>
+              <div v-if="!isMe()">TA被收藏</div>
             </div>
           </div>
         </el-card>
@@ -35,7 +37,8 @@
             <i class="el-icon-lx-goods grid-con-icon"></i>
             <div class="grid-cont-right">
               <div class="grid-num">{{userinfo.groups}}</div>
-              <div>我的团队</div>
+              <div v-if="isMe()">我的团队</div>
+              <div v-if="!isMe()">TA的团队</div>
             </div>
           </div>
         </el-card>
@@ -83,8 +86,10 @@
         <el-card shadow="hover" style="height:450px;">
           <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">
             <span><h3>个人简介</h3></span>
+            <div v-if="isMe()">
             <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="edit" v-if="!isEdit">修改</el-button>
             <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="save" v-if="isEdit">保存</el-button>
+            </div>
           </div>
           <!-- 显示个人简介 -->
           <div v-html="introduce" v-if="!isEdit">
@@ -105,10 +110,15 @@ import TinymceIntroduce from '../components/user/TinymceIntroduce.vue'
 export default {
   name: "dashboard",
   data() {
-    console.log(this.$store.state.user.username.id)
+    console.log('登录用户id');
+    console.log(this.$store.state.user.username.id);
+    console.log('传入用户id');
+    console.log(this.$route.params.user_id);
     return {
       //已登录用户id
       login_id:this.$store.state.user.username.id,
+      //将要访问的用户id
+      user_id:this.$route.params.user_id,
       //已登录用户头像
       userAvator:this.global.baseUrl +
         "/image/avatar/show?user_id=" +
@@ -122,8 +132,13 @@ export default {
   },
 
   created:function(){
+    if(this.user_id === null)
+    {
+      console.log('传入的参数为空')
+      this.user_id = this.login_id;
+    }
     var _this = this;
-    this.$api.user.info({id:this.login_id}).then(response => {
+    this.$api.user.info({id:this.user_id}).then(response => {
       if(response.code === 200){
         console.log('获取用户信息成功');
         console.log(response.data);
@@ -133,6 +148,9 @@ export default {
         this.userinfo.groups = response.data.groups;
         this.userinfo.views = response.data.views;
         this.userinfo.stars = response.data.stars;
+        this.userAvator = this.global.baseUrl +
+        "/image/avatar/show?user_id=" +
+        this.user_id;
       }
       else {
         console.log('获取用户信息出错');
@@ -141,7 +159,7 @@ export default {
       console.log('获取用户信息捕获到了异常');
     })
 
-    this.$api.introduction.view({user_id:this.login_id}).then(response => {
+    this.$api.introduction.view({user_id:this.user_id}).then(response => {
       if(response.code === 200){
         console.log('获取个人简介成功');
         _this.introduce = response.data;
@@ -157,6 +175,15 @@ export default {
     TinymceIntroduce
   },
   methods:{
+    isMe:function(){
+      return false;
+      console.log('in isMe');
+      console.log('login_id');
+      console.log(this.login_id);
+      console.log('user_id');
+      console.log(this.user_id);
+      return this.login_id === this.user_id;
+    },
     edit:function(){
       console.log(this.introduce);
       this.isEdit = true;
@@ -165,7 +192,7 @@ export default {
       console.log(this.introduce);
       this.isEdit = false;
       var _this = this;
-      this.$api.introduction.save({user_id:_this.login_id},_this.introduce).then(response =>{
+      this.$api.introduction.save({user_id:_this.user_id},_this.introduce).then(response =>{
         if(response.code === 200)
           console.log('上传简介成功');
         else console.log('上传失败');
