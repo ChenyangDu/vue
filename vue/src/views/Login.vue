@@ -66,7 +66,7 @@ export default {
             } else {
               _this.$store.commit('login',res.data)
               console.log(_this.$store.state.user.username.id)
-              _this.$router.push('/home')
+              _this.$router.push('/dashboard')
             }
           }).catch(failResponse => {})
         } else {
