@@ -204,9 +204,6 @@ export default {
 .remember {
   margin: 0 0 35px 0;
 }
-.el-form-item {
-  margin-bottom: 30px;
-}
 /*.el-button{*/
 /*  margin-left: 47px;*/
 /*}*/

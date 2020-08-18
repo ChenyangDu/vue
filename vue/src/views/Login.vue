@@ -121,9 +121,6 @@ export default {
 .remember {
   margin: 0 0 35px 0;
 }
-.el-form-item {
-  margin-bottom: 30px;
-}
 .login_remember {
   margin: 0 0 0 0;
   text-align: left;
