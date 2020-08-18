@@ -3,7 +3,7 @@
     <el-form class="login-container" :model="loginForm" ref="loginForm" :rules="fieldRules" label-position="left" label-width="0px">
       <h2 class="title"><b>系统登陆</b></h2>
       <el-form-item prop="phone">
-        <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="手机号/邮箱号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
