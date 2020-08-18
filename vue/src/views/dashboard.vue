@@ -176,12 +176,6 @@ export default {
   },
   methods:{
     isMe:function(){
-      return false;
-      console.log('in isMe');
-      console.log('login_id');
-      console.log(this.login_id);
-      console.log('user_id');
-      console.log(this.user_id);
       return this.login_id === this.user_id;
     },
     edit:function(){
