@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="wrapper">
       <div class="left"  id="fullscreen">
         <!-- 文章标题-->
@@ -110,33 +109,16 @@
       </div>
 
       <!--分享弹窗-->
-      <el-dialog title="分享" :visible.sync="shareDialogVisible" @close="clearAu">
-        <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare" v-on:showLink="showLink"></share-panel>
+      <el-dialog title="分享" :visible.sync="shareDialogVisible">
+        <share-panel :doc_id="this.doc_id" v-on:cancelShare="cancelShare"></share-panel>
       </el-dialog>
 
       <!--权限设置-->
       <el-dialog title="权限管理" :visible.sync="authorityDialogVisible">
         <authority-panel :doc_id="this.doc_id" :group_id="this.doc.group_id"></authority-panel>
       </el-dialog>
-
-<!--      <el-dialog title="分享链接" :visible.sync="dialogVisible">-->
-<!--        <el-row :gutter="50">-->
-<!--          <el-col :span="16" offset="1">-->
-<!--            <el-input type="text" v-model="shareLink"></el-input>-->
-<!--          </el-col>-->
-<!--          <el-col :span="6" align="center">-->
-<!--            <el-button type="info" round-->
-<!--                       v-clipboard:copy="shareLink"-->
-<!--                       v-clipboard:success="onCopy"-->
-<!--                       v-clipboard:error="onError">点击复制</el-button>-->
-<!--          </el-col>-->
-<!--        </el-row>-->
-<!--      </el-dialog>-->
-
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -198,9 +180,7 @@ export default {
         can_delete: '',
         can_edit: '',
         can_read: ''
-      },
-      shareLink: '',
-      dialogVisible: false
+      }
     }
   },
   created() {
@@ -546,16 +526,6 @@ export default {
     },
     cancelShare() {
       this.shareDialogVisible = false
-    },
-    showLink(link) {
-      this.shareLink = link
-      this.dialogVisible = true
-    },
-    onCopy(){
-      this.$message.success('链接已复制到剪贴板');
-    },
-    onError(){
-      this.$message.error('复制失败');
     },
     // 监听
     submitSuccess() {
