@@ -12,7 +12,7 @@
           </el-col>
           <!--信息-->
           <el-col :span="14" :offset="0">
-            <el-form class="person" label-position="right" label-width="60px">
+            <el-form class="person" label-position="right" label-width="80px">
               <el-form-item label="昵称" prop="name" class="descClass">
                 <el-input type="text" v-model="userinfoForm.name" readonly="readonly"></el-input>
               </el-form-item>
