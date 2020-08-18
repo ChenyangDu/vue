@@ -7,6 +7,7 @@ npm install
 ### npm install @tinymce/tinymce-vue -S
 ### npm install tinymce -S
 ### npm i --save ant-design-vue
+### npm install --save v-clipboard
 
 
 ### Compiles and hot-reloads for development

@@ -16,6 +16,20 @@
       </el-col>
     </el-row>
 
+    <el-dialog title="分享链接" :visible.sync="dialogVisible">
+      <el-row :gutter="50">
+        <el-col :span="16" offset="1">
+          <el-input type="text" v-model="shareLink"></el-input>
+        </el-col>
+        <el-col :span="6" align="center">
+          <el-button type="info" round
+                     v-clipboard:copy="shareLink"
+                     v-clipboard:success="onCopy"
+                     v-clipboard:error="onError">点击复制</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -43,6 +57,9 @@ export default {
         can_edit: true,
       },
       formLabelWidth:'100px',
+      // 弹窗
+      dialogVisible:false,
+      shareLink:"",
     }
   },
   methods:{
@@ -75,15 +92,17 @@ export default {
             _this.shareAuthorityForm
         ).then(res=> {
           if(res.code === 200 ){
-            _this.$alert('http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
-              confirmButtonText: '确定',
-              callback: action => {
-                _this.$message({
-                  message: '文档分享成功',
-                  type: 'success'
-                })
-              }
-            })
+            _this.shareLink = 'http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id
+            _this.dialogVisible = true;
+            // _this.$alert('http://192.168.0.106:8080/#/doceditor?doc_id=' + _this.doc_id,'分享链接',{
+            //   confirmButtonText: '确定',
+            //   callback: action => {
+            //     _this.$message({
+            //       message: '文档分享成功',
+            //       type: 'success'
+            //     })
+            //   }
+            // })
           } else {
             _this.$message({
               message: res.msg,
@@ -97,6 +116,12 @@ export default {
     },
     cancel(){
       this.$emit('cancelShare')
+    },
+    onCopy(){
+      this.$message('链接已复制到剪贴板');
+    },
+    onError(){
+      this.$message.error('复制失败');
     }
   }
 }

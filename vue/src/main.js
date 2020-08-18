@@ -11,7 +11,9 @@ import "element-ui/lib/theme-chalk/index.css";
 
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
+import VueClipboard from 'v-clipboard'
 
+Vue.use(VueClipboard)
 Vue.config.productionTip = false;
 
 Vue.use(Antd);
