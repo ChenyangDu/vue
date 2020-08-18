@@ -69,6 +69,7 @@
               </div>
             </div>
           </el-row>
+          <el-divider class="title-content-divider" v-if="!(edit_status)"></el-divider>
           <el-form class="edit-container" v-if="edit_status">
             <el-form-item>
               <tinymce-editor v-model="msg"
@@ -638,5 +639,8 @@ export default {
 .doc-info{
   color: #606266;
   font-weight: bold;
+}
+.title-content-divider{
+  margin-top: 0;
 }
 </style>

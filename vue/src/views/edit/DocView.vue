@@ -29,7 +29,8 @@
                   </el-col>
                 </div>
               </el-row>
-              <el-form>
+              <el-divider class="title-content-divider"></el-divider>
+              <el-form v-if="false">
                 <el-form-item>
                   <!--              不能编辑：禁用-->
                   <tinymce-editor v-model="msg"
@@ -37,7 +38,7 @@
                                   :edit_bar_show="this.edit_bar_show"
                                   :doc_id="this.doc_id"
                                   @onClick="onClick"
-                                  ref="editor" v-if="false">
+                                  ref="editor">
                   </tinymce-editor>
                 </el-form-item>
               </el-form>
@@ -287,5 +288,8 @@ export default {
 .doc-info{
   color: #606266;
   font-weight: bold;
+}
+.title-content-divider{
+  margin-top: 0;
 }
 </style>
