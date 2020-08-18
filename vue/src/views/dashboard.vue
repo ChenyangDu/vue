@@ -70,7 +70,7 @@
               <!-- 用户名 -->
               <div class="user-info-name">{{userinfo.name}}</div>
               <!-- 用户等级 -->
-              <div>LV:18</div>
+              <div>TEL:{{userinfo.phone}}</div>
             </div>
           </div>
           <div class="user-info-text">个性签名</div>
@@ -149,6 +149,7 @@ export default {
         this.userAvator = this.global.baseUrl +
         "/image/avatar/show?user_id=" +
         this.user_id;
+        this.userinfo.phone = response.data.phone;
       }
       else {
         console.log('获取用户信息出错');
