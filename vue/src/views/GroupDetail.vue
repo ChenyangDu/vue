@@ -23,7 +23,7 @@
                       <br>
                       <div class="block">
                         <div align="center">
-                          <i @click="handleNewDoc" style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
+                          <i  style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
                         </div>
                         <div style="padding: 14px;">
                           <br>
