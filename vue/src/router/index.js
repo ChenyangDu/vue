@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import NotFound from '../views/404'
 import Login from '../views/Login'
 import Register from '../views/Register'
+import Welcome from '../views/Welcome'
 
 import GetDocTest from "@/views/edit/GetDocTest";
 
@@ -19,7 +20,7 @@ const router = new VueRouter({
     {
       path: "/",
       name: "Index",
-      redirect: "/dashboard",
+      redirect: "/home",
     },
     {
       path: "/home",
@@ -29,6 +30,14 @@ const router = new VueRouter({
         isLogin: false
       },
       children: [
+        {
+          path:'/welcome',
+          name:'Welcome',
+          component:Welcome,
+          meta:{
+            isLogin:false
+          }
+        },
         {
           path: '/dashboard',
           name: 'DashBoard',
