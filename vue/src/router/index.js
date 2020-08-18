@@ -20,7 +20,7 @@ const router = new VueRouter({
     {
       path: "/",
       name: "Index",
-      redirect: "/home",
+      redirect: "/welcome",
     },
     {
       path: "/home",

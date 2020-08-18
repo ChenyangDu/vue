@@ -17,43 +17,7 @@
     >
       <!-- 对items进行遍历 -->
       <template v-for="item in items">
-        <!-- 使用v-if判定是否具有第二级菜单 -->
-        <!-- <template v-if="item.subs">
-          <el-submenu :index="item.index" :key="item.index">
-            <template slot="title">
-              <i :class="item.icon"></i>
-        如果存在第二级菜单，渲染第一级菜单标题-->
-        <!-- <span slot="title">{{ item.title }}</span>
-        </template>-->
-
-        <!-- 遍历第二级菜单 -->
-        <!-- <template v-for="subItem in item.subs"> -->
-        <!-- 判定是否具有第三级菜单 -->
-        <!-- <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index"
-        >-->
-        <!-- 如果存在第三级菜单，渲染第二级菜单标题 -->
-        <!-- <template slot="title">{{ subItem.title }}</template> -->
-
-        <!-- 遍历第三级菜单，并渲染第三级菜单标题 -->
-        <!-- <el-menu-item
-                  v-for="(threeItem,i) in subItem.subs"
-                  :key="i"
-                  :index="threeItem.index"
-                  >{{ threeItem.title }}</el-menu-item
-                >
-        </el-submenu>-->
-
-        <!-- 如果不存在第三级菜单，渲染第二级菜单标题 -->
-        <!-- <el-menu-item v-else :index="subItem.index" :key="subItem.index"
-                >{{ subItem.title }}</el-menu-item
-              >
-            </template>
-          </el-submenu>
-        </template>-->
-
+       
         <!-- 如果不存在第二级菜单，渲染第一级菜单标题 -->
         <!-- <template v-else> -->
         <el-menu-item :index="item.index" :key="item.index">
@@ -89,11 +53,6 @@ export default {
           index: "grouplist",
           title: "我的团队",
         },
-        // {
-        //   icon: "el-icon-pie-chart",
-        //   index: "groupdocumentlist",
-        //   title: "团队文档",
-        // },
         {
           icon: "el-icon-delete",
           index: "trash",

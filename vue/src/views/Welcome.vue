@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <el-image src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" style="width: 200px; height: 200px" :fit="fit"></el-image>
+    <el-image src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" style="width: 200px; height: 200px" ></el-image>
     <h1>欢迎使用金刚石文档</h1>
     <p>
       如果您需要帮助，请点击右侧的帮助文档

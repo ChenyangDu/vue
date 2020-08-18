@@ -10,7 +10,7 @@
           <div class="grid-content grid-con-1">
             <i class="el-icon-lx-people grid-con-icon"></i>
             <div class="grid-cont-right">
-              <div class="grid-num">25</div>
+              <div class="grid-num">{{userinfo.own_documents}}</div>
               <div>我的文档</div>
             </div>
           </div>
@@ -22,8 +22,8 @@
           <div class="grid-content grid-con-2">
             <i class="el-icon-lx-notice grid-con-icon"></i>
             <div class="grid-cont-right">
-              <div class="grid-num">5</div>
-              <div>系统消息</div>
+              <div class="grid-num">{{userinfo.stars}}</div>
+              <div>我被收藏</div>
             </div>
           </div>
         </el-card>
@@ -34,7 +34,7 @@
           <div class="grid-content grid-con-3">
             <i class="el-icon-lx-goods grid-con-icon"></i>
             <div class="grid-cont-right">
-              <div class="grid-num">15</div>
+              <div class="grid-num">{{userinfo.groups}}</div>
               <div>我的团队</div>
             </div>
           </div>
@@ -46,7 +46,7 @@
           <div class="grid-content grid-con-4">
             <i class="el-icon-lx-goods grid-con-icon"></i>
             <div class="grid-cont-right">
-              <div class="grid-num">6</div>
+              <div class="grid-num">{{userinfo.views}}</div>
               <div>访问次数</div>
             </div>
           </div>
@@ -61,18 +61,18 @@
         <el-card shadow="hover" class="mgb20" style="height:450px;">
           <div class="user-info">
             <!-- 用户头像 -->
-            <img src="../assets/img/img.jpg" class="user-avator" alt />
+            <!-- <img src="" class="user-avator" alt /> -->
+            <el-avatar :size="150" :src="userAvator"></el-avatar>
             <div class="user-info-cont">
               <!-- 用户名 -->
-              <div class="user-info-name">cwd</div>
+              <div class="user-info-name">{{userinfo.name}}</div>
               <!-- 用户等级 -->
               <div>LV:18</div>
             </div>
           </div>
-          <div class="user-info-text">个人签名</div>
+          <div class="user-info-text">个性签名</div>
           <div class="user-info-list">
-            琴上永不停息的优雅，现只留下哀伤。
-            吉他上永不停息的狂野，现只留下悲伤。
+            {{userinfo.sigature}}
           </div>
         </el-card>
       </el-col>
@@ -82,38 +82,18 @@
         <!-- 每日计划卡片 -->
         <el-card shadow="hover" style="height:450px;">
           <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">
-            <span>每日计划</span>
-            <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text">添加</el-button>
+            <span><h3>个人简介</h3></span>
+            <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="edit" v-if="!isEdit">修改</el-button>
+            <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="save" v-if="isEdit">保存</el-button>
           </div>
-          <el-table
-            :data="todoList"
-            :show-header="false"
-            height="304"
-            style="width: 100%;font-size:16px;"
-          >
-            <el-table-column width="40">
-              <!--  <template slot-scope="scope"> -->
-              <template v-slot="scope">
-                <!-- 这个插槽设置复选框的初始状态 -->
-                <el-checkbox v-model="scope.row.status"></el-checkbox>
-              </template>
-            </el-table-column>
-            <el-table-column>
-              <template v-slot="scope">
-                <!-- 这个插槽放置data中的title属性值 -->
-                <div
-                  class="todo-item"
-                  :class="{'todo-item-del': scope.row.status}"
-                >{{scope.row.title}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column width="60">
-              <template v-slot="scope">
-                <i class="el-icon-edit"></i>
-                <i class="el-icon-delete"></i>
-              </template>
-            </el-table-column>
-          </el-table>
+          <!-- 显示个人简介 -->
+          <div v-html="introduce" v-if="!isEdit">
+          </div>
+          <!-- 修改个人简介 -->
+          <tinymce-introduce v-if="isEdit" v-model="introduce"
+          :edit_bar_show="true"  :disabled="false">
+          </tinymce-introduce>
+
         </el-card>
       </el-col>
     </el-row>
@@ -121,40 +101,79 @@
 </template>
 
 <script>
+import TinymceIntroduce from '../components/user/TinymceIntroduce.vue'
 export default {
   name: "dashboard",
   data() {
+    console.log(this.$store.state.user.username.id)
     return {
-      user_id:this.$route.params.user_id,
+      //已登录用户id
       login_id:this.$store.state.user.username.id,
-      userinfo:{id:0,name:'',sigature:'',email:'',phone:'',wechat:'',qq:''},
-      todoList: [
-        {
-          title: "今天吃红烧牛肉面",
-          status: false,
-        },
-        {
-          title: "明天和小艾约会",
-          status: false,
-        },
-        {
-          title: "编译原理大作业",
-          status: false,
-        },
-        {
-          title: "今天要修复100个bug",
-          status: false,
-        },
-        {
-          title: "完成10道算法题",
-          status: true,
-        },
-      ],
+      //已登录用户头像
+      userAvator:this.global.baseUrl +
+        "/image/avatar/show?user_id=" +
+        this.$store.state.user.username.id,
+      //已登录用户信息
+      userinfo:{name:'蔡徐坤',sigature:'微管仲，吾其被发左衽矣',own_documents:0,
+        groups:0,views:0,stars:0},
+      introduce:'<p>此人很懒，什么也没有留下</p><br><p>此人很懒，什么也没有留下</p>',
+      isEdit:false
     };
   },
 
   created:function(){
+    var _this = this;
+    this.$api.user.info({id:this.login_id}).then(response => {
+      if(response.code === 200){
+        console.log('获取用户信息成功');
+        console.log(response.data);
+        this.userinfo.name = response.data.name;
+        this.userinfo.sigature = response.data.sign;
+        this.userinfo.own_documents = response.data.own_documents;
+        this.userinfo.groups = response.data.groups;
+        this.userinfo.views = response.data.views;
+        this.userinfo.stars = response.data.stars;
+      }
+      else {
+        console.log('获取用户信息出错');
+      }
+    }).catch(err => {
+      console.log('获取用户信息捕获到了异常');
+    })
 
+    this.$api.introduction.info({user_id:this.login_id}).then(response => {
+      if(response.code === 200){
+        console.log('获取个人简介成功');
+        console.log(response.data);
+        _this.introduce = response.data;
+      }
+      else {
+        console.log('获取个人简介出错');
+      }
+    }).catch(err => {
+      console.log('获取个人简介捕获到了异常');
+    })
+  },
+  components:{
+    TinymceIntroduce
+  },
+  methods:{
+    edit:function(){
+      console.log(this.introduce);
+      this.isEdit = true;
+    },
+    save:function(){
+      console.log(this.introduce);
+      this.isEdit = false;
+      var _this = this;
+      this.$api.introduction.save({user_id:_this.login_id},_this.introduce).then(response =>{
+        if(response.code === 200)
+          console.log('上传简介成功');
+        else console.log('上传失败');
+      }).catch(err => {
+        console.log('上传简介出现异常');
+      })
+    }
   }
 };
 </script>

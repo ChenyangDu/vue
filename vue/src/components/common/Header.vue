@@ -338,9 +338,9 @@ export default {
       try {
         let now = this.now
         let string = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay();
-        console.log(flag)
-        console.log(string)
-        console.log(parseInt(flag.time.substr(0, 4)))
+        // console.log(flag)
+        // console.log(string)
+        // console.log(parseInt(flag.time.substr(0, 4)))
         if (now.getFullYear() == parseInt(flag.time.substr(0, 4)) &&
             now.getMonth() == parseInt(flag.time.substr(5, 2) - 1) &&
             now.getDate() == parseInt(flag.time.substr(8, 2))
@@ -363,12 +363,12 @@ export default {
                 if (res.code === 200) {
                     this.tableData = [];
                     this.de_tableData = [];
-                    console.log("所有",res.data)
+                    // console.log("所有",res.data)
                   for(let flag of res.data){
                     this.solveTime(flag)
                   }
                     for (let flag of res.data) {
-                        console.log(flag)
+                        // console.log(flag)
                         if(flag.have_read === true){
                             switch (flag.message_type) {
                                 case 0:
@@ -442,8 +442,8 @@ export default {
                     }
                     this.tableData = this.tableData.reverse();
                     this.de_tableData = this.de_tableData.reverse();
-                    console.log("已读",this.tableData)
-                    console.log("未读",this.de_tableData)
+                    // console.log("已读",this.tableData)
+                    // console.log("未读",this.de_tableData)
 
                 } else {
                     _this.$message({
