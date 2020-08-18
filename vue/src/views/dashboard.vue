@@ -10,8 +10,8 @@
                       <div class="grid-content grid-con-1">
                         <i class="el-icon-lx-people grid-con-icon"></i>
                         <div class="grid-cont-right">
-                          <div class="grid-num">25</div>
-                          <div>我的文档</div>
+                          <div class="grid-num">{{user.own_documents}}</div>
+                          <div>TA的文档</div>
                         </div>
                       </div>
                 </el-card>
@@ -22,8 +22,8 @@
 			          <div class="grid-content grid-con-2">
 			            <i class="el-icon-lx-notice grid-con-icon"></i>
 			            <div class="grid-cont-right">
-			              <div class="grid-num">5</div>
-			              <div>系统消息</div>
+			              <div class="grid-num">{{user.stars}}</div>
+			              <div>TA被收藏</div>
 			            </div>
 			          </div>
 			        </el-card>
@@ -34,8 +34,8 @@
 			          <div class="grid-content grid-con-3">
 			            <i class="el-icon-lx-goods grid-con-icon"></i>
 			            <div class="grid-cont-right">
-			              <div class="grid-num">15</div>
-			              <div>我的团队</div>
+			              <div class="grid-num">{{user.groups}}</div>
+			              <div>TA的团队</div>
 			            </div>
 			          </div>
 			        </el-card>
@@ -46,7 +46,7 @@
 			          <div class="grid-content grid-con-4">
 			            <i class="el-icon-lx-goods grid-con-icon"></i>
 			            <div class="grid-cont-right">
-			              <div class="grid-num">6</div>
+			              <div class="grid-num">{{user.views}}</div>
 			              <div>访问次数</div>
 			            </div>
 			          </div>
@@ -70,8 +70,7 @@
                       </div>
                     </div>
                     <div class="user-info-text">个人签名</div>
-					<div class="user-info-list">琴上永不停息的优雅，现只留下哀伤。
-吉他上永不停息的狂野，现只留下悲伤。</div>
+					<div class="user-info-list">{{user.sign}}</div>
 			    </el-card>
             </el-col>
 
@@ -96,28 +95,7 @@
       return {
         id: this.$store.state.user.username.id,
         introduction:"",
-        todoList: [
-          {
-            title: "今天吃红烧牛肉面",
-            status: false,
-          },
-          {
-            title: "明天和小艾约会",
-            status: false,
-          },
-          {
-            title: "编译原理大作业",
-            status: false,
-          },
-          {
-            title: "今天要修复100个bug",
-            status: false,
-          },
-          {
-            title: "完成10道算法题",
-            status: true,
-          },
-        ],
+        user:{},
       };
     },
     created() {
@@ -126,6 +104,14 @@
       }).then(res =>{
         if(res.code == 200){
           this.introduction = res.data
+        }
+      })
+
+      this.$api.user.info({
+        id:this.id
+      }).then(res=>{
+        if(res.code == 200){
+          this.user = res.data
         }
       })
     }
