@@ -11,7 +11,7 @@
         </el-form-item>
       </el-form>
       <el-row :gutter="0">
-        <el-col :span="24" :push="16">
+        <el-col :span="8" :push="16">
           <el-button @click="cancel">取 消</el-button>
           <el-button type="primary" @click="handleShare">确 定</el-button>
         </el-col>
