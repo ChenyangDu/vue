@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>热门素材</h1>
     <el-row :gutter="20">
       <el-col :span="22" :offset="1">
         <el-carousel :interval="4000" type="card" height="300px">
@@ -16,6 +17,7 @@
       <!--        </div>-->
       <!--      </el-col>-->
     </el-row>
+    <h1>推荐模板</h1>
     <el-row :gutter="20">
       <div v-for="(item) in 9" :key="item.id">
         <el-col :span=5 :offset="1">
@@ -43,7 +45,7 @@
       return {
         // srcUrl:"http://39.101.200.9:8081/image/system?id=document"
         srcUrl: "http://39.101.200.9:8081/image/model?id=",
-        carouselShow: [6, 1008, 9],
+        carouselShow: [1006, 1008, 1009],
         id: this.$store.state.user.username.id,
       }
     },

@@ -93,6 +93,7 @@
             <!-- slot设置下拉列表 -->
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="myinfo">你好,{{username}}</el-dropdown-item>
+              <el-dropdown-item command="editinfo">修改信息</el-dropdown-item>
               <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -159,7 +160,9 @@
           this.$router.push("/login");
         } else if (command == "myinfo") {
           //this.$router.push({path:"/personalinformation",params:{user_id:this.$store.state.user.username.id}});
-          this.$router.push("/personalinformation");
+          this.$router.push({name:'DashBoard',params:{user_id:this.$store.state.user.username.id}});
+        } else if(command === 'editinfo'){
+          this.$router.push('/personalinformation');
         }
       },
 

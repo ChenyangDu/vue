@@ -441,6 +441,7 @@ export default {
             console.log("返回了400");
           } else {
             that.owndocuments = response.data; // 文档列表
+            that.owndocuments.sort((a,b)=>(b.last_edit_time.localeCompare(a.last_edit_time)))
             console.log("获取数据成功");
           }
         })

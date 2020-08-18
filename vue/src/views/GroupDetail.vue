@@ -446,6 +446,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
             },
             memberDetail:function(id){
               console.log('点击了用户详情'+id);
+              this.$router.push({name:'DashBoard',params:{user_id:id}});
             },
             authority(id) {
               this.doc_id = id
