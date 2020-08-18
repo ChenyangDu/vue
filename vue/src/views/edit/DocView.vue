@@ -272,8 +272,12 @@ export default {
 .title-row{
   margin-bottom: 0;
 }
-.doc-card,.info-card{
+.doc-card{
   margin-top: 5px;
+}
+.info-card{
+  margin-top: 5px;
+  margin-bottom: 0;
 }
 .comment-card{
   margin-top: 15px;
