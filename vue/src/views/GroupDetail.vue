@@ -15,8 +15,11 @@
 <!--              <h1>团队文档</h1>-->
               <p class="Nav-sc-VyK8c-1 iirLju active">团队文档</p>
                 <el-row :gutter="20">
+<!--                  分割线-->
+                  <div class="line"></div>
                   <div v-for="(item) in groupdocuments" :key="item.id">
                     <el-col :span=4 :offset="1">
+
                       <div>
                         <br>
                         <el-card :body-style="{ padding: '0px' }" shadow="always">
@@ -28,7 +31,9 @@
                                        style="cursor:pointer" ></el-avatar>
                           </div>
                           <div style="padding: 14px;">
-                            <span>{{item.name}}</span><br>
+                            <div class="doc-title">
+                              <span>{{item.name}}</span><br>
+                            </div>
                             <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                             <el-dropdown class="right" @command="handleCommand($event,item.id)">
                               <i class="el-icon-more"></i>
@@ -74,18 +79,24 @@
                       </div>
                     </el-card>
                   </el-col>
+
                 </el-row>
+
                 <br>
 
 
-            </div></el-col>
+            </div>
+
+            </el-col>
 <!--          <el-col :span="1">-->
 <!--          </el-col>-->
+
+
             <el-col :span="6"><div >
               <el-row>
-                <el-col :span="1">
-                  <div style="height:300px; width:1px; border-left:1px solid blue"></div>
-                </el-col>
+<!--                <el-col :span="1">-->
+<!--                  <div style="height:300px; width:1px; border-left:1px solid blue"></div>-->
+<!--                </el-col>-->
                 <el-col :span="23">
                   <p class="Nav-sc-VyK8c-1 iirLju active">团队成员</p>
                   <!--              <h1>团队成员</h1>-->
@@ -608,4 +619,27 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
   /*  height: 10px;*/
   /*  border-bottom: 1px solid red;*/
   /*}*/
+  .doc-title{
+    width:110px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  /* 竖线 */
+  .line{
+    float: right;
+    width:1px;
+    height: 520px;
+    margin-right: 60px;
+    /*margin-left: 1.5em;*/
+    background: #f0f0f0;
+    border-left-style: dashed;
+    border-left-width: 1px;
+    /*border-style: ;*/
+    border-color: #cccccc;
+    position: relative;
+    bottom: 47px;
+  }
+
+
 </style>

@@ -39,7 +39,10 @@
                                    style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
-                        <span>{{item.name}}</span><br>
+                        <div class="doc-title">
+                          <span>{{item.name}}</span><br>
+                        </div>
+
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                         <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
@@ -93,7 +96,9 @@
                                    style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
-                        <span>{{item.name}}</span><br>
+                        <div class="doc-title">
+                          <span>{{item.name}}</span><br>
+                        </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                         <el-dropdown class="right" @command="handleCommand($event,item.id)">
                           <i class="el-icon-more"></i>
@@ -149,7 +154,9 @@
                                    style="cursor:pointer" ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
-                        <span>{{item.name}}</span><br>
+                        <div class="doc-title">
+                          <span>{{item.name}}</span><br>
+                        </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
                         <el-dropdown class="right" @command="handleCommand($event,item.id)">
                           <i class="el-icon-more"></i>
@@ -577,5 +584,11 @@ export default {
 
   width: 20%;
 
+}
+.doc-title{
+  width:130px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 </style>

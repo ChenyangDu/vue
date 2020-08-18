@@ -121,7 +121,6 @@ export default {
         this.global.baseUrl +
         "/image/avatar/show?user_id=" +
         this.$store.state.user.username.id,
-      message: 2,
       isLogin: false,
 
       tableData: null,
@@ -210,6 +209,7 @@ export default {
     },
 
     agree: function (flag) {
+      this.notread--;
       if (flag.message_type === 1) {
         this.$api.group
           .reply_invite({
@@ -261,6 +261,7 @@ export default {
     },
 
     disagree: function (flag) {
+      this.notread--;
       if (flag.message_type === 1) {
         this.$api.group
           .reply_invite({
