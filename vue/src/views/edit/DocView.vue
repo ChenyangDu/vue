@@ -255,6 +255,9 @@ export default {
 
 <style scoped>
 
+.el-row{
+  margin-bottom: 0;
+}
 .wrapper{
   width: 100%;
   height: 100%;
