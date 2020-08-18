@@ -4,7 +4,7 @@
     <div class="wrapper">
       <!-- 文章标题 + 文章内容-->
       <div class="left" id="fullscreen" >
-            <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always">
+            <el-card  class="doc-card" :body-style="{ margin: '0px'}" shadow="always" style="min-height: 660px">
               <el-row :gutter="50" class="title-row">
                 <el-col :span="8" :push="0">
                   <h1 class="doc-info">{{ doc.name }}</h1>
@@ -37,10 +37,11 @@
                                   :edit_bar_show="this.edit_bar_show"
                                   :doc_id="this.doc_id"
                                   @onClick="onClick"
-                                  ref="editor">
+                                  ref="editor" v-if="false">
                   </tinymce-editor>
                 </el-form-item>
               </el-form>
+              <div v-html="msg"></div>
             </el-card>
       </div>
       <!-- 文章评论-->
@@ -267,8 +268,14 @@ export default {
   width: 350px;
   height: 100%;
 }
-.doc-card, .comment-card,.info-card{
+.title-row{
+  margin-bottom: 0;
+}
+.doc-card,.info-card{
   margin-top: 5px;
+}
+.comment-card{
+  margin-top: 15px;
 }
 .icon-favorite, .icon-toEdit, .icon-screen{
   font-size: 24px;
