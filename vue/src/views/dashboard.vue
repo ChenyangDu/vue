@@ -80,37 +80,9 @@
                 <!-- 每日计划卡片 -->
                 <el-card shadow="hover" style="height:450px;">
                   <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">
-                    <span>每日计划</span>
-                    <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text">添加</el-button>
+                    <p v-html="introduction"></p>
                   </div>
-                  <el-table
-                    :data="todoList"
-                    :show-header="false"
-                    height="304"
-                    style="width: 100%;font-size:16px;"
-                  >
-                    <el-table-column width="40">
-                      <!--  <template slot-scope="scope"> -->
-                      <template v-slot="scope">
-                        <!-- 这个插槽设置复选框的初始状态 -->
-                        <el-checkbox v-model="scope.row.status"></el-checkbox>
-                      </template>
-                    </el-table-column>
-                    <el-table-column>
-                      <template v-slot="scope">
-                        <!-- 这个插槽放置data中的title属性值 -->
-                        <div class="todo-item" :class="{'todo-item-del': scope.row.status}">
-                          {{scope.row.title}}
-                        </div>
-                      </template>
-                    </el-table-column>
-                    <el-table-column width="60">
-                      <template v-slot="scope">
-                        <i class="el-icon-edit"></i>
-                        <i class="el-icon-delete"></i>
-                      </template>
-                    </el-table-column>
-                  </el-table>
+
                 </el-card>
             </el-col>
         </el-row>
@@ -122,6 +94,8 @@
     name: "dashboard",
     data() {
       return {
+        id: this.$store.state.user.username.id,
+        introduction:"",
         todoList: [
           {
             title: "今天吃红烧牛肉面",
@@ -146,6 +120,15 @@
         ],
       };
     },
+    created() {
+      this.$api.introduction.view({
+        user_id:this.id
+      }).then(res =>{
+        if(res.code == 200){
+          this.introduction = res.data
+        }
+      })
+    }
   };
 </script>
 

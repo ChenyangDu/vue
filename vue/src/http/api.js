@@ -6,6 +6,7 @@ import * as comment from './modules/comment'
 import * as group from './modules/group'
 import * as searchModule from './modules/searchModule'
 import * as message from './modules/messageNotice'
+import * as introduction from './modules/introduction'
 
 export default {
   authority,
@@ -15,5 +16,6 @@ export default {
   comment,
   group,
   searchModule,
-  message
+  message,
+  introduction
 }
