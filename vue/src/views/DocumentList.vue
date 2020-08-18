@@ -13,16 +13,16 @@
                     <br/>
                     <el-card :body-style="{ padding: '0px' }" shadow="always" @click.native="handleNewDoc(-1)" style="cursor:pointer">
                       <br/>
+                      <br><br>
                       <div align="center">
-                        <i style="font-size: 100px;" class="el-icon-document-add"></i>
+                        <i @click.native="handleNewDoc(-1)" style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
                       </div>
+<!--                      <br>-->
                       <div style="padding: 14px;">
-                        <br/>
                         <div  class="bottom clearfix">
-                          <br/>
+                          <br>
                         </div>
                       </div>
-                      <br/>
                     </el-card>
                   </div>
                 </el-col>
