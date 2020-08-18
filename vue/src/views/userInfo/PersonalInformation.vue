@@ -28,6 +28,9 @@
               <el-form-item label="QQ号" prop="qq">
                 <el-input type="text" v-model="userinfoForm.qq" readonly="readonly"></el-input>
               </el-form-item>
+              <el-form-item label="个性签名" prop="sign">
+                <el-input type="text" v-model="userinfoForm.sign" readonly="readonly"></el-input>
+              </el-form-item>
 <!--              <el-form-item class="button-item">-->
 <!--                <router-link to="/Revising">-->
 <!--                  <el-button type="primary" style="width:50%;" round>修 改 个 人 信 息</el-button>-->
@@ -78,6 +81,9 @@
               <el-form-item label="QQ号">
                 <el-input type="text" v-model="formLabelAlign.qq" ></el-input>
               </el-form-item>
+              <el-form-item label="个性签名">
+                <el-input type="text" v-model="formLabelAlign.sign" ></el-input>
+              </el-form-item>
 
               <el-form-item class="button-item">
                 <el-button type="primary" style="width:36%;" @click="handleSubmit" round>保 存</el-button>
@@ -105,6 +111,7 @@ export default {
         wechat: '',
         qq: '',
         email: '',
+        sign:''
       },
       formLabelAlign: {
         id: 1,
@@ -113,7 +120,8 @@ export default {
         phone: '',
         wechat: '',
         qq: '',
-        email: ''
+        email: '',
+        sign:''
       },
       src:this.global.baseUrl + "/image/avatar/show?user_id="+this.$store.state.user.username.id
     };

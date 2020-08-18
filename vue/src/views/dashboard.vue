@@ -110,10 +110,10 @@ import TinymceIntroduce from '../components/user/TinymceIntroduce.vue'
 export default {
   name: "dashboard",
   data() {
-    console.log('登录用户id');
-    console.log(this.$store.state.user.username.id);
-    console.log('传入用户id');
-    console.log(this.$route.params.user_id);
+    // console.log('登录用户id');
+    // console.log(this.$store.state.user.username.id);
+    // console.log('传入用户id');
+    // console.log(this.$route.params.user_id);
     return {
       //已登录用户id
       login_id:this.$store.state.user.username.id,
@@ -132,10 +132,8 @@ export default {
   },
 
   created:function(){
-    if(this.user_id === null)
-    {
-      console.log('传入的参数为空')
-      this.user_id = this.login_id;
+    if(this.$route.params.user_id === undefined){
+      this.user_id = this.$store.state.user.username.id;
     }
     var _this = this;
     this.$api.user.info({id:this.user_id}).then(response => {
