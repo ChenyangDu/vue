@@ -100,7 +100,7 @@
                           <span>{{item.name}}</span><br>
                         </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                        <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
@@ -158,7 +158,7 @@
                           <span>{{item.name}}</span><br>
                         </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                        <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
