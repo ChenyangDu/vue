@@ -27,7 +27,8 @@ const router = new VueRouter({
       name: "Home",
       component: Home,
       meta: {
-        isLogin: false
+        isLogin: false,
+        title: "首页"
       },
       children: [
         {
@@ -35,7 +36,8 @@ const router = new VueRouter({
           name:'Welcome',
           component:Welcome,
           meta:{
-            isLogin:false
+            isLogin:false,
+            title: "欢迎"
           }
         },
         {
@@ -140,7 +142,11 @@ const router = new VueRouter({
         {
           path: '/noauthority',
           name: 'NoAuthority',
-          component: () => import('../views/edit/NoAuthority')
+          component: () => import('../views/edit/NoAuthority'),
+          meta: {
+            isLogin: true,
+            title: "无权限"
+          }
         },
         {
           path: '/model',
@@ -157,7 +163,8 @@ const router = new VueRouter({
       name: 'Login',
       component: Login,
       meta: {
-        isLogin: false
+        isLogin: false,
+        title: "登录"
       }
     },
     {
@@ -165,7 +172,8 @@ const router = new VueRouter({
       name: 'Register',
       component: Register,
       meta: {
-        isLogin: false
+        isLogin: false,
+        title: "注册"
       }
     },
     {
@@ -173,7 +181,8 @@ const router = new VueRouter({
       name: 'NotFound',
       component: NotFound,
       meta: {
-        isLogin: false
+        isLogin: false,
+        title: "404"
       }
     },
     {
@@ -182,6 +191,14 @@ const router = new VueRouter({
       component: () => import('../views/edit/GetDocTest')
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
 })
 
 // router.beforeEach((to, from, next) => {
