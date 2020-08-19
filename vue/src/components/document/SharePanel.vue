@@ -4,6 +4,7 @@
       <el-form :model="shareForm">
         <el-form-item label="权限给予：" :label-width="formLabelWidth">
           <el-select v-model="shareForm.type" placeholder="请选择分享的权限">
+            <el-option label="私密" value="0"></el-option>
             <el-option label="可查看" value="1"></el-option>
             <el-option label="可查看与评论" value="2"></el-option>
             <el-option label="可查看与评论与编辑" value="3"></el-option>
@@ -81,7 +82,11 @@ export default {
         })
       } else {
         // todo 提交权限
-        if(this.shareForm.type === "1") {
+        if (this.shareForm.type === "0") {
+          this.shareAuthorityForm.can_read = false
+          this.shareAuthorityForm.can_comment = false
+          this.shareAuthorityForm.can_edit = false
+        } else if(this.shareForm.type === "1") {
           this.shareAuthorityForm.can_read = true
           this.shareAuthorityForm.can_comment = false
           this.shareAuthorityForm.can_edit = false
