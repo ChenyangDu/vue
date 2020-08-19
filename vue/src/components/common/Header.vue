@@ -9,7 +9,7 @@
     </div>
 
     <!-- 系统logo -->
-    <div class="logo">金刚石文档</div>
+    <div class="logo" style="font-weight: bold">Cullinan</div>
 
     <!-- 头部组件右边功能区 -->
     <div class="header-right">
