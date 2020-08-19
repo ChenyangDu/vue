@@ -1,57 +1,56 @@
 <template>
   <div>
-    <br />
+    <br/>
     <div style="height: 55px">
-      <el-col :span="4" :push="20">
+      <el-col :span="4" offset="20">
+
         <el-button type="danger" @click="clearTrash" class="clearButton">清空回收站</el-button>
       </el-col>
     </div>
-    <el-col :span="22" :push="1">
-      <!--      <el-tabs value="first">-->
-      <!--        <el-tab-pane label="回收站" name="first">-->
+    <el-col :span="22" offset="1">
+<!--      <el-tabs value="first">-->
+<!--        <el-tab-pane label="回收站" name="first">-->
 
-      <el-row>
-        <el-col :span="22" :push="1">
-          <el-row :gutter="40">
-            <el-col :span="4" v-for="item in documents" :key="item.id">
-              <div>
-                <br />
-                <el-card :body-style="{ padding: '0px' }" shadow="always">
-                  <br />
-                  <div align="center">
-                    <el-avatar
-                      shape="square"
-                      :size="100"
-                      fit="fill"
-                      :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
-                      style="cursor:pointer"
-                    ></el-avatar>
+          <el-row>
+            <el-col :span="22" offset="1">
+              <el-row :gutter="40">
+                <el-col :span="4" v-for="item in documents" :key="item.id">
+                  <div>
+                    <br>
+                    <el-card :body-style="{ padding: '0px' }" shadow="always">
+                      <br>
+                      <div align="center">
+                        <el-avatar
+                            shape="square" :size="100" fit="fill"
+                            :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                            style="cursor:pointer" ></el-avatar>
+                      </div>
+                      <div style="padding: 14px;">
+                        <div class="doc-title">
+                          <span>{{item.name}}</span><br/>
+                        </div>
+                        <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
+                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                          <i class="el-icon-more"></i>
+                          <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item icon="el-icon-refresh" command="recover">还原</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-delete" command="del">彻底删除</el-dropdown-item>
+                          </el-dropdown-menu>
+                        </el-dropdown>
+                        <div class="bottom clearfix">
+                        </div>
+                      </div>
+                      <!-- <el-button type="primary" class="left" round @click="recover(item.id)">还原</el-button>
+                      <el-button type="danger" class="right" round @click="del(item.id)">彻底删除</el-button> -->
+                    </el-card>
                   </div>
-                  <div style="padding: 14px;">
-                    <div class="doc-title">
-                      <span>{{item.name}}</span>
-                      <br />
-                    </div>
-                    <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                    <el-dropdown class="right" @command="handleCommand($event,item.id)">
-                      <i class="el-icon-more"></i>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-refresh" command="recover">还原</el-dropdown-item>
-                        <el-dropdown-item icon="el-icon-delete" command="del">彻底删除</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                    <div class="bottom clearfix"></div>
-                  </div>
-                  <!-- <el-button type="primary" class="left" round @click="recover(item.id)">还原</el-button>
-                  <el-button type="danger" class="right" round @click="del(item.id)">彻底删除</el-button>-->
-                </el-card>
-              </div>
+                </el-col>
+              </el-row>
             </el-col>
           </el-row>
-        </el-col>
-      </el-row>
-      <!--        </el-tab-pane>-->
-      <!--      </el-tabs>-->
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
+
     </el-col>
   </div>
 </template>
@@ -66,9 +65,11 @@ export default {
     };
   },
   methods: {
-    handleCommand(event, id) {
-      if (event === "recover") this.recover(id);
-      else if (event === "del") this.del(id);
+    handleCommand(event,id){
+      if(event === 'recover')
+        this.recover(id);
+      else if(event === 'del')
+      this.del(id);
     },
     getTrashList: function () {
       let inf = { user_id: this.id }; // 用户id
@@ -115,9 +116,9 @@ export default {
           } else {
             //that.documents = response.data; // 文档列表
             that.$message({
-              message: "文档还原成功",
-              type: "success",
-            });
+              message: '文档还原成功',
+              type: 'success'
+            })
             this.getTrashList();
             console.log("获取数据成功");
           }
@@ -134,65 +135,62 @@ export default {
     clearTrash: function () {
       var that = this;
       console.log("清空回收站");
-      this.$confirm("此操作将永久删除回收站内的文件，是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          that.documents.forEach(function (value, key, arr) {
-            that.delForClear(value.id);
-          });
-          that.documents = [];
-          that.$message({
-            message: "已成功清空回收站",
-            type: "success",
-          });
-        })
-        .catch(() => {
-          that.$message({
-            message: "已取消清空回收站",
-            type: "info",
-          });
+      this.$confirm('此操作将永久删除回收站内的文件，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        that.documents.forEach(function (value, key, arr) {
+          that.delForClear(value.id);
         });
+        that.documents = [];
+        that.$message({
+          message: '已成功清空回收站',
+          type: 'success'
+        })
+      }).catch(() => {
+        that.$message({
+          message: '已取消清空回收站',
+          type: 'info',
+        });
+      });
     },
     delForClear(id) {
       let inf = { doc_id: id, user_id: this.id };
       var that = this;
       this.$api.document
-        .remove(inf)
-        .then((response) => {
-          if (response.code === 400) {
+          .remove(inf)
+          .then((response) => {
+            if (response.code === 400) {
+              that.$message({
+                // message: response.msg,
+                message: "列表为空",
+                type: "error",
+              });
+              console.log("返回了400");
+            } else {
+              that.getTrashList();
+            }
+          })
+          .catch((err) => {
+            console.log("捕获到了异常");
             that.$message({
-              // message: response.msg,
-              message: "列表为空",
+              message: err.msg,
               type: "error",
             });
-            console.log("返回了400");
-          } else {
-            that.getTrashList();
-          }
-        })
-        .catch((err) => {
-          console.log("捕获到了异常");
-          that.$message({
-            message: err.msg,
-            type: "error",
           });
-        });
     },
     del: function (id) {
       //console.log(id);
       var that = this;
 
-      this.$confirm("此操作将永久删除该文件，是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          let inf = { doc_id: id, user_id: this.id };
-          this.$api.document
+      this.$confirm('此操作将永久删除该文件，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let inf = { doc_id: id, user_id: this.id };
+        this.$api.document
             .remove(inf)
             .then((response) => {
               if (response.code === 400) {
@@ -204,9 +202,9 @@ export default {
                 console.log("返回了400");
               } else {
                 that.$message({
-                  message: "已彻底删除该文件",
-                  type: "success",
-                });
+                  message: '已彻底删除该文件',
+                  type: 'success'
+                })
                 console.log("彻底删除成功");
                 that.getTrashList();
               }
@@ -218,13 +216,13 @@ export default {
                 type: "error",
               });
             });
-        })
-        .catch(() => {
-          that.$message({
-            message: "已取消彻底删除该文件",
-            type: "info",
-          });
+      }).catch(() => {
+        that.$message({
+          message: '已取消彻底删除该文件',
+          type: 'info',
         });
+      });
+
     },
   },
   created: function () {
@@ -234,9 +232,12 @@ export default {
 </script>
 
 <style scoped>
-/* .clearButton{
-
-} */
+.clearButton{
+  /*position: relative;*/
+  /*float: right;*/
+  /*right: 100px;*/
+  /*bottom: 40px;*/
+}
 .el-row {
   margin-bottom: 20px;
   /* &:last-child {
@@ -301,10 +302,10 @@ export default {
   padding: 5%;
   float: left;
 }
-.doc-title {
-  width: 130px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.doc-title{
+  width:130px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 </style>
