@@ -27,7 +27,7 @@
       <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">微信公众号</a></li>
       <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">微博</a></li>
     </ul> -->
-    <h3>关于我们</h3>
+    <h3>项目地址</h3>
     <ul>
       <li><a href="https://github.com/ChenyangDu/vue" target="_blank" rel="noopener">前端</a></li>
       <li><a href="https://github.com/ChenyangDu/springboot" target="_blank" rel="noopener">后端</a></li>
