@@ -3,7 +3,7 @@
     <el-form class="login-container" :model="loginForm" ref="loginForm" :rules="fieldRules" label-position="left" label-width="0px">
       <h2 class="title"><b>系统登陆</b></h2>
       <el-form-item prop="phone">
-        <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="账号"></el-input>
+        <el-input type="text" v-model="loginForm.phone" auto-complete="off" placeholder="手机号/邮箱号"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
@@ -66,7 +66,7 @@ export default {
             } else {
               _this.$store.commit('login',res.data)
               console.log(_this.$store.state.user.username.id)
-              _this.$router.push('/home')
+              _this.$router.push('/dashboard')
             }
           }).catch(failResponse => {})
         } else {
@@ -106,7 +106,7 @@ export default {
   border-radius: 5px;
   -moz-border-radius: 5px;
   background-clip: padding-box;
-  margin: 100px auto;
+  margin: 70px auto;
   width: 420px;
   padding: 35px 35px 15px 35px;
   background: #fff;

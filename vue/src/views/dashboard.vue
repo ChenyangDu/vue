@@ -73,7 +73,8 @@
               <div>TEL:{{userinfo.phone}}</div>
             </div>
           </div>
-          <div class="user-info-text">个性签名</div>
+          <el-divider content-position="center"><span style="font-weight: bold;font-size: medium">个性签名</span></el-divider>
+<!--          <div class="user-info-text">个性签名</div>-->
           <div class="user-info-list">
             {{userinfo.sigature}}
           </div>
@@ -85,10 +86,10 @@
         <!-- 每日计划卡片 -->
         <el-card shadow="hover" style="height:450px;">
           <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">
-            <span><h3>个人简介</h3></span>
+            <span style="position: relative; top: 12px"><h3><b>个人简介</b></h3></span>
             <div v-if="isMe()">
-            <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="edit" v-if="!isEdit">修改</el-button>
-            <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="save" v-if="isEdit">保存</el-button>
+              <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="edit" v-if="!isEdit"><i class="el-icon-edit"></i></el-button>
+              <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="save" v-if="isEdit"><i class="el-icon-upload2"></i></el-button>
             </div>
           </div>
           <!-- 显示个人简介 -->
@@ -265,7 +266,7 @@ export default {
   display: flex;
   align-items: center;
   padding-bottom: 20px;
-  border-bottom: 2px solid #ccc;
+  /*border-bottom: 2px solid #ccc;*/
   margin-bottom: 20px;
 }
 
@@ -279,7 +280,7 @@ export default {
   padding-left: 50px;
   flex: 1;
   font-size: 20px;
-  color: #000000;
+  color: #303133;
 }
 
 .user-info-cont div:first-child {

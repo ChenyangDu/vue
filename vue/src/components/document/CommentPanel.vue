@@ -11,7 +11,7 @@
           :author="item.username"
           :content="item.content"
           :datetime="item.time.substring(0,10)+' '+item.time.substring(11,19)"
-          :avatar="item.avatar"
+          :avatar="item.avatar" @click.native="memberDetail(item.user_id)"
         />
 
         <!--          :avatar='this.global.baseUrl + "/image/avatar/show?user_id="+item.user_id'-->
@@ -115,6 +115,10 @@ export default {
     handleChange(e) {
       this.value = e.target.value;
     },
+    memberDetail(id){
+      console.log('点击了用户详情'+id);
+      this.$router.push({name:'DashBoard',params:{user_id:id}});
+    }
   }
 };
 </script>

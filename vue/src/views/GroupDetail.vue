@@ -169,6 +169,9 @@
     <el-dialog title="权限管理" :visible.sync="authorityDialogVisible">
       <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
     </el-dialog>
+    <el-dialog  :visible.sync="modelDialogVisible" fullscreen center>
+        <model-panel ></model-panel>
+    </el-dialog>
   </div>
 </template>
 
@@ -176,6 +179,7 @@
 import InvitePanel from '../components/group/InvitePanel.vue';
 import SharePanel from "@/components/document/SharePanel";
 import AuthorityPanel from "@/components/document/AuthorityPanel";
+import ModelPanel from '../components/modelpanel/ModelPanel.vue';
     export default {
         name: "GroupDetail",
         data(){
@@ -189,6 +193,7 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
                 inviteDialogVisible: false,
                 shareDialogVisible: false,
                 authorityDialogVisible: false,
+                modelDialogVisible:false,
                 list:[1,2,3,4,5],
                 avatarUrl:null,
                 showdocuments:[],
@@ -256,7 +261,8 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
         components:{
           InvitePanel,
           SharePanel,
-          AuthorityPanel
+          AuthorityPanel,
+          ModelPanel
         },
         methods:{
             handleClick() {
@@ -520,48 +526,49 @@ import AuthorityPanel from "@/components/document/AuthorityPanel";
               });
             },
             handleNewDoc() {
-              let _this = this;
-              this.$prompt('请输入标题','提示',{
-                  confirmButtonText: '确定',
-                  cancelButtonText: '取消',
-              }).then(({value}) => {
-                if (value === null) {
-                  _this.$message({
-                    type: 'error',
-                    message: '请输入标题'
-                  })
-                } else {
-                  _this.$api.document
-                    .create({
-                      user_id: _this.id,
-                      group_id: _this.group_id,
-                      name: value,
-                      type: -1,
-                      // type: 1
-                    })
-                    .then((res) => {
-                      if (res.code === 200) {
-                        _this.$router.push({
-                          path: "/doceditor",
-                          query: {
-                            doc_id: res.data.id,
-                          },
-                        });
-                      } else {
-                        _this.$message({
-                          message: res.msg,
-                          type: "error",
-                        });
-                      }
-                    })
-                    .catch((failResponse) => {});
-                }
-              }).catch(()=>{
-                _this.$message({
-                    type: 'info',
-                    message: '取消输入'
-                })
-              })
+              this.modelDialogVisible = true;
+              // let _this = this;
+              // this.$prompt('请输入标题','提示',{
+              //     confirmButtonText: '确定',
+              //     cancelButtonText: '取消',
+              // }).then(({value}) => {
+              //   if (value === null) {
+              //     _this.$message({
+              //       type: 'error',
+              //       message: '请输入标题'
+              //     })
+              //   } else {
+              //     _this.$api.document
+              //       .create({
+              //         user_id: _this.id,
+              //         group_id: _this.group_id,
+              //         name: value,
+              //         type: -1,
+              //         // type: 1
+              //       })
+              //       .then((res) => {
+              //         if (res.code === 200) {
+              //           _this.$router.push({
+              //             path: "/doceditor",
+              //             query: {
+              //               doc_id: res.data.id,
+              //             },
+              //           });
+              //         } else {
+              //           _this.$message({
+              //             message: res.msg,
+              //             type: "error",
+              //           });
+              //         }
+              //       })
+              //       .catch((failResponse) => {});
+              //   }
+              // }).catch(()=>{
+              //   _this.$message({
+              //       type: 'info',
+              //       message: '取消输入'
+              //   })
+              // })
             },
         }
     }

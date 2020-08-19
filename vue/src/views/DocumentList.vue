@@ -202,12 +202,15 @@
         <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
       </el-dialog>
       <!-- 模板弹窗-->
-      <el-dialog title="使用模板" :visible.sync="typePanelVisible">
+      <!-- <el-dialog title="使用模板" :visible.sync="typePanelVisible">
         <type-panel v-on:cancelCreate="cancelCreate" v-on:confirmCreate="confirmCreate"></type-panel>
+      </el-dialog> -->
+      <el-dialog  :visible.sync="typePanelVisible" fullscreen center>
+        <model-panel ></model-panel>
       </el-dialog>
-
     </el-col>
   </div>
+
 </template>
 
 
@@ -215,9 +218,10 @@
 import SharePanel from "@/components/document/SharePanel";
 import TypePanel from "@/components/document/TypePanel";
 import AuthorityPanel from "@/components/document/AuthorityPanel";
+import ModelPanel from '../components/modelpanel/ModelPanel.vue';
 export default {
   name: "DocumentList",
-  components: {TypePanel, SharePanel, AuthorityPanel},
+  components: {TypePanel, SharePanel, AuthorityPanel,ModelPanel},
   data: function () {
     return {
       owndocuments: [],
@@ -243,7 +247,7 @@ export default {
     cancelCreate(){
       this.typePanelVisible = false
       this.$message({
-        type: 'info',
+        type: 'info',     
         message: '已取消创建'
       })
     },
@@ -253,48 +257,49 @@ export default {
       this.handleNewDoc(typeNum)
     },
     handleNewDoc(typeNum) {
-      var _this = this;
-      this.$prompt('请输入标题','提示',{
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-      }).then(({value}) => {
-        if (value === null) {
-          _this.$message({
-            type: 'error',
-            message: '请输入标题'
-          })
-        } else {
-          _this.$api.document
-            .create({
-              user_id: this.id,
-              group_id: -1,
-              name: value,
-              type: typeNum,
-              // type: 1
-            })
-            .then((res) => {
-              if (res.code === 200) {
-                _this.$router.push({
-                  path: "/doceditor",
-                  query: {
-                    doc_id: res.data.id,
-                  },
-                });
-              } else {
-                _this.$message({
-                  message: res.msg,
-                  type: "error",
-                });
-              }
-            })
-            .catch((failResponse) => {});
-        }
-      }).catch(()=>{
-        _this.$message({
-          type: 'info',
-          message: '取消输入'
-        })
-      })
+      this.typePanelVisible = true;
+      // var _this = this;
+      // this.$prompt('请输入标题','提示',{
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      // }).then(({value}) => {
+      //   if (value === null) {
+      //     _this.$message({
+      //       type: 'error',
+      //       message: '请输入标题'
+      //     })
+      //   } else {
+      //     _this.$api.document
+      //       .create({
+      //         user_id: this.id,
+      //         group_id: -1,
+      //         name: value,
+      //         type: typeNum,
+      //         // type: 1
+      //       })
+      //       .then((res) => {
+      //         if (res.code === 200) {
+      //           _this.$router.push({
+      //             path: "/doceditor",
+      //             query: {
+      //               doc_id: res.data.id,
+      //             },
+      //           });
+      //         } else {
+      //           _this.$message({
+      //             message: res.msg,
+      //             type: "error",
+      //           });
+      //         }
+      //       })
+      //       .catch((failResponse) => {});
+      //   }
+      // }).catch(()=>{
+      //   _this.$message({
+      //     type: 'info',
+      //     message: '取消输入'
+      //   })
+      // })
     },
     handleCommand: function (command, id) {
       //console.log(command,id);
@@ -515,6 +520,9 @@ export default {
 </script>
 
 <style scoped>
+.modelclass{
+  background-color: #050d1a;
+}
 .el-row {
   margin-bottom: 20px;
   /* &:last-child {
