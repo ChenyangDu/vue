@@ -102,7 +102,8 @@ export default {
           _this.$api.group
             .create({
               creator_id: _this.$store.state.user.username.id,
-              name: value
+              name: value,
+              dismissed:false
               // type: 1
             })
             .then((res) => {
