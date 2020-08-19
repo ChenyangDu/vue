@@ -19,7 +19,7 @@
     </el-row>
     <h1>推荐模板</h1>
     <el-row :gutter="20">
-      <div v-for="(item) in 10" :key="item.id">
+      <div v-for="(item) in 9" :key="item.id">
         <el-col :span=5 :offset="1">
           <el-card shadow="always">
             <div class="block">
