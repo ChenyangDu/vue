@@ -170,7 +170,7 @@
       <authority-panel :doc_id="this.doc_id" :group_id="this.group_id"></authority-panel>
     </el-dialog>
     <el-dialog  :visible.sync="modelDialogVisible" fullscreen center>
-        <model-panel ></model-panel>
+        <model-panel :group_id="this.group_id"></model-panel>
     </el-dialog>
   </div>
 </template>

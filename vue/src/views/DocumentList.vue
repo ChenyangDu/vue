@@ -206,7 +206,7 @@
         <type-panel v-on:cancelCreate="cancelCreate" v-on:confirmCreate="confirmCreate"></type-panel>
       </el-dialog> -->
       <el-dialog  :visible.sync="typePanelVisible" fullscreen center>
-        <model-panel ></model-panel>
+        <model-panel :group_id="this.groupId"></model-panel>
       </el-dialog>
     </el-col>
   </div>
@@ -230,6 +230,7 @@ export default {
       id: this.$store.state.user.username.id,
       doc_id: '',
       group_id: '',
+      groupId: -1,
       activeName: "first",
       shareDialogVisible: false,
       authorityDialogVisible: false,
@@ -247,7 +248,7 @@ export default {
     cancelCreate(){
       this.typePanelVisible = false
       this.$message({
-        type: 'info',     
+        type: 'info',
         message: '已取消创建'
       })
     },

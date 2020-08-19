@@ -41,6 +41,12 @@
 <script>
   export default {
     name: "ModelPanel",
+    props: {
+      group_id: {
+        type: Number,
+        default: -1
+      }
+    },
     data() {
       return {
         // srcUrl:"http://39.101.200.9:8081/image/system?id=document"
@@ -71,7 +77,7 @@
             _this.$api.document
                 .create({
                   user_id: this.id,
-                  group_id: -1,
+                  group_id: _this.group_id,
                   name: value,
                   type: typeNum,
                   // type: 1
