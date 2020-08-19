@@ -3,7 +3,7 @@
     <el-image :src="imagepath" :lazy='true' style="width: 200px; height: 200px" ></el-image>
     <h1>欢迎使用库里南文档</h1>
     <p>
-      库利南，面向未来的办公软件
+      库里南，面向未来的办公软件
       <!-- <a href="https://cli.vuejs.org" target="_blank" rel="noopener">帮助</a>. -->
     </p>
     <p>文档实时协同</p>
@@ -18,7 +18,7 @@
       已有账号？
       <a href="./#/login" target="_blank" rel="noopener">立即登录</a>.
     </p>
-    
+
     <!-- <h3>想了解更多？</h3>
     <ul>
       <li><a href="https://vuejs.org" target="_blank" rel="noopener">核心文档</a></li>
