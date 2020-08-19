@@ -85,13 +85,13 @@
       <el-col :span="16">
         <!-- 每日计划卡片 -->
         <el-card shadow="hover" style="height:450px;">
-          <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">
-            <span style="position: relative; top: 12px"><h3><b>个人简介</b></h3></span>
+<!--          <div slot="header" class="clearfix" style="text-align: center;font-size: 20px;">-->
+<!--            <span style="position: relative; top: 0px"><h3><b>个人简介</b></h3></span>-->
             <div v-if="isMe()">
               <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="edit" v-if="!isEdit"><i class="el-icon-edit"></i></el-button>
               <el-button style="float: right; padding: 3px 0;color:#5555ff;" type="text" @click="save" v-if="isEdit"><i class="el-icon-upload2"></i></el-button>
             </div>
-          </div>
+<!--          </div>-->
           <!-- 显示个人简介 -->
           <div v-html="introduce" v-if="!isEdit">
           </div>
