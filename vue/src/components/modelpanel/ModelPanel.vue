@@ -1,8 +1,8 @@
 <template>
-  <el-card class="panel">
-    <h1>热门素材</h1>
+  <el-card class="panel" shadow="always">
+    <h1><b>热门素材</b></h1>
     <el-row :gutter="20">
-      <el-col :span="22" :offset="1">
+      <el-col :span="22" :push="1">
         <el-carousel :interval="4000" type="card" height="300px">
           <el-carousel-item v-for="item in carouselShow" :key="item">
             <img @click="click(item)" align="center" :src="srcUrl+item" fit="fill" height="100%" width="100%" />
@@ -17,7 +17,7 @@
       <!--        </div>-->
       <!--      </el-col>-->
     </el-row>
-    <h1>推荐模板</h1>
+    <h1><b>推荐模板</b></h1>
     <el-row :gutter="10">
       <div v-for="(item) in 9" :key="item.id">
         <el-col :span=5 :push="1">

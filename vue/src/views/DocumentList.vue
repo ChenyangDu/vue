@@ -1,26 +1,31 @@
 <template>
   <div>
-    <br/>
-    <el-col :span="22" offset="1">
+    <br />
+    <el-col :span="22" :push="1">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="我创建的文档" name="first">
           <el-row>
-            <el-col :span="22" offset="1">
+            <el-col :span="22" :push="1">
               <el-row :gutter="40">
-
                 <el-col :span="4">
                   <div>
-                    <br/>
-                    <el-card :body-style="{ padding: '0px' }" shadow="always" @click.native="handleNewDoc(-1)" style="cursor:pointer">
-                      <br/>
-                      <br><br>
+                    <br />
+                    <el-card
+                      :body-style="{ padding: '0px' }"
+                      shadow="always"
+                      @click.native="handleNewDoc(-1)"
+                      style="cursor:pointer"
+                    >
+                      <br />
+                      <br />
+                      <br />
                       <div align="center">
-                        <i  style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
+                        <i style="font-size: 100px;cursor:pointer" class="el-icon-plus"></i>
                       </div>
-<!--                      <br>-->
+                      <!--                      <br>-->
                       <div style="padding: 14px;">
-                        <div  class="bottom clearfix">
-                          <br>
+                        <div class="bottom clearfix">
+                          <br />
                         </div>
                       </div>
                     </el-card>
@@ -29,18 +34,23 @@
 
                 <el-col :span="4" v-for="item in owndocuments" :key="item.id">
                   <div>
-                    <br>
-                    <el-card :body-style="{ padding: '0px' }" shadow="always" >
-                      <br>
+                    <br />
+                    <el-card :body-style="{ padding: '0px' }" shadow="always">
+                      <br />
                       <div align="center">
-                        <el-avatar @click.native="detail(item.id)"
-                                   shape="square" :size="100" fit="fill"
-                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
-                                   style="cursor:pointer" ></el-avatar>
+                        <el-avatar
+                          @click.native="detail(item.id)"
+                          shape="square"
+                          :size="100"
+                          fit="fill"
+                          :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                          style="cursor:pointer"
+                        ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <div class="doc-title">
-                          <span>{{item.name}}</span><br>
+                          <span>{{item.name}}</span>
+                          <br />
                         </div>
 
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
@@ -50,26 +60,32 @@
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-share"
-                                command="share"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-share"
+                              command="share"
+                              v-if="isMyDoc(item.creator_id)"
                             >分享</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-s-tools"
-                                command="authority"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-s-tools"
+                              command="authority"
+                              v-if="isMyDoc(item.creator_id)"
                             >权限</el-dropdown-item>
                             <el-dropdown-item
-                                    icon="el-icon-delete-solid"
-                                    command="del"
-                                    v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-delete-solid"
+                              command="del"
+                              v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
-                          <i class="el-icon-view"></i> {{item.views}}
-                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
+                          <i class="el-icon-view"></i>
+                          {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i>
+                          {{item.comments}}
+                          <i
+                            :class="item.star?'el-icon-star-on':'el-icon-star-off'"
+                            @click="collect(item)"
+                          ></i>
+                          {{item.stars}}
                         </div>
                       </div>
                     </el-card>
@@ -80,110 +96,131 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="我最近浏览的文档" name="second">
-<!--          <h1>我最近浏览的文档</h1>-->
+          <!--          <h1>我最近浏览的文档</h1>-->
           <el-row>
-            <el-col :span="22" offset="1">
+            <el-col :span="22" :push="1">
               <el-row :gutter="40">
                 <el-col :span="4" v-for="(item) in recentdocuments" :key="item.id">
                   <div>
-                    <br>
+                    <br />
                     <el-card :body-style="{ padding: '0px' }" shadow="always">
-                      <br>
+                      <br />
                       <div align="center">
-                        <el-avatar @click.native="detail(item.id)"
-                                   shape="square" :size="100" fit="fill"
-                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
-                                   style="cursor:pointer" ></el-avatar>
+                        <el-avatar
+                          @click.native="detail(item.id)"
+                          shape="square"
+                          :size="100"
+                          fit="fill"
+                          :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                          style="cursor:pointer"
+                        ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <div class="doc-title">
-                          <span>{{item.name}}</span><br>
+                          <span>{{item.name}}</span>
+                          <br />
                         </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                        <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-share"
-                                command="share"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-share"
+                              command="share"
+                              v-if="isMyDoc(item.creator_id)"
                             >分享</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-s-tools"
-                                command="authority"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-s-tools"
+                              command="authority"
+                              v-if="isMyDoc(item.creator_id)"
                             >权限</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-delete-solid"
-                                command="del"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-delete-solid"
+                              command="del"
+                              v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
-                          <i class="el-icon-view"></i> {{item.views}}
-                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
+                          <i class="el-icon-view"></i>
+                          {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i>
+                          {{item.comments}}
+                          <i
+                            :class="item.star?'el-icon-star-on':'el-icon-star-off'"
+                            @click="collect(item)"
+                          ></i>
+                          {{item.stars}}
                         </div>
                       </div>
                     </el-card>
                   </div>
-                  <br>
+                  <br />
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
-
         </el-tab-pane>
         <el-tab-pane label="我收藏的文档" name="third">
-<!--          <h1>我收藏的文档</h1>-->
+          <!--          <h1>我收藏的文档</h1>-->
           <el-row>
-            <el-col :span="22" offset="1">
+            <el-col :span="22" :push="1">
               <el-row :gutter="40">
                 <el-col :span="4" v-for="item in favoritedocuments" :key="item.id">
                   <div>
-                    <br>
+                    <br />
                     <el-card :body-style="{ padding: '0px' }" shadow="always">
-                      <br>
+                      <br />
                       <div align="center">
-                        <el-avatar @click.native="detail(item.id)"
-                                   shape="square" :size="100" fit="fill"
-                                   :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
-                                   style="cursor:pointer" ></el-avatar>
+                        <el-avatar
+                          @click.native="detail(item.id)"
+                          shape="square"
+                          :size="100"
+                          fit="fill"
+                          :src="'http://39.101.200.9:8081/image/system?id='+(item.group_id?'document_group':'document')"
+                          style="cursor:pointer"
+                        ></el-avatar>
                       </div>
                       <div style="padding: 14px;">
                         <div class="doc-title">
-                          <span>{{item.name}}</span><br>
+                          <span>{{item.name}}</span>
+                          <br />
                         </div>
                         <time class="time">{{ item.last_edit_time.substr(0,10) }}</time>
-                        <el-dropdown class="right" @command="handleCommand($event,item.id)">
+                        <el-dropdown class="right" @command="handleCommand($event,item)">
                           <i class="el-icon-more"></i>
                           <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item icon="el-icon-view" command="view">查看</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-edit" command="edit">编辑</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-share"
-                                command="share"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-share"
+                              command="share"
+                              v-if="isMyDoc(item.creator_id)"
                             >分享</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-s-tools"
-                                command="authority"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-s-tools"
+                              command="authority"
+                              v-if="isMyDoc(item.creator_id)"
                             >权限</el-dropdown-item>
                             <el-dropdown-item
-                                icon="el-icon-delete-solid"
-                                command="del"
-                                v-if="isMyDoc(item.creator_id)"
+                              icon="el-icon-delete-solid"
+                              command="del"
+                              v-if="isMyDoc(item.creator_id)"
                             >删除</el-dropdown-item>
                           </el-dropdown-menu>
                         </el-dropdown>
                         <div class="bottom clearfix">
-                          <i class="el-icon-view"></i> {{item.views}}
-                          <i class="el-icon-chat-dot-square"></i> {{item.comments}}
-                          <i :class="item.star?'el-icon-star-on':'el-icon-star-off'" @click="collect(item)"></i> {{item.stars}}
+                          <i class="el-icon-view"></i>
+                          {{item.views}}
+                          <i class="el-icon-chat-dot-square"></i>
+                          {{item.comments}}
+                          <i
+                            :class="item.star?'el-icon-star-on':'el-icon-star-off'"
+                            @click="collect(item)"
+                          ></i>
+                          {{item.stars}}
                         </div>
                       </div>
                     </el-card>
@@ -204,13 +241,12 @@
       <!-- 模板弹窗-->
       <!-- <el-dialog title="使用模板" :visible.sync="typePanelVisible">
         <type-panel v-on:cancelCreate="cancelCreate" v-on:confirmCreate="confirmCreate"></type-panel>
-      </el-dialog> -->
-      <el-dialog  :visible.sync="typePanelVisible" fullscreen center>
+      </el-dialog>-->
+      <el-dialog :visible.sync="typePanelVisible" fullscreen center>
         <model-panel :group_id="this.groupId"></model-panel>
       </el-dialog>
     </el-col>
   </div>
-
 </template>
 
 
@@ -218,24 +254,24 @@
 import SharePanel from "@/components/document/SharePanel";
 import TypePanel from "@/components/document/TypePanel";
 import AuthorityPanel from "@/components/document/AuthorityPanel";
-import ModelPanel from '../components/modelpanel/ModelPanel.vue';
+import ModelPanel from "../components/modelpanel/ModelPanel.vue";
 export default {
   name: "DocumentList",
-  components: {TypePanel, SharePanel, AuthorityPanel,ModelPanel},
+  components: { TypePanel, SharePanel, AuthorityPanel, ModelPanel },
   data: function () {
     return {
       owndocuments: [],
-      favoritedocuments:[],
-      recentdocuments:[],
+      favoritedocuments: [],
+      recentdocuments: [],
       id: this.$store.state.user.username.id,
-      doc_id: '',
-      group_id: '',
+      doc_id: "",
+      group_id: "",
       groupId: -1,
       activeName: "first",
       shareDialogVisible: false,
       authorityDialogVisible: false,
-      iscollect:false,
-      typePanelVisible: false
+      iscollect: false,
+      typePanelVisible: false,
     };
   },
   created: function () {
@@ -245,17 +281,17 @@ export default {
     isMyDoc: function (id) {
       return id === this.id;
     },
-    cancelCreate(){
-      this.typePanelVisible = false
+    cancelCreate() {
+      this.typePanelVisible = false;
       this.$message({
-        type: 'info',
-        message: '已取消创建'
-      })
+        type: "info",
+        message: "已取消创建",
+      });
     },
     confirmCreate(typeNum) {
-      console.log(typeNum)
-      this.typePanelVisible = false
-      this.handleNewDoc(typeNum)
+      console.log(typeNum);
+      this.typePanelVisible = false;
+      this.handleNewDoc(typeNum);
     },
     handleNewDoc(typeNum) {
       this.typePanelVisible = true;
@@ -361,68 +397,75 @@ export default {
     },
     share: function (id) {
       console.log("share");
-      this.doc_id = id
-      this.shareDialogVisible = true
+      this.doc_id = id;
+      this.shareDialogVisible = true;
     },
     cancelShare() {
-      this.shareDialogVisible = false
+      this.shareDialogVisible = false;
     },
     authority(id) {
-      this.doc_id = id.id
-      this.group_id = id.group_id
-      this.authorityDialogVisible = true
+      this.doc_id = id.id;
+      this.group_id = id.group_id;
+      this.authorityDialogVisible = true;
     },
     collect: function (doc) {
       console.log("collect");
-      var _this = this
-      this.doc_id = doc.id
-      if(doc.star) { // 已收藏
-        _this.$api.document.favorite({
-          doc_id: doc.id,
-          user_id: _this.id,
-          favorite: false
-        }).then(res => {
-          if (res.code === 200) {
-            _this.$message({
-              message: '文档已取消收藏',
-              type: 'success'
-            })
-            _this.getOwnList()
-            _this.getFavoriteList()
-            _this.getRecentList()
-          } else {
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(failResponse => {})
-      } else { // 目前未收藏
-        _this.$api.document.favorite({
-          doc_id: doc.id,
-          user_id: _this.id,
-          favorite: true
-        }).then(res => {
-          if (res.code === 200) {
-            _this.$message({
-              message: '文档收藏成功',
-              type: 'success'
-            })
-            _this.getOwnList()
-            _this.getFavoriteList()
-            _this.getRecentList()
-          } else {
-            _this.$message({
-              message: '收藏失败',
-              type: 'error'
-            })
-            _this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          }
-        }).catch(failResponse => {})
-
+      var _this = this;
+      this.doc_id = doc.id;
+      if (doc.star) {
+        // 已收藏
+        _this.$api.document
+          .favorite({
+            doc_id: doc.id,
+            user_id: _this.id,
+            favorite: false,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              _this.$message({
+                message: "文档已取消收藏",
+                type: "success",
+              });
+              _this.getOwnList();
+              _this.getFavoriteList();
+              _this.getRecentList();
+            } else {
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
+      } else {
+        // 目前未收藏
+        _this.$api.document
+          .favorite({
+            doc_id: doc.id,
+            user_id: _this.id,
+            favorite: true,
+          })
+          .then((res) => {
+            if (res.code === 200) {
+              _this.$message({
+                message: "文档收藏成功",
+                type: "success",
+              });
+              _this.getOwnList();
+              _this.getFavoriteList();
+              _this.getRecentList();
+            } else {
+              _this.$message({
+                message: "收藏失败",
+                type: "error",
+              });
+              _this.$message({
+                message: res.msg,
+                type: "error",
+              });
+            }
+          })
+          .catch((failResponse) => {});
       }
     },
 
@@ -447,7 +490,9 @@ export default {
             console.log("返回了400");
           } else {
             that.owndocuments = response.data; // 文档列表
-            that.owndocuments.sort((a,b)=>(b.last_edit_time.localeCompare(a.last_edit_time)))
+            that.owndocuments.sort((a, b) =>
+              b.last_edit_time.localeCompare(a.last_edit_time)
+            );
             console.log("获取数据成功");
           }
         })
@@ -521,7 +566,7 @@ export default {
 </script>
 
 <style scoped>
-.modelclass{
+.modelclass {
   background-color: #050d1a;
 }
 .el-row {
@@ -590,15 +635,13 @@ export default {
   padding: 0;
   float: right;
 }
-.el-col-5{
-
+.el-col-5 {
   width: 20%;
-
 }
-.doc-title{
-  width:130px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.doc-title {
+  width: 130px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
